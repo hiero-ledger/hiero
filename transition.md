@@ -3,6 +3,9 @@
 This document contains an overview of the state of the project transition from Hedera to Hiero.
 We will do the transition in phases and several different tasks need to be done and checked for each and every project.
 Therefore, we created a matrix that shows the state of all projects for that the transition has been started or is planned for the near future.
+Next to the matrix that is shown in this document we create issues for each repo that should be transfered.
+The issues might contain more detailed information about the transition state as shown in the matrix.
+A list of all issues can be found [here](https://github.com/LFDT-Hiero/tsc/issues/5).
 
 | Hedera Repo                                                                             | Hiero Repo                  | DCO check      | License check  | README and others updated | user rights    | vendor neutral code | GitHub Actions     | deployments        |
 | --------------------------------------------------------------------------------------- | --------------------------- | -------------- | -------------- | ------------------------- | -------------- | ------------------- | ------------------ | ------------------ |
