@@ -27,7 +27,7 @@ A list of all issues can be found [here](https://github.com/LFDT-Hiero/tsc/issue
 | [did-method](https://github.com/hashgraph/did-method)                                   |                             | :construction:     |                |                           |                |                     |                    |                    |
 | [did-sdk-js](https://github.com/hashgraph/did-sdk-js)                                   |                             | :white_check_mark: |      :construction: |                           |                |                     |                    |                    |
 | [did-sdk-java](https://github.com/hashgraph/did-sdk-java)                               |                             | :construction:     |                |                           |                |                     |                    |                    |
-| [hedera-protobufs](https://github.com/hashgraph/hedera-protobufs)                       |                             | :white_check_mark: |                |                           |                |                     |                    |                    |
+| [hedera-protobufs](https://github.com/hashgraph/hedera-protobufs)                       |                             | :white_check_mark: | :white_check_mark: |                           |     |                     |                    |                    |
 | [hedera-improvement-proposal](https://github.com/hashgraph/hedera-improvement-proposal) | hiero-improvement-proposals | :construction:     | :construction: | :construction:            | :construction: |                     | :construction:     | :heavy_minus_sign: |
 
 ### Icons
