@@ -48,7 +48,7 @@ A list of all issues can be found [here](https://github.com/LFDT-Hiero/tsc/issue
 
 **DCO check** - Check if all commits in the repo are signed the DCO
 
-**License check** - Check if the repo license and the licenses of all transitive dependencies are compatible with the [LFDT guidelines](https://lf-decentralized-trust.github.io/governance/governing-documents/allowed-third-party-licenses.html)
+**License check** - Check if the repo license and the licenses of all transitive dependencies are compatible with the [LFDT guidelines](https://lf-decentralized-trust.github.io/governance/governing-documents/allowed-third-party-licenses.html). All open issues regarding license problems can be found [here](https://github.com/LFDT-Hiero/tsc/labels/license%20issue).
 
 **README and others updated** - Files like README.md, MAINTAINERS.md and others must exist and be up to date. More information can be found in the [LFDT guidelines](https://lf-decentralized-trust.github.io/governance/governing-documents/repository-structure.html)
 
