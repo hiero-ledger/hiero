@@ -24,8 +24,8 @@ If you want to contact the TSC regarding adding a project to Hiero, the best way
 
 ## Minimal requirements of a project
 
-Since Hiero is part of the Linux Foundation (LF), all requirements defined by LF must be met for a project to be considered.
-Hiero is part of the sub-foundation LF Decentralized Trust (LFDT) within the Linux Foundation, which adds additional project constraints.
+Since Hiero is part of the [Linux Foundation (LF)](https://www.linuxfoundation.org), all requirements defined by LF must be met for a project to be considered.
+Hiero is part of the sub-foundation [LF Decentralized Trust (LFDT)](https://www.lfdecentralizedtrust.org) within the Linux Foundation, which adds additional project constraints.
 A project must fulfill the following requirements:
 
 - Each commit of a project must be signed by the DCO.
@@ -37,6 +37,7 @@ A project must fulfill the following requirements:
   If a needed license is not listed in that document, the TSC can be contacted for further discussion.
 - A project must contain specific files defining the LFDT Code of Conduct and more.
   A detailed overview can be found [here](https://lf-decentralized-trust.github.io/governance/governing-documents/repository-structure.html).
+  We have already covered several of those files at [https://github.com/hiero-ledger/.github](https://github.com/hiero-ledger/.github).
 - LFDT defined some [best practices for projects](https://lf-decentralized-trust.github.io/governance/guidelines/project-best-practices.html).
   We recommend to fulfill as many of those as possible.
 
