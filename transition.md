@@ -7,6 +7,8 @@ Next to the matrix that is shown in this document we create issues for each repo
 The issues might contain more detailed information about the transition state as shown in the matrix.
 A list of all issues can be found [here](https://github.com/LFDT-Hiero/tsc/issues/5).
 
+A step-by-step guide for doing the transition of a repository can be found [here](https://github.com/hiero-ledger/hiero/blob/main/hashgraph-transfer.md).
+
 | Hedera Repo                                                                             | Hiero Repo                  | DCO check          | DCO remediation  | License remediation  | README and others updated | user rights    | vendor neutral code | GitHub Actions     | deployments        |
 | --------------------------------------------------------------------------------------- | --------------------------- | ------------------ | ---------- | -------------- | ------------------------- | -------------- | ------------------- | ------------------ | ------------------ |
 | [hedera-sdk-go](https://github.com/hashgraph/hedera-sdk-go)                             | hiero-sdk-go                | :white_check_mark: | :white_check_mark: | :construction: | :construction:            | :construction: |                     | :construction:     | :heavy_minus_sign: |
