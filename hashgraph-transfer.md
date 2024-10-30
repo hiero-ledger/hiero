@@ -29,11 +29,16 @@ The following steps shall occur to transfer a repository into Hiero from a sourc
 
 - The TA will generate a pull request in the [Hiero-Ledger Governance](https://github.com/hiero-ledger/governance) repository
   - The TA will modify the `config.yaml` file in this repository with the following information
-    - The new maintainer group name
+    - The new maintainer group name (`REPO-maintainers`)
     - The new maintainers for the group
-    - The new committer group name
+    - The new committer group name (`REPO-committers`)
     - the new set of committers for that group
     - The new repository to pull in
+    - The `tsc` group should have the `admin` role on the repository
+    - The `github-maintainers` group should have the `admin` role on the repository
+    - The `github-committers` group should have the `write` role on the repository.
+    - The `REPO-maintainers` group should have the `maintain` role on the repository.
+    - The `REPO-committers` group should have the `write` role on the repository.
 - The AA will approve the changes in `Hiero-Ledger/governance`
 - The TA will transfer the repository from the source organization into Hiero
   - The TA will assign the `Target Repository Name` to the repo upon transfer
