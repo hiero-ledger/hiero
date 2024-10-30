@@ -24,7 +24,7 @@ and the email address from the former step.
 Add your GPG public key into your GitHub account.
 With this step GitHub is ready to verify your PGP signed commits.
 
-* [Adding a GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account)
+* [GitHub Docs: Adding a GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account)
 
 ## Work with your local git
 
@@ -66,6 +66,8 @@ git config set commit.gpgsign true
 # use this GPG key by default
 git config set user.signingkey <your key id>
 ```
+
+* [GitHub Docs: Telling Git about your signing key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key)
 
 ### DCO signature
 
