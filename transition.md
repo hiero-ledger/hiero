@@ -50,7 +50,7 @@ A step-by-step guide for doing the transition of a repository can be found [here
 
 **DCO check** - Check if all commits in the repo are signed the DCO
 
-**DCO remediation** - We need to fix all commits on the main branch that are not signed the DCO
+**DCO remediation** - We need to ensure that all commits on the main branch are DCO signed. This can be accomplished by retroactively signing commits through an empty signed commit on the repository.
 
 **License remediation** - Check if the repo license and the licenses of all transitive dependencies are compatible with the [LFDT guidelines](https://lf-decentralized-trust.github.io/governance/governing-documents/allowed-third-party-licenses.html). All open issues regarding license problems can be found [here](https://github.com/LFDT-Hiero/tsc/labels/license%20issue).
 
