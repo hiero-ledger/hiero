@@ -30,6 +30,7 @@ A project must fulfill the following requirements:
 
 - Each commit of a project must be signed by the DCO.
   More information can be found [here](https://wiki.linuxfoundation.org/dco).
+  We have developed [a python based tool](https://github.com/hiero-ledger/hiero/tree/main/dco-check) that can check repositories for committs without DCO signing.
 - Each commit of a project must be GPG signed.
   More information can be found [here](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account)
 - LFDT must support the project licenses and all transient dependencies.
