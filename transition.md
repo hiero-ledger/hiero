@@ -48,7 +48,7 @@ A step-by-step guide for doing the transition of a repository can be found [here
 
 **Hiero Repo** - Name and maybe link to new Hiero repo
 
-**DCO check** - Check if all commits in the repo are signed the DCO
+**DCO check** - Check if all commits in the repo are signed the DCO. We have [a python tool](https://github.com/hiero-ledger/hiero/tree/main/dco-check) that can run the checks for you.
 
 **DCO remediation** - We need to ensure that all commits on the main branch are DCO signed. This can be accomplished by retroactively signing commits through an empty signed commit on the repository.
 
