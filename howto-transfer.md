@@ -18,9 +18,8 @@ Through discussions with the community, you will understand if your project is a
 Next to the discussions we have a weekly community call that is open to attend.
 More information about that and other Hiero appoitnments and events can be found in our [public calender](https://zoom-lfx.platform.linuxfoundation.org/meetings/lf-decentralized-trust?view=week).
 
-To start submitting, transferring, or creating a project to Hiero, the technical steering committee (TSC) must be informed.
-Individual maintainers of the projects form the TSC and will decide what projects will be part of Hiero.
-If you want to contact the TSC regarding adding a project to Hiero, the best way is by open an issue in the [TSC repo](https://github.com/LFDT-Hiero/tsc).
+To start submitting, transferring, or creating a project to Hiero, the [technical steering committee (TSC)](https://github.com/hiero-ledger/tsc?tab=readme-ov-file#overview) must be informed.
+Individual maintainers of the Hiero projects form the TSC and will decide what projects will be part of Hiero.
 
 ## Minimal requirements of a project
 
@@ -52,11 +51,16 @@ Details about that can be found above.
 
 ## Create an issue for the project
 
-TODO
+A project proposal must be created as an issue in the [tsc repository](https://github.com/hiero-ledger/tsc).
+The issue must be labeled by the ['project proposal' label](https://github.com/hiero-ledger/tsc/labels/project%20proposal).
+We are currently working on a good template for a project proposal.
 
 ## TSC will vote on the issue
 
-TODO
-
+The TSC will review the submitter of the proposal to a TSC meeting and provide a slot to introduce the project.
+Here the TSC can ask any additional questions regarding the project and the project proposal.
+As a next step and final the TSC will decide (by voting) if the project will be added directly to the [hiero-ledger org](https://github.com/hiero-ledger).
+For some projects the TSC might suggest to transfer it to the [LF Decentralized Trust labs](https://lf-decentralized-trust-labs.github.io).
+This allows the project to mature and align with industry standards before it is potentially transferred to Hiero.
 
 
