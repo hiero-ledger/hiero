@@ -49,7 +49,7 @@ The following steps shall occur to transfer a repository into Hiero from a sourc
     - Note: This will enable the repository actions to run after transfer
   - The TA will update the organization runner groups to include the new repository
 - The AA will approve the PR on the `Target Repository`
-- The AA will set the "Social preview" in the repository settings to https://github.com/hiero-ledger/.github/blob/main/resources/social-media-template.png
+- The TA will set the "Social preview" in the repository settings to https://github.com/hiero-ledger/.github/blob/main/resources/social-media-template.png
 
 At this point the repository is considered **transferred**.
 
