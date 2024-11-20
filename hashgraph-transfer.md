@@ -45,7 +45,7 @@ When transferring ownership of a repository from [Hashgraph][hashgraph] to [Hier
 - The [@hashgraph/devops-ci team][devops-ci] will capture the repository secrets and provide this list to the TA prior
   to day of transfer
 
-## Day Before Checks
+## Day-Before Checks
 
 The day before a repository is transferred the TA and AA shall verify the following checks have been complete
 
@@ -54,17 +54,17 @@ The day before a repository is transferred the TA and AA shall verify the follow
 - Pre-Transfer Checks are complete
   - TA has the following:
     - New repository Information
-    - List of MC packages
+    - List of Maven Central packages
     - List of Gradle Plugin Central packages
     - List of NPMJS packages
     - Awareness of Codecov needs
     - List of repository variables/states
     - List of repository secrets
-    - Repository Point of Contact for Day of questions
+    - Repository Point of Contact for day-of questions
 - Developer Experience team is allerted that the repository is ready to transfer
 
 The Developer Experience Team shall announce the upcoming repository transfer to the community once the TA and AA verify
-the repository is ready for transfer
+the repository is ready for transfer.
 
 ## Transfer Day
 
@@ -78,7 +78,7 @@ The following steps shall occur to transfer a repository into Hiero from a sourc
   - The new maintainer group name (`REPO-maintainers`)
   - The new maintainers for the group
   - The new committer group name (`REPO-committers`)
-  - the new set of committers for that group
+  - The new set of committers for that group
   - The new repository to pull in
   - The `tsc` group should have the `admin` role on the repository
   - The `github-maintainers` group should have the `admin` role on the repository
