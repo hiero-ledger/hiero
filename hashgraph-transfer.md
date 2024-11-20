@@ -9,7 +9,7 @@ When transferring ownership of a repository from [Hashgraph][hashgrah] to [Hiero
   - Must have ability to create a repository on the receiving organizations side (Hiero)
 - **Repository Transfer Approval Agent (AA)**
   - The person responsible for approving PRs throughout the transfer process
-  - Must have approval authority on the Hiero-Ledger/governance repository and on the target repository
+  - Must have approval authority on the [Hiero-Ledger/governance][governance] repository and on the target repository
 
 ## PRE-TRANSFER Checks
 
@@ -61,7 +61,7 @@ The day before a repository is transferred the TA and AA shall verify the follow
     - List of repository variables/states
     - List of repository secrets
     - Repository Point of Contact for Day of questions
-- Developer Experience team is allerted that repository is ready to transfer
+- Developer Experience team is allerted that the repository is ready to transfer
 
 The Developer Experience Team shall announce the upcoming repository transfer to the community once the TA and AA verify
 the repository is ready for transfer
