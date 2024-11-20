@@ -1,6 +1,6 @@
 # Hashgraph to Hiero Repository Transfer Process
 
-When transferring ownership of a repository from [Hashgraph][hashgrah] to [Hiero-Ledger][hiero] in Github the steps outlined below must be completed
+When transferring ownership of a repository from [Hashgraph][hashgraph] to [Hiero-Ledger][hiero] in Github the steps outlined below must be completed
 
 ## Definitions
 
