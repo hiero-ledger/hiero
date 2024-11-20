@@ -61,7 +61,7 @@ The day before a repository is transferred the TA and AA shall verify the follow
     - List of repository variables/states
     - List of repository secrets
     - Repository Point of Contact for day-of questions
-- Developer Experience team is allerted that the repository is ready to transfer
+- Developer Experience team is alerted that the repository is ready to transfer
 
 The Developer Experience Team shall announce the upcoming repository transfer to the community once the TA and AA verify
 the repository is ready for transfer.
