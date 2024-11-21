@@ -95,7 +95,6 @@ The following steps shall occur to transfer a repository into Hiero from a sourc
 - The TA will open a PR on the `Target Repository`
   - The TA will modify the self-hosted runner labels in the github actions
     - Note: This will enable the repository actions to run after transfer
-  - The TA will update the organization runner groups to include the new repository
 - The AA will approve the PR on the `Target Repository`
 - The TA will set the "Social preview" in the repository settings to the
   [Hiero-Ledger Social Media Template](https://github.com/hiero-ledger/.github/blob/main/resources/social-media-template.png)
@@ -107,8 +106,8 @@ The following steps shall occur to transfer a repository into Hiero from a sourc
   - The TA has added the GRADLE_CACHE_PASSWORD secret to the repository
 - If publishing to Maven Central
   - The maven central namespace tokens are created on the [Hiero-Ledger][hiero] MC namespace
-  - The TA has added the OSSRH_USERNAME secret has been added to the repository
-  - The TA has added the OSSRH_PASSWORD secret has been added to the repository
+  - The TA has added the OSSRH_USERNAME secret to the repository
+  - The TA has added the OSSRH_PASSWORD secret to the repository
 - If performing semantic release
   - The TA has created the NPMJS token for the repository
   - The TA has added the NPM_TOKEN secret to the repository
@@ -122,6 +121,7 @@ At this point the repository is considered **transferred**.
 
 - After the repository is transferred the maintainers and committers shall ensure the repository behaves
   as expected and will triage and solve any immediate issues
+- After the repository is transferred the maintainers and committers shall ensure all applicable websites are up to date.
 - After the repository is transferred the [@hashgraph/devops-ci team][devops-ci] will deprecate existing packages
   in the Hashgraph namespaces for Maven Central, NPMJS, and Gradle Plugin Central as applicable
 
