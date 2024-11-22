@@ -125,6 +125,40 @@ At this point the repository is considered **transferred**.
 - After the repository is transferred the [@hashgraph/devops-ci team][devops-ci] will deprecate existing packages
   in the Hashgraph namespaces for Maven Central, NPMJS, and Gradle Plugin Central as applicable
 
+### Naming conventions for moving from "Hedera" to "Hiero"
+
+When a repository is transfered the next big step is to remove "Hedera" from the code and documentation to make clear that the source is not only Hedera specific but can be used with any Hiero based network.
+While a lot of this is a simple find and replace of "Hedera" in the docs (or class names, packages,...) there are some points on that we still need to use Hedera.
+
+- Whenever "Hedera testnet" or "Hedera mainnet" is used it should not be changed. There is not "Hiero testnet" or "Hiero mainnet".
+- Whenever "testnet" or "mainnet" is used we need to change it to "Hedera testnet" or "Hedera mainnet". For a Hedera specific project is it clear what "mainnet" or "testnet" is but in the Hiero context that could be anything. Here we need to make clear that we refer to the Hedera networks.
+- If a project / repository is mentioned that has already been transfered to Hiero we should change the name and link to Hiero. As en example "hedera-sdk-go" will become "hiero-sdk-go" and "https://github.com/hashgraph/hedera-sdk-go" will become "https://github.com/hiero-ledger/hiero-sdk-go".
+- If a project / repository has not been migrated to Hiero the name and link should not be changed. Here it would make sense to create an issue per repository and label it by "Hiero Transfer" for collecting such names for a later refactoring.
+
+### New license headers
+
+When a repository is transfered we need to change the license headers of all (code) files in the repository. The new license header format has been discussed [here](https://github.com/hiero-ledger/tsc/issues/64). The new header looks like this: `// SPDX-License-Identifier: Apache-2.0`. A PR that does the change for the GO SDK can be found [here](https://github.com/hiero-ledger/hiero-sdk-go/pull/1152).
+
+### Appendix of README
+
+We have defined a general text for some topics that should be in the README of every project:
+
+```markdown
+## Contributing
+
+Whether you’re fixing bugs, enhancing features, or improving documentation, your contributions are important — let’s build something great together!
+
+Please read our [contributing guide](https://github.com/hiero-ledger/.github/blob/main/CONTRIBUTING.md) to see how you can get involved.
+
+## Code of Conduct
+
+Hiero uses the Linux Foundation Decentralised Trust [Code of Conduct](https://www.lfdecentralizedtrust.org/code-of-conduct).
+
+## License
+
+[Apache License 2.0](LICENSE)
+```
+
 [hiero]:https://github.com/hiero-ledger
 [hashgraph]:https://github.com/hashgraph
 [governance]:https://github.com/hiero-ledger/governance
