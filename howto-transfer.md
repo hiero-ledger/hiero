@@ -3,12 +3,6 @@
 This document shows the workflow for transferring any (public or private) project to Hiero and advises on several best practices for setting up a good
 open-source project that fits the pattern we use in Hiero.
 
-> **Note**
->
-> This document is only a draft and not final.
-> We create the document in the open and feedback is more than welcome.
-> The content of the document is not official until the technical steering committee (TSC) of Hiero voted on it.
-
 ## Getting in touch with the Hiero community
 
 The first and most important task to contribute to Hiero is to become a community member.
