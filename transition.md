@@ -34,7 +34,7 @@ The following table contains an overview of the initial steps that need to be do
 | [did-sdk-js](https://github.com/hashgraph/did-sdk-js)                  |                                   | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :construction:     |
 | [did-sdk-java](https://github.com/hashgraph/did-sdk-java)                |                                   | :white_check_mark:  | :red_circle:              | :construction:             | :construction:             | :construction:     |
 | [hedera-protobufs](https://github.com/hashgraph/hedera-protobufs)            | hiero-protobufs                   | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :construction:     | 
-| [hedera-improvement-proposal](https://github.com/hashgraph/hedera-improvement-proposal) | hiero-improvement-proposals       | :white_check_mark:  | :red_circle:              | :white_check_mark:         | :red_circle:               | :construction:     |
+| [hedera-improvement-proposal](https://github.com/hashgraph/hedera-improvement-proposal) | hiero-improvement-proposals       | :white_check_mark:  | :red_circle:              | :white_check_mark:         | :red_circle:               | :construction: [<sup>*</sup>](https://github.com/hiero-ledger/tsc/issues/40) |
 
 ### Defintions of columns
 
