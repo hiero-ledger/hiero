@@ -11,7 +11,7 @@ For the DCO report we assume that always the "committer" of a commit is the pers
 
 Repository has been transferred to Hiero.
 
-## hedera-sdk-swift
+## hedera-sdk-swift (https://github.com/hashgraph/hedera-sdk-swift)
 
 - The lib https://github.com/krzyzanowskim/CryptoSwift.git has an unknown license
 
@@ -30,11 +30,11 @@ Repository has been transferred to Hiero.
 
 The repository does not have an invalid commit.
 
-## hiero-sdk-tck
+## hiero-sdk-tck (https://github.com/hiero-ledger/hiero-sdk-tck)
 
 Repository has been transferred to Hiero.
 
-## hedera-sdk-js
+## hedera-sdk-js (https://github.com/hashgraph/hedera-sdk-js)
 
 ### License checks
 
@@ -52,11 +52,11 @@ Repository has been transferred to Hiero.
 
 The repository does not have an invalid commit.
 
-## hiero-sdk-cpp
+## hiero-sdk-cpp (https://github.com/hiero-ledger/hiero-sdk-cpp)
 
 Repository has been transferred to Hiero.
 
-## hedera-sdk-java
+## hedera-sdk-java (https://github.com/hashgraph/hedera-sdk-java)
 
 ### License checks
 
@@ -80,7 +80,7 @@ The repository contains the following invalid commits:
 - https://github.com/hashgraph/hedera-sdk-java/commit/655814cb878197a3e6c631078250765438ff2d48
 - https://github.com/hashgraph/hedera-sdk-java/commit/bb2c02721af35e6d8277576cddb8e88b914573e9
 
-## hedera-sdk-rust
+## hedera-sdk-rust (https://github.com/hashgraph/hedera-sdk-rust)
 
 - Unknown license in dependency: https://github.com/briansmith/ring/blob/main/LICENSE
 - Example for project under "Unicode 3.0" license: https://github.com/unicode-org/icu4x?tab=readme-ov-file
@@ -104,7 +104,7 @@ The repository contains the following invalid commits:
 
 The repository does not have an invalid commit.
 
-## solo
+## solo (https://github.com/hashgraph/solo)
 
 ### License checks
 
@@ -124,7 +124,7 @@ The repository does not have an invalid commit.
 
 The repository does not have an invalid commit.
 
-## hedera-local-node
+## hedera-local-node (https://github.com/hashgraph/hedera-local-node)
 
 ### License checks
 
@@ -144,7 +144,7 @@ The repository does not have an invalid commit.
 
 The repository does not have an invalid commit.
 
-## hedera-json-rpc-relay
+## hedera-json-rpc-relay (https://github.com/hashgraph/hedera-json-rpc-relay)
 
 - license check is still in progress
 
@@ -152,7 +152,7 @@ The repository does not have an invalid commit.
 
 The repository does not have an invalid commit.
 
-## hedera-mirror-node
+## hedera-mirror-node (https://github.com/hashgraph/hedera-mirror-node)
 
 - The LGPL-2.1-only license is not needed at runtime and can be refactored
 - Hibernate is licensed LGPL-2.1-or-later
@@ -198,7 +198,7 @@ The repository contains the following invalid commits:
 - https://github.com/hashgraph/hedera-mirror-node/commit/e869f02e23c0ccc2cf39cc037109fb1c9dadb938
 - https://github.com/hashgraph/hedera-mirror-node/commit/a7692778f6d6b48c2eb9c778ac39e5e9b6c84413
 
-## hedera-mirror-node-explorer
+## hedera-mirror-node-explorer (https://github.com/hashgraph/hedera-mirror-node-explorer)
 
 - The LGPL-3.0-only license is because of https://github.com/web3/web3.js?tab=readme-ov-file
 
@@ -224,7 +224,7 @@ The repository contains the following invalid commits:
 
 - https://github.com/hashgraph/hedera-mirror-node-explorer/commit/e55caa1507cbb0ce9670021b70d4d42d2ce035c1
 
-## hedera-block-node
+## hedera-block-node (https://github.com/hashgraph/hedera-block-node)
 
 - The "GPL-2.0-only WITH Classpath-exception-2.0" license is because of "Maven:com.google.errorprone:javac-shaded:9-dev-r4023-3"
 - The "LGPL-2.1-only" license is because of "Maven:com.github.spotbugs:spotbugs-annotations:4.7.3" that is not needed at runtime
@@ -248,7 +248,7 @@ The repository contains the following invalid commits:
 
 The repository does not have an invalid commit.
 
-## hedera-services
+## hedera-services (https://github.com/hashgraph/hedera-services)
 
 - Need to contact Jendrik for automatic license check+
 
@@ -258,7 +258,7 @@ The repository contains the following invalid commits:
 
 - https://github.com/hashgraph/hedera-services/commit/26967885ce7b3e071773e062b01e857b971ddae4
 
-## hedera-docs
+## hedera-docs (https://github.com/hashgraph/hedera-docs)
 
 ### DCO checks
 
@@ -270,7 +270,7 @@ The repository contains the following invalid commits:
 - https://github.com/hashgraph/hedera-docs/commit/26aea17c0304c34a830b6fc55fc928118a481eed
 - https://github.com/hashgraph/hedera-docs/commit/844415e2a9d05370f712c6a34a73ea07cb8eb856
 
-## did-method
+## did-method (https://github.com/hashgraph/did-method)
 
 ### DCO checks
 
@@ -294,7 +294,7 @@ The repository contains the following invalid commits:
 - https://github.com/hashgraph/did-method/commit/3a31a1ae91fb640dbc7ce851903f39c6d91e942a
 - https://github.com/hashgraph/did-method/commit/4cc2a3b54b78ac0264fc39195e6076deb9f4ddf6
 
-## did-sdk-js
+## did-sdk-js (https://github.com/hashgraph/did-sdk-js)
 
 ### License checks
 
@@ -311,7 +311,7 @@ The repository contains the following invalid commits:
 
 The repository does not have an invalid commit.
 
-## did-sdk-java
+## did-sdk-java (https://github.com/hashgraph/did-sdk-java)
 
 - license check is still in progress
 
@@ -336,13 +336,13 @@ The repository contains the following invalid commits:
 - https://github.com/hashgraph/did-sdk-java/commit/3c8ddd1d95cb13e9e773ef2ea4aacc73952cd192
 - https://github.com/hashgraph/did-sdk-java/commit/57788165dc7cd9e57f0a888ca91bd1221db1d021
 
-## hedera-protobufs
+## hedera-protobufs (https://github.com/hashgraph/hedera-protobufs)
 
 ### DCO checks
 
 The repository does not have an invalid commit.
 
-## hedera-improvement-proposal
+## hedera-improvement-proposal (https://github.com/hashgraph/hedera-improvement-proposal)
 
 - license check is still in progress
 
