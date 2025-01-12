@@ -32,7 +32,17 @@ Repository has been transferred to Hiero.
 
 ## hedera-sdk-js
 
-- Execution of license checks is still in progress
+### License checks
+
+| License (SPDX)     | state |
+| ------------------ | ----- |
+| 0BSD               | :white_check_mark: |
+| Apache-2.0         | :white_check_mark: |
+| BSD-3-Clause       | :white_check_mark: |
+| ISC                | :white_check_mark: |
+| MIT                | :white_check_mark: |
+| Python-2.0         | :white_check_mark: |
+| Unlicense          | :white_check_mark: |
 
 ## hiero-sdk-cpp
 
