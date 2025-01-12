@@ -7,7 +7,7 @@ This report gives detailed information on the state of the transition for each r
 
 For the DCO report we assume that always the "committer" of a commit is the person that has to sign the DCO.
 
-## hiero-sdk-go
+## hiero-sdk-go (https://github.com/hiero-ledger/hiero-sdk-go)
 
 Repository has been transferred to Hiero.
 
