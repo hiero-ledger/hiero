@@ -134,7 +134,26 @@ The repository does not have an invalid commit.
 
 ## hedera-json-rpc-relay (https://github.com/hashgraph/hedera-json-rpc-relay)
 
-- license check is still in progress
+- The dependency "https://github.com/ethereum/execution-apis" uses the "CC0-1.0" license
+- The dependency "https://github.com/jslicense/spdx-license-ids" uses the "CC0-1.0" license
+- The dependency "https://github.com/jslicense/spdx-exceptions.json" uses the "CC-BY-3.0" license
+
+### License checks
+
+| License (SPDX)     | state |
+| ------------------ | ----- |
+| 0BSD               | :white_check_mark: |
+| Apache-2.0         | :white_check_mark: |
+| BSD-2-Clause       | :white_check_mark: |
+| BSD-3-Clause       | :white_check_mark: |
+| BlueOak-1.0.0      | :white_check_mark: |
+| CC-BY-3.0           | ? |
+| CC0-1.0            | :red_circle: |
+| ISC                | :white_check_mark: |
+| MIT                | :white_check_mark: |
+| MPL-2.0            | :white_check_mark: |
+| Python-2.0         | :white_check_mark: |
+| Unlicense          | :white_check_mark: |
 
 ### DCO checks
 
