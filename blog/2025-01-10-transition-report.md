@@ -351,7 +351,19 @@ The repository does not have an invalid commit.
 
 ## hedera-improvement-proposal (https://github.com/hashgraph/hedera-improvement-proposal)
 
-- license check is still in progress
+- The dependency "https://github.com/eventmachine/eventmachine" is used in gem-file. It is licensed by "GPL-2.0-only" and "Ruby" (it is a transitive dependency of Jekyll)
+- The dependency "https://github.com/ruby/webrick" is used in gem-file. It is licensed by "Ruby"
+
+### License checks
+
+| License (SPDX)     | state |
+| ------------------ | ----- |
+| Apache-2.0         | :white_check_mark: |
+| BSD-2-Clause       | :white_check_mark: |
+| BSD-3-Clause       | :white_check_mark: |
+| GPL-2.0-only       | :red_circle: |
+| MIT                | :white_check_mark: |
+| Ruby               | ? |
 
 ### DCO checks
 
