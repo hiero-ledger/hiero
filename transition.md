@@ -9,6 +9,10 @@ A list of all issues can be found [here](https://github.com/LFDT-Hiero/tsc/issue
 
 A step-by-step guide for doing the transition of a repository can be found [here](https://github.com/hiero-ledger/hiero/blob/main/hashgraph-transfer.md).
 
+## Initial steps
+
+The following table contains an overview of the initial steps that need to be done for each project before the actual transition can start.
+
 | Hedera Repo                        | Hiero Repo                        | automatic DCO check | DCO remediation           | automatic License check    | License remediation        | user rights        |
 | ---------------------------------- | --------------------------------- | ------------------- | ------------------------- | -------------------------- | -------------------------- | ------------------ |
 | [hedera-sdk-go](https://github.com/hashgraph/hedera-sdk-go)               | [hiero-sdk-go](https://github.com/hiero-ledger/hiero-sdk-go)               | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :white_check_mark: |
@@ -21,15 +25,15 @@ A step-by-step guide for doing the transition of a repository can be found [here
 | [solo](https://github.com/hashgraph/solo)                        | solo                              | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :construction:     |
 | [hedera-local-node](https://github.com/hashgraph/hedera-local-node)           | hiero-local-node                  | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :white_check_mark: |
 | [hedera-json-rpc-relay](https://github.com/hashgraph/hedera-json-rpc-relay)       | hiero-json-rpc-relay              | :white_check_mark:  | :white_check_mark:        | :construction:             | :construction:             | :construction:     |
-| [hedera-mirror-node](https://github.com/hashgraph/hedera-mirror-node)          |                                   | :white_check_mark:  | :red_circle:<sup>*1</sup> | :white_check_mark:         | :red_circle: <sup>*1</sup> | :white_check_mark: |
-| [hedera-mirror-node-explorer](https://github.com/hashgraph/hedera-mirror-node-explorer) |                                   | :white_check_mark:  | :red_circle:<sup>*1</sup> | :white_check_mark:         | :red_circle: <sup>*1</sup> | :construction:     |
-| [hedera-block-node](https://github.com/hashgraph/hedera-block-node)           |                                   | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :construction:             | :white_check_mark: |
-| [hedera-services](https://github.com/hashgraph/hedera-services)             |                                   | :white_check_mark:  | :red_circle:<sup>*1</sup> | :construction:             | :construction:             | :construction:     |
-| [hedera-docs](https://github.com/hashgraph/hedera-docs)                 |                                   | :white_check_mark:  | :red_circle:<sup>*1</sup> | :construction:             | :construction:             | :construction:     |
+| [hedera-mirror-node](https://github.com/hashgraph/hedera-mirror-node)          | hiero-mirror-node                 | :white_check_mark:  | :red_circle:<sup>*1</sup> | :white_check_mark:         | :red_circle: <sup>*1</sup> | :white_check_mark: |
+| [hedera-mirror-node-explorer](https://github.com/hashgraph/hedera-mirror-node-explorer) | hiero-mirror-node-explorer        | :white_check_mark:  | :red_circle:<sup>*1</sup> | :white_check_mark:         | :red_circle: <sup>*1</sup> | :construction:     |
+| [hedera-block-node](https://github.com/hashgraph/hedera-block-node)           | hiero-block-node                  | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :construction:             | :white_check_mark: |
+| [hedera-services](https://github.com/hashgraph/hedera-services)             | hiero-consensus-node              | :white_check_mark:  | :red_circle:<sup>*1</sup> | :construction:             | :construction:             | :construction:     |
+| [hedera-docs](https://github.com/hashgraph/hedera-docs)                 | hiero-docs                        | :white_check_mark:  | :red_circle:<sup>*1</sup> | :construction:             | :construction:             | :construction:     |
 | [did-method](https://github.com/hashgraph/did-method)                  |                                   | :white_check_mark:  | :red_circle:<sup>*1</sup> | :construction:             | :construction:             | :construction:     |
 | [did-sdk-js](https://github.com/hashgraph/did-sdk-js)                  |                                   | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :construction:     |
 | [did-sdk-java](https://github.com/hashgraph/did-sdk-java)                |                                   | :white_check_mark:  | :red_circle:<sup>*1</sup> | :construction:             | :construction:             | :construction:     |
-| [hedera-protobufs](https://github.com/hashgraph/hedera-protobufs)            |                                   | :white_check_mark:  | :white_check_mark:        | :construction:             | :construction:             | :construction:     | 
+| [hedera-protobufs](https://github.com/hashgraph/hedera-protobufs)            | hiero-protobufs                   | :white_check_mark:  | :white_check_mark:        | :construction:             | :construction:             | :construction:     | 
 | [hedera-improvement-proposal](https://github.com/hashgraph/hedera-improvement-proposal) | hiero-improvement-proposals       | :white_check_mark:  | :red_circle:<sup>*1</sup> | :construction:             | :construction:             | :construction:     |
 
 ### Icons
