@@ -11,6 +11,14 @@ For the DCO report we assume that always the "committer" of a commit is the pers
 
 Repository has been transferred to Hiero.
 
+## hiero-sdk-tck (https://github.com/hiero-ledger/hiero-sdk-tck)
+
+Repository has been transferred to Hiero.
+
+## hiero-sdk-cpp (https://github.com/hiero-ledger/hiero-sdk-cpp)
+
+Repository has been transferred to Hiero.
+
 ## hedera-sdk-swift (https://github.com/hashgraph/hedera-sdk-swift)
 
 - The lib https://github.com/krzyzanowskim/CryptoSwift.git has an unknown license
@@ -30,10 +38,6 @@ Repository has been transferred to Hiero.
 
 The repository does not have an invalid commit.
 
-## hiero-sdk-tck (https://github.com/hiero-ledger/hiero-sdk-tck)
-
-Repository has been transferred to Hiero.
-
 ## hedera-sdk-js (https://github.com/hashgraph/hedera-sdk-js)
 
 ### License checks
@@ -51,10 +55,6 @@ Repository has been transferred to Hiero.
 ### DCO checks
 
 The repository does not have an invalid commit.
-
-## hiero-sdk-cpp (https://github.com/hiero-ledger/hiero-sdk-cpp)
-
-Repository has been transferred to Hiero.
 
 ## hedera-sdk-java (https://github.com/hashgraph/hedera-sdk-java)
 
