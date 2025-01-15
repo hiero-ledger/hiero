@@ -80,7 +80,7 @@ The following steps shall occur to transfer a repository into Hiero from a sourc
   - The new committer group name (`REPO-committers`)
   - The new set of committers for that group
   - The new repository to pull in
-  - The `tsc` group should have the `admin` role on the repository
+  - The `tsc` group should have the `maintain` role on the repository
   - The `github-maintainers` group should have the `admin` role on the repository
   - The `github-committers` group should have the `write` role on the repository
   - The `REPO-maintainers` group should have the `maintain` role on the repository
