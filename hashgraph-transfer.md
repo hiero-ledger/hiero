@@ -40,9 +40,9 @@ When transferring ownership of a repository from [Hashgraph][hashgraph] to [Hier
 - If codecov artifacts are captured for the repository
   - **Repository Transfer Agent** is made aware
 
-- The [@hashgraph/devops-ci team][devops-ci] will capture the repository variables and variable states and provide to
+- The [@hashgraph/platform-ci team][platform-ci] will capture the repository variables and variable states and provide to
   the TA prior to day of transfer
-- The [@hashgraph/devops-ci team][devops-ci] will capture the repository secrets and provide this list to the TA prior
+- The [@hashgraph/platform-ci team][platform-ci] will capture the repository secrets and provide this list to the TA prior
   to day of transfer
 
 ## Day-Before Checks
@@ -122,10 +122,10 @@ At this point the repository is considered **transferred**.
 - After the repository is transferred the maintainers and committers shall ensure the repository behaves
   as expected and will triage and solve any immediate issues
 - After the repository is transferred the maintainers and committers shall ensure all applicable websites are up to date.
-- After the repository is transferred the [@hashgraph/devops-ci team][devops-ci] will deprecate existing packages
+- After the repository is transferred the [@hashgraph/platform-ci team][platform-ci] will deprecate existing packages
   in the Hashgraph namespaces for Maven Central, NPMJS, and Gradle Plugin Central as applicable
 
 [hiero]:https://github.com/hiero-ledger
 [hashgraph]:https://github.com/hashgraph
 [governance]:https://github.com/hiero-ledger/governance
-[devops-ci]:https://github.com/orgs/hashgraph/teams/devops-ci
+[platform-ci]:https://github.com/orgs/hashgraph/teams/platform-ci
