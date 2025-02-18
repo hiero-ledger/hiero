@@ -59,6 +59,9 @@ If applicable, description of any internal changes to the SDKs that may impact u
 ### Response Codes
 
 If applicable, include any new consensus node response codes associated with this feature. Response codes are messages that the consensus node returns when a transaction succeeds or fails.
+- `RESPONSE_CODE_1`
+- `RESPONSE_CODE_2`
+- ...
 
 #### Transaction Retry
 
@@ -74,10 +77,10 @@ Create a numbered list of end-to-end tests that should be implemented to fully t
 
 ### TCK
 
-When adding new SDK features, consider whether a tests should be defined in the TCK repository. The next step would be to create issues in the TCK repository based on this content to document all end-to-end tests and link it as reference in the design doc.
+The tests defined above should also be defined in the TCK repository. Issues should be created in the TCK repository based on this content to document all end-to-end tests and link it as reference in the design doc.
 
 ## SDK Example
 
-Define an example that shows how to use the new feature in code. The example should follow the intended use case flow as defined in the HIP (i.e. user stories), and validate that this intended use case achieves the desired output. The example should define a list of steps which show the user case flow, and provide any checks and validations needed to show the desired output.
+Define an example that shows how to use the new feature in code. The example should follow the intended use case flow as defined in the HIP (i.e. user stories), and validate that this intended use case achieves the desired output. The example should define a list of steps which show the user case flow, and provide any checks and validations needed to show the desired output. If necessary, multiple examples can be provided and defined.
 
 It it is deemed better, instead of defining a new example, to update an existing one, it should be stated what example is being updated and how. If more code is simply being added to the end of the example, the steps can simply be defined as if it was a new example and appended to the example. If, however, updating the example involves more complex changes, it may be best to redefine all the steps for the entire example.
