@@ -1,0 +1,33 @@
+# Transition of projects to Hiero
+
+This document contains an overview of the state of the project transition to Hiero.
+For all projects that are transferred from Hedera to Hiero we have an [extra page](transition.md).
+
+The general process for transferring a project to Hiero can be found [here](howto-transfer.md).
+
+## Initial steps
+
+The following table contains an overview of the initial steps that need to be done for each project before the actual transition can start.
+
+| Hedera Repo                        | Hiero Repo                                                           | Proposal created    | DCO check & remediation   | License check & remediation | user rights       | TSC presentation & voting |  transfered |
+| ---------------------------------- |----------------------------------------------------------------------| ------------------- | ------------------------- | --------------------------- | ----------------- | ------------------------- |------------|
+| -              | [hiero-sdk-python](https://github.com/hiero-ledger/hiero-sdk-python)                     | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
+| -      | [hiero-solo-action](https://github.com/hiero-ledger/hiero-solo-action)                           | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
+| -             | [hiero-did-sdk-python](https://github.com/hiero-ledger/hiero-did-sdk-python)              | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
+| [gomint-api](https://github.com/gomintco/gomint-api)  | -                                                 | :construction:  |         |         | |  |    |
+
+### Defintions of columns
+
+**Source Repo** - Name and maybe link to old project repo
+
+**Hiero Repo** - Name and maybe link to new Hiero repo
+
+**automatic DCO check** - Check if all commits in the repo are automatically checked for DCO signing
+
+**DCO remediation** - We need to ensure that all commits on the main branch are DCO signed. This can be accomplished by retroactively signing commits through an empty signed commit on the repository.
+
+**automatic License check** - Check if the repo is automatically checked for licensing issues
+
+**License remediation** - Check if the repo license and the licenses of all transitive dependencies are compatible with the [LFDT guidelines](https://lf-decentralized-trust.github.io/governance/governing-documents/allowed-third-party-licenses.html).
+
+**user rights** - Users, groups and rights are managed by the `config.yaml` file in the https://github.com/LFDT-Hiero/governance repo. We will create custom groups for each repo. That groups must be created and added to the specific repos in the `config.yaml`.
