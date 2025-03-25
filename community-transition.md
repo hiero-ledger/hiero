@@ -9,7 +9,7 @@ The general process for transferring a project to Hiero can be found [here](howt
 
 The following table contains an overview of the initial steps that need to be done for each project before the actual transition can start.
 
-| Hedera Repo                        | Hiero Repo                                                           | Proposal created    | DCO check & remediation   | License check & remediation | user rights       | TSC presentation & voting |  transfered |
+| Source Repo                        | Hiero Repo                                                           | Proposal created    | DCO check & remediation   | License check & remediation | user rights       | TSC presentation & voting |  transfered |
 | ---------------------------------- |----------------------------------------------------------------------| ------------------- | ------------------------- | --------------------------- | ----------------- | ------------------------- |------------|
 | -              | [hiero-sdk-python](https://github.com/hiero-ledger/hiero-sdk-python)                     | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
 | -      | [hiero-solo-action](https://github.com/hiero-ledger/hiero-solo-action)                           | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
@@ -22,8 +22,12 @@ The following table contains an overview of the initial steps that need to be do
 
 **Hiero Repo** - Name and maybe link to new Hiero repo
 
-**DCO check & remediation* - We need to ensure that all commits on the main branch are DCO signed. This can be accomplished by retroactively signing commits through an empty signed commit on the repository.
+**Proposal created** - A proposal for the project must created. More information can be found [here](howto-transfer.md).
+
+**DCO check & remediation** - We need to ensure that all commits on the main branch are DCO signed. This can be accomplished by retroactively signing commits through an empty signed commit on the repository.
 
 **License check & remediation** - Check if the repo license and the licenses of all transitive dependencies are compatible with the [LFDT guidelines](https://lf-decentralized-trust.github.io/governance/governing-documents/allowed-third-party-licenses.html).
 
 **user rights** - Users, groups and rights are managed by the `config.yaml` file in the https://github.com/LFDT-Hiero/governance repo. We will create custom groups for each repo. That groups must be created and added to the specific repos in the `config.yaml`.
+
+**TSC presentation & voting** - The TSC need to vote for adding the project to Hiero
