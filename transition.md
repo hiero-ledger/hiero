@@ -13,7 +13,7 @@ A step-by-step guide for doing the transition of a repository can be found [here
 
 The following table contains an overview of the initial steps that need to be done for each project before the actual transition can start.
 
-| Hedera Repo                        | Hiero Repo                                                           | automatic DCO check | DCO remediation           | automatic License check    | License remediation        | user rights        | transfered |
+| Hedera Repo                        | Hiero Repo                                                           | automatic DCO check | DCO remediation           | automatic License check    | License remediation        | user rights        | transferred |
 | ---------------------------------- |----------------------------------------------------------------------| ------------------- | ------------------------- | -------------------------- | -------------------------- | ------------------ |------------|
 | [hedera-sdk-go](https://github.com/hashgraph/hedera-sdk-go)               | [hiero-sdk-go](https://github.com/hiero-ledger/hiero-sdk-go)         | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :white_check_mark: | :tada:     |
 | [hedera-sdk-tck](https://github.com/hashgraph/hedera-sdk-tck)              | [hiero-sdk-tck](https://github.com/hiero-ledger/hiero-sdk-tck)       | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :white_check_mark: | :tada:     |
