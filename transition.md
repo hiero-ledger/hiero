@@ -30,7 +30,7 @@ The following table contains an overview of the initial steps that need to be do
 | [hedera-block-node](https://github.com/hashgraph/hedera-block-node)           | [hiero-block-node](https://github.com/hiero-ledger/hiero-block-node) | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:           | :white_check_mark: | :tada:     |
 | [hedera-services](https://github.com/hashgraph/hedera-services)             | [hiero-consensus-node](https://github.com/hiero-ledger/hiero-consensus-node)        | :white_check_mark:  | :white_check_mark:              | :white_check_mark:             | :white_check_mark:             | :white_check_mark: | :tada:    |
 | [hedera-docs](https://github.com/hashgraph/hedera-docs)                 | [hiero-docs](https://github.com/hiero-ledger/hiero-docs)             | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :white_check_mark: | :tada:     |
-| [hedera-improvement-proposal](https://github.com/hashgraph/hedera-improvement-proposal) | hiero-improvement-proposals                                          | :white_check_mark:  | :construction:[<sup>*</sup>](https://github.com/hiero-ledger/tsc/issues/92)              | :white_check_mark:         | :white_check_mark: | :construction:[<sup>*</sup>](https://github.com/hiero-ledger/tsc/issues/40) |            |
+| [hedera-improvement-proposal](https://github.com/hashgraph/hedera-improvement-proposal) | [hiero-improvement-proposals](https://github.com/hiero-ledger/hiero-improvement-proposals) | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark:         | :white_check_mark: | :tada:     |
 
 ### Defintions of columns
 
