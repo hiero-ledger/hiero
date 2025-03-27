@@ -96,6 +96,7 @@ The following steps shall occur to transfer a repository into Hiero from a sourc
   - The TA will modify the self-hosted runner labels in the github actions
     - Note: This will enable the repository actions to run after transfer
 - The AA will approve the PR on the `Target Repository`
+- The TA will add the repo to the Hiero-Ledger organization global rule
 - The TA will set the "Social preview" in the repository settings to the
   [Hiero-Ledger Social Media Template](https://github.com/hiero-ledger/.github/blob/main/resources/social-media-template.png)
 - If publishing to NPMJS
