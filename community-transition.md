@@ -9,12 +9,20 @@ The general process for transferring a project to Hiero can be found [here](howt
 
 The following table contains an overview of the initial steps that need to be done for each project before the actual transition can start.
 
-| Source Repo                        | Hiero Repo                                                           | Proposal created    | DCO check & remediation   | License check & remediation | user rights       | TSC presentation & voting |  transfered |
-| ---------------------------------- |----------------------------------------------------------------------| ------------------- | ------------------------- | --------------------------- | ----------------- | ------------------------- |------------|
-| -              | [hiero-sdk-python](https://github.com/hiero-ledger/hiero-sdk-python)                     | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
-| -      | [hiero-solo-action](https://github.com/hiero-ledger/hiero-solo-action)                           | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
-| -             | [hiero-did-sdk-python](https://github.com/hiero-ledger/hiero-did-sdk-python)              | :white_check_mark:  | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
-| [gomint-api](https://github.com/gomintco/gomint-api)  | -                                                 | :construction:  |         |         | |  |    |
+| Source Repo                                                                 | Hiero Repo                                                                   | Proposal created   | DCO check & remediation   | License check & remediation | user rights       | TSC presentation & voting |  transfered |
+|-----------------------------------------------------------------------------|------------------------------------------------------------------------------| ------------------ | ------------------------- | --------------------------- | ----------------- | ------------------------- |------------|
+| -                                                                           | [hiero-sdk-python](https://github.com/hiero-ledger/hiero-sdk-python)         | :white_check_mark: | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
+| -                                                                           | [hiero-solo-action](https://github.com/hiero-ledger/hiero-solo-action)       | :white_check_mark: | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
+| -                                                                           | [hiero-did-sdk-python](https://github.com/hiero-ledger/hiero-did-sdk-python) | :white_check_mark: | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
+| [gomint-api](https://github.com/gomintco/gomint-api)                        | -                                                                            | :construction: |         |         | |  |    |
+| [did-method](https://github.com/hashgraph/did-method)                       | hiero-did-method                                                             | :construction: | | | | | |
+| [did-sdk-py](https://github.com/hashgraph/did-sdk-py)                       | hiero-did-sdk-py                                                             | :construction: | | | | | |
+| [did-sdk-js](https://github.com/hashgraph/did-sdk-js)                       | hiero-did-sdk-js                                                             | :construction: | | | | | |
+| [did-sdk-java](https://github.com/hashgraph/did-sdk-java)                   | hiero-did-sdk-java                                                           | :construction: | | | | | |
+| [hedera-smart-contracts](https://github.com/hashgraph/hedera-smart-contracts)      | hiero-smart-contracts                                                        | :construction: | | | | | |
+| [hedera-the-graph](https://github.com/hashgraph/hedera-the-graph)           | hiero-the-graph                                                              | :construction: | | | | | |
+| [hedera-metamask-snaps](https://github.com/hashgraph/hedera-metamask-snaps) | hiero-metamask-snaps                                                         | :construction: | | | | | |
+| [hedera-forking](https://github.com/hashgraph/hedera-forking)               | hiero-forking                                                                | :construction: | | | | | |
 
 ### Defintions of columns
 
