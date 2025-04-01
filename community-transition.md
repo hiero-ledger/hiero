@@ -15,6 +15,8 @@ The following table contains an overview of the initial steps that need to be do
 | -                                                                           | [hiero-solo-action](https://github.com/hiero-ledger/hiero-solo-action)       | :white_check_mark: | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
 | -                                                                           | [hiero-did-sdk-python](https://github.com/hiero-ledger/hiero-did-sdk-python) | :white_check_mark: | :white_check_mark:        | :white_check_mark:         | :white_check_mark: | :white_check_mark:        | :tada:     |
 | [gomint-api](https://github.com/gomintco/gomint-api)                        | -                                                                            | :construction: |         |         | |  |    |
+| [hashgraph-online/standards-sdk](https://github.com/hashgraph-online/standards-sdk)                        | -                                                                            | :white_check_mark: |         |         | |  |    |
+
 | [did-method](https://github.com/hashgraph/did-method)                       | hiero-did-method                                                             | :construction: | | | | | |
 | [did-sdk-py](https://github.com/hashgraph/did-sdk-py)                       | hiero-did-sdk-py                                                             | :construction: | | | | | |
 | [did-sdk-js](https://github.com/hashgraph/did-sdk-js)                       | hiero-did-sdk-js                                                             | :construction: | | | | | |
