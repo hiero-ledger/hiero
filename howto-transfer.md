@@ -1,7 +1,9 @@
 # How to transfer a project to Hiero
 
-This document shows the workflow for transferring any (public or private) project to Hiero and advises on several best practices for setting up a good
-open-source project that fits the pattern we use in Hiero.
+This document shows the workflow for transferring any (public or private) project to Hiero and advises on several best
+practices for setting up a good open-source project that fits the pattern we use in Hiero.
+In general a project that should be transfered to Hiero must fulfill the [Hiero Project Criteria](project-criteria.md).
+Therefore it makes sense to read that document before starting the transfer process.
 
 ## Getting in touch with the Hiero community
 
@@ -21,9 +23,6 @@ Since Hiero is part of the [Linux Foundation (LF)](https://www.linuxfoundation.o
 Hiero is part of the sub-foundation [LF Decentralized Trust (LFDT)](https://www.lfdecentralizedtrust.org) within the Linux Foundation, which adds additional project constraints.
 A project must fulfill the following requirements:
 
-- Each commit of a project must be signed by the DCO.
-  More information can be found [here](https://wiki.linuxfoundation.org/dco).
-  We have developed [a python based tool](https://github.com/hiero-ledger/hiero/tree/main/dco-check) that can check repositories for committs without DCO signing.
 - Each commit of a project must be GPG signed.
   More information can be found [here](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account)
 - LFDT must support the project licenses and all transient dependencies.
@@ -54,6 +53,7 @@ We are currently working on a good template for a project proposal.
 The TSC will review the submitter of the proposal to a TSC meeting and provide a slot to introduce the project.
 Here the TSC can ask any additional questions regarding the project and the project proposal.
 As a next step and final the TSC will decide (by voting) if the project will be added directly to the [hiero-ledger org](https://github.com/hiero-ledger).
+The TSC will use the criteria defined in the [Hiero Project Criteria](project-criteria.md) to vote on the project.
 For some projects the TSC might suggest to transfer it to the [LF Decentralized Trust labs](https://lf-decentralized-trust-labs.github.io).
 This allows the project to mature and align with industry standards before it is potentially transferred to Hiero.
 
