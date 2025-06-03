@@ -1,0 +1,136 @@
+# Hashgraph to Hiero Repository Transfer Process
+
+When transferring ownership of a repository to [Hiero-Ledger][hiero] in Github the steps outlined below must be completed
+
+## Definitions
+
+- **Repository Transfer Agent (TA)** 
+  - The person responsible for transferring the repository
+  - Must have ability to create a repository on the receiving organizations side (Hiero)
+  - Must have admin rights for the repo under the source organization
+- **Repository Transfer Approval Agent (AA)**
+  - The person responsible for approving PRs throughout the transfer process
+  - Must have approval authority on the [Hiero-Ledger/governance][governance] repository and on the target repository
+
+## PRE-TRANSFER Checks
+
+- Prior to the day of transfer the following items shall be defined and made available to the **Repository Transfer Agent**
+  - Target Repository Name (like hiero-sdk-foo)
+  - Maintainer Group Name (like hiero-sdk-foo-maintainer)
+  - Maintainers List (should be 2-3 people)
+  - Committer Group Name (like hiero-sdk-foo-commiter)
+  - Committers List
+
+- Point of contact for questions during transfer is identified and provided to the **Repository Transfer Agent**
+
+- Impending Change has been communicated
+  - Internal consumers are aware that the repository is moving to [Hiero-Ledger][hiero]
+  - External consumers are aware that the repository is moving to [Hiero-Ledger][hiero]
+ 
+- If publishing artifacts to maven central:
+  - Appropriate service account is configured in [Hiero-Ledger][hiero]
+  - Maven Central namespace is available for publishing
+  - List of currrently published packages (from [Hashgraph][hashgraph]) is provided to **Repository Transfer Agent**
+- If publishing gradle plugins to gradle plugin central:
+  - Appropriate service account is configured in [Hiero-Ledger][hiero]
+  - List of currrently published packages (from [Hashgraph][hashgraph]) is provided to **Repository Transfer Agent**
+- If publishing to npmjs:
+  - Appropriate service account is configured in [Hiero-Ledger][hiero]
+  - List of currrently published packages (from [Hashgraph][hashgraph]) is provided to **Repository Transfer Agent**
+- If codecov artifacts are captured for the repository
+  - **Repository Transfer Agent** is made aware
+
+- The [@hashgraph/platform-ci team][platform-ci] will capture the repository variables and variable states and provide to
+  the TA prior to day of transfer
+- The [@hashgraph/platform-ci team][platform-ci] will capture the repository secrets and provide this list to the TA prior
+  to day of transfer
+
+## Day-Before Checks
+
+The day before a repository is transferred the TA and AA shall verify the following checks have been complete
+
+- DCO Audit is complete
+- License Audit is complete
+- Pre-Transfer Checks are complete
+  - TA has the following:
+    - New repository Information
+    - List of Maven Central packages
+    - List of Gradle Plugin Central packages
+    - List of NPMJS packages
+    - Awareness of Codecov needs
+    - List of repository variables/states
+    - List of repository secrets
+    - Repository Point of Contact for day-of questions
+- Developer Experience team is alerted that the repository is ready to transfer
+
+The Developer Experience Team shall announce the upcoming repository transfer to the community once the TA and AA verify
+the repository is ready for transfer.
+
+## Transfer Day
+
+Throughout the transfer process both TA and AA shall be available.
+
+The following steps shall occur to transfer a repository into Hiero from a source organization
+
+- The TA will open a new ticket in the [Governance][governance] repository
+  - The TA will create a new branch on the [Governance][governance] repository's ticket
+- The TA will modify the `config.yaml` file in this repository with the following information
+  - The new maintainer group name (`REPO-maintainers`)
+  - The new maintainers for the group
+  - The new committer group name (`REPO-committers`)
+  - The new set of committers for that group
+- The TA will generate a pull request in the [Governance][governance]repository
+- The AA will approve and merge the changes in [Governance][governance]
+- The TA will remove all directly added GitHub accounts from the repo at the source organization
+- The TA will transfer the repository from the source organization into Hiero
+  - The TA will assign the `Target Repository Name` to the repo upon transfer
+- The TA will modify the `config.yaml` file in this repository with the following information
+  - The new repository to pull in
+  - The `tsc` group should have the `maintain` role on the repository
+  - The `github-maintainers` group should have the `admin` role on the repository
+  - The `github-committers` group should have the `write` role on the repository
+  - The `REPO-maintainers` group should have the `maintain` role on the repository
+  - The `REPO-committers` group should have the `write` role on the repository
+  - The visibility field should be set to `public`
+- The TA will generate a pull request in the [Governance][governance]repository
+- The AA will approve and merge the changes in [Governance][governance]
+- The TA will assign the `Target Repository` to the appropriate github self-hosted runner group
+- The TA will open a PR on the `Target Repository`
+  - The TA will modify the self-hosted runner labels in the github actions
+    - Note: This will enable the repository actions to run after transfer
+- The AA will approve the PR on the `Target Repository`
+- The TA will add the repo to the Hiero-Ledger organization global rule
+- The TA will set the "Social preview" in the repository settings to the
+  [Hiero-Ledger Social Media Template](https://github.com/hiero-ledger/.github/blob/main/resources/social-media-template.png)
+- If publishing to NPMJS
+  - The TA has created the new `NPM_TOKEN` for the new repository
+  - The TA has added the `NPM_TOKEN` to the repository secrets
+- If publishing to gradle plugin central
+  - The TA has added the `GRADLE_CACHE_USERNAME` secret to the repository
+  - The TA has added the `GRADLE_CACHE_PASSWORD` secret to the repository
+- If publishing to Maven Central
+  - The maven central namespace tokens are created on the [Hiero-Ledger][hiero] MC namespace
+  - The TA has added the `OSSRH_USERNAME` secret to the repository
+  - The TA has added the `OSSRH_PASSWORD` secret to the repository
+- If performing semantic release
+  - The TA has created the `NPMJS` token for the repository
+  - The TA has added the `NPM_TOKEN` secret to the repository
+- The TA has verified the appropriate secrets needed by the workflows are defined in the github repository
+- The TA has verified that appropriate variables have been defined in the new repository
+- The TA has updated the `CODEOWNERS` file to include the teams defined on the [Hiero-Ledger][hiero] repository
+- The TA will update the [transition.md](https://github.com/hiero-ledger/hiero/blob/main/transition.md) document to show the transition is complete.
+
+At this point the repository is considered **transferred**.
+
+## Post-Transfer Activities
+
+- After the repository is transferred the maintainers and committers shall ensure the repository behaves
+  as expected and will triage and solve any immediate issues
+- After the repository is transferred the maintainers and committers shall ensure all applicable websites are up to date.
+- After the repository is transferred the [@hashgraph/platform-ci team][platform-ci] will deprecate existing packages
+  in the Hashgraph namespaces for Maven Central, NPMJS, and Gradle Plugin Central as applicable
+
+[hiero]:https://github.com/hiero-ledger
+[hashgraph]:https://github.com/hashgraph
+[governance]:https://github.com/hiero-ledger/governance
+[platform-ci]:https://github.com/orgs/hashgraph/teams/platform-ci
