@@ -25,7 +25,7 @@ The following table contains an overview of the initial steps that need to be do
 | [hedera-metamask-snaps](https://github.com/hashgraph/hedera-metamask-snaps) | hiero-metamask-snaps                                                         | :construction: | | | | | |
 | [hedera-forking](https://github.com/hashgraph/hedera-forking)               | hiero-forking                                                                | :construction: | | | | | |
 | [hiero-enterprise-java](https://github.com/OpenElements/hiero-enterprise-java)               | hiero-enterprise-java                                       | :white_check_mark: | | | | | |
-
+| [Hederium](https://github.com/LimeChain/Hederium) | [hiero-hederium](https://github.com/hiero-ledger/hiero-hederium) | :white_check_mark: | :white_check_mark: | :white_check_mark: | :construction: | :white_check_mark: | :construction: |
 
 ### Defintions of columns
 
