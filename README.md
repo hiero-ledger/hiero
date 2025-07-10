@@ -1,5 +1,9 @@
 # Hiero
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/hiero-ledger/hiero/badge)](https://scorecard.dev/viewer/?uri=github.com/hiero-ledger/hiero)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/10697/badge)](https://bestpractices.coreinfrastructure.org/projects/10697)
+[![License](https://img.shields.io/badge/license-apache2-blue.svg)](LICENSE)
+
 This repository is the main entrypoint for the Hiero project at GitHub.
 General information about the project can be found on our landingpage https://hiero.org. 
 
