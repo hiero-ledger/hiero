@@ -1,5 +1,6 @@
 # Technical Charter (the "Charter") for Hiero a Series of LF Projects, LLC
 > Adopted September 16, 2024
+> Amended July 7, 2025
 
 This Charter sets forth the responsibilities and procedures for technical contribution to, and oversight of, the Hiero
 open source project, which has been established as Hiero a Series of LF Projects, LLC (the “Project”).  LF Projects, LLC
@@ -168,11 +169,6 @@ terms of this Charter.
             3. Permanent members may be removed for violation of the Project’s Code of Conduct pursuant to a review by
                the Series Manager.
             
-            4. Any TSC member, including permanent members, that misses three (3) consecutive meetings shall be
-               automatically suspended from eligibility to vote, i.e. no longer considered an active member, until
-               having attended two meetings consecutively. For avoidance of doubt, the suspended TSC member shall be
-               eligible to vote in the second consecutive meeting.
-            
     10. Responsibilities: The TSC will be responsible for all aspects of oversight relating to the Project, in
         coordination with any staff provided by the LFDT for the technical direction of the Project;
    
@@ -201,16 +197,16 @@ terms of this Charter.
 4. **TSC Voting**
 
    1. While the Project aims to operate as a consensus-based community, if any TSC decision requires a vote to move the
-      Project forward, the voting members of the TSC will vote on a one vote per active voting member basis.
+      Project forward, the TSC will vote on a one vote per member basis.
    
-   2. Quorum for TSC meetings requires at least two thirds of all active voting members of the TSC to be present. The
+   2. Quorum for TSC meetings requires at least two thirds of all members of the TSC to be present. The
       TSC may continue to meet if quorum is not met but will be prevented from making any decisions at the meeting.
    
    3. Except as provided in Section **8.iii. and 10.i**, decisions by vote at a meeting require a majority vote of
       those in attendance, provided quorum is met. Decisions made by electronic vote without a meeting require a
-      majority vote of all active voting members of the TSC.
+      majority vote of the TSC.
    
-   4. In the event a vote cannot be resolved by the TSC, any voting member of the TSC may refer the matter to the Series
+   4. In the event a vote cannot be resolved by the TSC, any member of the TSC may refer the matter to the Series
       Manager for assistance in reaching a resolution.
    
 5. **Compliance with Policies**
@@ -295,7 +291,7 @@ terms of this Charter.
    3. The TSC may approve the use of an alternative license or licenses for inbound or outbound contributions on an
       exception basis. To request an exception, please describe the contribution, the alternative open source
       license(s), and the justification for using an alternative open source license for the Project. License
-      exceptions must be approved by a two-thirds vote of the entire TSC.
+      exceptions must be approved by a two-thirds vote of the TSC.
    
    4. Contributed files should contain license information, such as SPDX short form identifiers, indicating the open
       source license or licenses pertaining to the file.
@@ -332,8 +328,7 @@ terms of this Charter.
    
 10. **Amendments**
 
-    1. This charter may be amended by a two-thirds vote of all active voting members of the TSC and is subject to
-       approval by LF Projects; and
+    1. This charter may be amended by a two-thirds vote of the TSC and is subject to approval by LF Projects; and
     
-    2. Changes to the Baird Seat definition must be amended by a unanimous vote of all active voting members of the TSC
-       other than the Baird Seat, subject to approval by LF Projects.
+    2. Changes to the Baird Seat definition must be amended by a unanimous vote of all members of the TSC other than the
+       Baird Seat, subject to approval by LF Projects.
