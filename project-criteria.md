@@ -1,6 +1,6 @@
 # Hiero Project Criteria
 
-The following critera are defined by the Hiero TSC and must be met for a project to be considered for inclusion in Hiero.
+The following critera are defined by the Hiero TSC and must be met for a project to be considered for inclusion in [hiero-ledger](https://github.com/hiero-ledger).
 
 ## Hiero’s Mission and Technical Charter
 
@@ -13,13 +13,16 @@ The following critera are defined by the Hiero TSC and must be met for a project
 - The entity submitting a project must release its governance to Hiero’s open community.
 - The project’s name should not be trademarked or owned by an external entity that is not Hiero/LFDT.
 
-## Licensing, Compliance, & Security
-
-- The project must meet Hiero’s licensing and Developer Certificate of Origin (DCO) requirements. More information can be found [here](https://wiki.linuxfoundation.org/dco).
-- The project must follow Hiero best practices for security and repository setup. More information will be provided soon.
-
 ## Impact, Commitment, & Sustainability
 
 - The project must have potential for widespread impact and use.
 - The current project developers should demonstrate intention and commitment to continue participating in the development and governance of the project.
 - If the project is similar to an existing Hiero project then an attempt should be made to see if there is openness to merging. If however merging does not make sense then the project will remain open for consideration.
+- The project must promote the diversity of committers and maintainers.
+
+## LFDT and TAC Requirements
+
+- The project must meet Hiero’s licensing and [Developer Certificate of Origin (DCO) requirements](https://wiki.linuxfoundation.org/dco).
+- Information on project lincenses can be found in LFDT's TAC [Allowed Third Party Licenses](https://lf-decentralized-trust.github.io/governance/governing-documents/allowed-third-party-licenses/)
+- The project must follow Hiero's [Security Policy](https://github.com/hiero-ledger/.github/blob/main/SECURITY.md).
+- The project must follow the [LFDT TAC Guidelines for Repository Structure](https://lf-decentralized-trust.github.io/governance/governing-documents/repository-structure/)  
