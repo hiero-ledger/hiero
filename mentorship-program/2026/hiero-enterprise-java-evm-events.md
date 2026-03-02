@@ -33,8 +33,6 @@ Mostly all of that will be part of the hiero-eneterprise-java project (excluding
 
 We expect that events and logs of any deployed smart contracts can be observed by the API (by using callbacks).
 
-
-
 ### Relation to LF Decentralized Trust and impact on the community
 
 The contribution will be done to the hiero-eneterprise-java project what is a subproject of the graduated Hiero project.
