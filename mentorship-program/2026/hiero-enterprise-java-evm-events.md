@@ -4,7 +4,7 @@ Coding
 
 ### Description
 
-The hiero-eneterprise-java project provides a layer on top of Hiero SDKs to integrate hiero functionality in enterprise java applications that are based on frameorks like JakartaEE, Microprofile, Quarkus or Spring Boot.
+The [hiero-eneterprise-java](https://github.com/hiero-ledger/hiero-enterprise-java) project provides a layer on top of Hiero SDKs to integrate hiero functionality in enterprise java applications that are based on frameorks like JakartaEE, Microprofile, Quarkus or Spring Boot.
 Instead of just defining the SDK API the project creates a layer on top of it by providing services and repositories for a more easy and integrated interaction with an hiero based network.
 
 The project invests a lot in rich and easy to useable APIs to interact with smart contracts.
@@ -43,7 +43,7 @@ Next to that it will allow the Hiero community to get a lot of input on how futu
 
 - Knowledge of Java and Java enterprise frameworks (like Spring Boot)
 - Understanding web services and design of service interfaces (HTTP, RESTful interfaces, gRPC, OpenAPI)
-- Experience with Hiero (in best the SDKs) are a big plus
+- Experience with Hiero SDKs are a big plus
 - Experience with smart contracts and solidity are a big plus
 
 ### Mentor(s) Names and Contact Info
@@ -52,9 +52,9 @@ Name: Hendrik Ebbers
 Email: hendrik.ebbers@hashgraph.com
 Company affiliation: Hashgraph
 
-Name:
-Email:
-Company affiliation:
+Name: Tayebwa Noah
+Email: noah@open-elements.com
+Company affiliation: Open Elements
 
 ### Additional Information
 
