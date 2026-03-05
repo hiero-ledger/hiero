@@ -15,21 +15,21 @@ We will use this repository as a central point for [Github discussions regarding
 
 ### 👉 Transition trackers
 
-- [Transition of projects to Hiero](https://github.com/hiero-ledger/hiero/blob/main/community-transition.md)
-- COMPLETED - [Transition of Hedera projects to Hiero](https://github.com/hiero-ledger/hiero/blob/main/transition.md)
+- [Transition of projects to Hiero](https://github.com/hiero-ledger/governance/blob/main/processes/community-repo-transition-status.md)
+- COMPLETED - [Transition of Hedera projects to Hiero](https://github.com/hiero-ledger/governance/blob/main/processes/hedera-repo-transition-status.md)
 
 ### 👉 **Before transfering or adding repos**: Project Criteria for acceptance into hiero-ledger
 
-- [Project criteria guidelines](https://github.com/hiero-ledger/hiero/blob/main/project-criteria.md)
+- [Project criteria guidelines](https://github.com/hiero-ledger/governance/blob/main/rules-and-guidelines/project-criteria.md)
 
 ### 👉 Steps for transfering repos from one GitHub org to another GitHub org
 
-- **For Hashgraph repos** - Steps and guidelines for [transfer from hashgraph to hiero-ledger](https://github.com/hiero-ledger/hiero/blob/main/hashgraph-transfer.md).
-- **For all other repos** - Steps and guidelines for [transfer into hiero-ledger](https://github.com/hiero-ledger/hiero/blob/main/howto-transfer.md).
+- **For Hashgraph repos** - Steps and guidelines for [transfer from hashgraph to hiero-ledger](https://github.com/hiero-ledger/governance/blob/main/processes/hashgraph-transfer-checklist.md).
+- **For all other repos** - Steps and guidelines for [transfer into hiero-ledger](https://github.com/hiero-ledger/governance/blob/main/processes/transfer-process.md).
 
 ### 👉 Steps for adding new repositories into [hiero-ledger](https://github.com/hiero-ledger/) (Non-transfer)
 
-- Steps for adding new repos into hiero-ledger (Under Construction)
+- Steps and guidelines for [creating new repos](https://github.com/hiero-ledger/governance/blob/main/processes/new-repo-creation.md)
 
 ## Contribution Guidelines and Resources
 
@@ -38,8 +38,7 @@ The following documents will help you to understand our vision, workflows and co
 - Our [Code of Conduct](https://www.lfdecentralizedtrust.org/code-of-conduct)
 - Our [CONTRIBUTING.md](https://github.com/hiero-ledger/.github/blob/main/CONTRIBUTING.md) is a good starting point if you want to contribute to Hiero
 - All our projects are licensed under the [Apache 2.0 license](https://github.com/hiero-ledger/.github/blob/main/LICENSE.md).
-- Our [technical charter](https://github.com/hiero-ledger/hiero/blob/main/technical-charter.md) given an overview about or offical workflows, processes and the work of the technical steering comittee (TSC)
-- We provide a [transfer document](https://github.com/hiero-ledger/hiero/blob/main/transition.md) that shows the current state of the transition of Hedera projects to Hiero.
+- Our [technical charter](https://github.com/hiero-ledger/governance/blob/main/hiero-technical-charter.md) given an overview about or offical workflows, processes and the work of the technical steering comittee (TSC)
 - Our [public calender](https://zoom-lfx.platform.linuxfoundation.org/meetings/lf-decentralized-trust) contains the open TSC and community meetings.
 
 ## Help/Community
