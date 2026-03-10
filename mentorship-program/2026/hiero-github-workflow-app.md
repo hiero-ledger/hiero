@@ -1,3 +1,7 @@
+## Title: Hiero Github Workflow App
+Hiero Github Workflow App is a mentorship project at Hiero. It involves coding scalable, highly secure, end-to-end maintainer workflows that support contributor onboarding, progression and repository management across Hiero.
+
+
 ## Primary Focus
 
 Coding
