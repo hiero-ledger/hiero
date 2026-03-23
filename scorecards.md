@@ -4,7 +4,7 @@
 
 The Open Source Security Foundation ([OpenSSF](https://github.com/ossf)) is a cross-industry forum launched in 2020 by the Linux Foundation to enhance open-source software security. OpenSSF provides technical and educational initiatives, including a security baseline, automation tools for SBOMs, and a professional certificate program. It also manages projects like Alpha-Omega and [OpenSSF Scorecard](https://scorecard.dev/) to mitigate risks. 
 
-More detailed information regarding Scorecards, what is measured and how is reviewed can be found in the [OpenSSF Scorecard GitHub Repo](https://github.com/ossf/scorecard).
+More detailed information about Scorecards, including what is measured and how they are reviewed, can be found in the [OpenSSF Scorecard GitHub Repo](https://github.com/ossf/scorecard).
 
 ## How to Check my Project's Score
 
