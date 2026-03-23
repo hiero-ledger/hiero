@@ -2,19 +2,19 @@
 
 ## What is OpenSSF
 
-The Open Source Security Foundation ([OpenSSF](https://github.com/ossf)) is a cross-industry forum launched in 2020 by the Linux Foundation to enhance open-source software security. OpenSSF provides technical and educational initiatives, including a security baseline, automation tools for SBOMs, and a professional certificate program. It also manages projects like Alpha-Omega and [Security Scorecard](https://scorecard.dev/) to mitigate risks. 
+The Open Source Security Foundation ([OpenSSF](https://github.com/ossf)) is a cross-industry forum launched in 2020 by the Linux Foundation to enhance open-source software security. OpenSSF provides technical and educational initiatives, including a security baseline, automation tools for SBOMs, and a professional certificate program. It also manages projects like Alpha-Omega and [OpenSSF Scorecard](https://scorecard.dev/) to mitigate risks. 
 
-More detailed information regarding Scorecards, what is meassured and how is reviewed can be found in the [OpenSSF Scorecard GitHub Repo](https://github.com/ossf/scorecard).
+More detailed information regarding Scorecards, what is measured and how is reviewed can be found in the [OpenSSF Scorecard GitHub Repo](https://github.com/ossf/scorecard).
 
 ## How to Check my Project's Score
 
 **Via reports from the weekly cron job**
-Use the [Webviewer](https://scorecard.dev/viewer/?uri=) to find your project's score as shown in the example.
+Use the [Webviewer](https://scorecard.dev/viewer/) to find your project's score by appending your repository URI to the `uri` parameter, for example: [Webviewer example](https://scorecard.dev/viewer/?uri=github.com/hiero-ledger/hiero).
 If your project is not available, please add it via PR to the [OpenSSF Scorecard GitHub Repo](https://github.com/ossf/scorecard).
 [Example PR](https://github.com/ossf/scorecard/pull/4884).
 
 **Via GitHub Actions and API**
-Run the score manually in your repo by adding a workflow in your repo's GitHub actions or use the API as mentioned in the [documentation](https://github.com/ossf/scorecard?tab=readme-ov-file#scorecard-rest-api).
+Run the score manually in your repo by adding a workflow in your repo's GitHub Actions or use the API as mentioned in the [documentation](https://github.com/ossf/scorecard?tab=readme-ov-file#scorecard-rest-api).
 
 ## Repo Scores
 
