@@ -13,7 +13,8 @@ Use the [Webviewer](https://scorecard.dev/viewer/?uri=) to find your project's s
 If your project is not available, please add it via PR to the [OpenSSF Scorecard GitHub Repo](https://github.com/ossf/scorecard).
 [Example PR](https://github.com/ossf/scorecard/pull/4884).
 
-Run the score manually in your repo by adding a workflow in your repo's GitHub actions or use the API as mentioned in the [documentation](https://github.com/ossf/scorecard?tab=readme-ov-file#scorecard-rest-api)
+**Via GitHub Actions and API**
+Run the score manually in your repo by adding a workflow in your repo's GitHub actions or use the API as mentioned in the [documentation](https://github.com/ossf/scorecard?tab=readme-ov-file#scorecard-rest-api).
 
 ## Repo Scores
 
