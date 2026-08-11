@@ -114,7 +114,7 @@ def main():
             if github_user:
                 other_email = None
                 if "github" in email:
-                    other_email = get_github_username(email, os.getenv('GITHUB_TOKEN'))
+                    other_email = get_github_user_email(github_user, os.getenv('GITHUB_TOKEN'))
 
                 for commit in user_map[email]:
                     commit["github_username"] = github_user
