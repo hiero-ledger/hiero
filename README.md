@@ -20,7 +20,7 @@ We will use this repository as a central point for [Github discussions regarding
 
 ### 👉 **Before transfering or adding repos**: Project Criteria for acceptance into hiero-ledger
 
-- [Project criteria guidelines](https://github.com/hiero-ledger/hiero/blob/main/project-criteria.md)
+- [Project criteria guidelines](https://github.com/hiero-ledger/governance/blob/main/rules-and-guidelines/project-criteria.md)
 
 ### 👉 Steps for transfering repos from one GitHub org to another GitHub org
 
