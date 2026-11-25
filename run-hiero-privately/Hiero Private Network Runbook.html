@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hiero Private Network Runbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Operations manual: ink on paper, one steel-teal accent for actions, semantic stripes for callouts.
+     Layout: sticky contents rail on wide screens, single 72ch column of numbered steps. */
+  --paper: #f7f8f8;
+  --sheet: #ffffff;
+  --ink: #17212b;
+  --muted: #56636f;
+  --rule: #d9dee2;
+  --accent: #0e6e74;
+  --accent-soft: #e3f0f0;
+  --code-bg: #f1f3f4;
+  --warn: #9a5b00; --warn-bg: #fff6e6;
+  --crit: #a3262a; --crit-bg: #fdeeee;
+  --ok: #1f7a3f; --ok-bg: #eaf6ee;
+  --font-display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1519; --sheet: #151c21; --ink: #e3e8eb; --muted: #9aa7b0; --rule: #2a343b;
+    --accent: #52b9bd; --accent-soft: #15302f; --code-bg: #1b2328;
+    --warn: #f0b45a; --warn-bg: #2b2213; --crit: #f08a8a; --crit-bg: #2e1818; --ok: #6fcf8f; --ok-bg: #142a1c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1519; --sheet: #151c21; --ink: #e3e8eb; --muted: #9aa7b0; --rule: #2a343b;
+  --accent: #52b9bd; --accent-soft: #15302f; --code-bg: #1b2328;
+  --warn: #f0b45a; --warn-bg: #2b2213; --crit: #f08a8a; --crit-bg: #2e1818; --ok: #6fcf8f; --ok-bg: #142a1c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--font-body); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 40px; }
+@media (max-width: 900px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; } nav.toc { position: static; max-height: none; border: 1px solid var(--rule); border-radius: 6px; margin: 16px 0; } }
+header.doc { max-width: 1180px; margin: 0 auto; padding: 40px 16px 24px; border-bottom: 1px solid var(--rule); }
+header.doc .kicker { font: 500 13px/1.4 var(--font-mono); color: var(--accent); letter-spacing: .04em; text-transform: uppercase; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 38px; margin: 6px 0 8px; }
+h2 { font-size: 26px; margin: 56px 0 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
+h3 { font-size: 19px; margin: 28px 0 8px; font-family: var(--font-body); }
+.lede { font-size: 18px; color: var(--muted); max-width: 72ch; margin: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 18px; font-size: 14px; color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 600; }
+nav.toc { position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; padding: 28px 12px 28px 0; font-size: 14px; }
+nav.toc p { font: 600 12px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+nav.toc a { display: block; padding: 4px 8px; border-radius: 4px; color: var(--ink); text-decoration: none; }
+nav.toc a:hover { background: var(--accent-soft); }
+nav.toc li.sub a { padding-left: 22px; font-size: 13.5px; }
+nav.toc .n { display: inline-block; width: 26px; color: var(--muted); font-variant-numeric: tabular-nums; }
+main { min-width: 0; padding-bottom: 80px; }
+main > section > p, main > section > ul, main > section > ol { max-width: 72ch; }
+.step-title { border: 0 !important; margin: 40px 0 8px !important; font-size: 22px !important; padding-top: 0 !important; }
+.step-h { display: flex; gap: 14px; align-items: baseline; }
+.step-n { font: 600 14px/1 var(--font-mono); color: var(--sheet); background: var(--accent); padding: 6px 8px; border-radius: 4px; flex: none; font-variant-numeric: tabular-nums; }
+.where { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 14px; }
+.chip { font: 500 12px/1 var(--font-mono); padding: 6px 8px; border-radius: 999px; border: 1px solid var(--rule); background: var(--sheet); color: var(--muted); }
+.chip.host { border-color: var(--accent); color: var(--accent); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; background: var(--sheet); }
+.tbl { overflow-x: auto; margin: 12px 0 18px; border: 1px solid var(--rule); border-radius: 6px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 600; background: var(--code-bg); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--font-mono); font-size: .88em; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.code { margin: 10px 0 16px; border: 1px solid var(--rule); border-radius: 6px; background: var(--code-bg); overflow: hidden; }
+.code-h { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 8px 6px 12px; border-bottom: 1px solid var(--rule); font: 12px/1.4 var(--font-mono); color: var(--muted); }
+.code-h code.sha { background: none; padding: 0; font-size: 11px; }
+.code pre { margin: 0; padding: 12px 14px; overflow-x: auto; font: 13px/1.55 var(--font-mono); }
+.code pre code { background: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
+.code.file pre { max-height: none; }
+button.copy { font: 500 12px/1 var(--font-body); padding: 6px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--sheet); color: var(--ink); cursor: pointer; flex: none; }
+button.copy:hover { border-color: var(--accent); color: var(--accent); }
+pre.out { margin: 6px 0 16px; padding: 10px 14px; border-left: 3px solid var(--ok); background: var(--ok-bg); font: 12.5px/1.55 var(--font-mono); overflow-x: auto; }
+.label-out { font: 600 12px/1 var(--font-mono); color: var(--ok); text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
+.note { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 14px 0; max-width: 80ch; }
+.note.warn { border-color: var(--warn); background: var(--warn-bg); }
+.note.crit { border-color: var(--crit); background: var(--crit-bg); }
+.note b.t { display: block; margin-bottom: 2px; }
+.note p { margin: 4px 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 14px 0; }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; }
+.card h4 { margin: 0 0 4px; font-size: 15px; }
+.card p { margin: 0; font-size: 14px; color: var(--muted); }
+figure { margin: 18px 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; overflow-x: auto; }
+figure svg { display: block; width: 100%; min-width: 640px; height: auto; }
+figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+svg .box { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.4; }
+svg .box.acc { stroke: var(--accent); stroke-width: 2; }
+svg .t { fill: var(--ink); font: 600 13px var(--font-body); }
+svg .s { fill: var(--muted); font: 11.5px var(--font-mono); }
+svg .gossip { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+svg .flow { stroke: var(--muted); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+svg .arrow { fill: var(--muted); }
+ol.steps-mini { padding-left: 20px; }
+footer { border-top: 1px solid var(--rule); margin-top: 60px; padding-top: 16px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<header class="doc">
+  <div class="kicker">Operations runbook · Hiero consensus network</div>
+  <h1>Hiero Private Network Runbook</h1>
+  <p class="lede">How to build a private Hiero network of four consensus nodes and one mirror node on Ubuntu virtual machines, using only public software and the scripts included in this document.</p>
+  <div class="meta">
+    <span><b>Version</b> 1.0</span>
+    <span><b>Prepared by</b> MAKE Group</span>
+    <span><b>Validated with</b> consensus node v0.76.4 · mirror node v0.163.0 · explorer 26.2.0</span>
+    <span><b>Effort</b> about 2–3 hours</span>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <p>Contents</p>
+  <ol>
+    <li><a href="#overview"><span class="n">1</span>Overview</a></li>
+    <li><a href="#prereq"><span class="n">2</span>Before you start</a></li>
+    <li><a href="#steps"><span class="n">3</span>Deployment steps</a></li>
+    <li class="sub"><a href="#s1"><span class="n">1</span>Copy the scripts</a></li>
+    <li class="sub"><a href="#s2"><span class="n">2</span>Prepare node hosts</a></li>
+    <li class="sub"><a href="#s3"><span class="n">3</span>Generate node keys</a></li>
+    <li class="sub"><a href="#s4"><span class="n">4</span>Create the genesis</a></li>
+    <li class="sub"><a href="#s5"><span class="n">5</span>Install node software</a></li>
+    <li class="sub"><a href="#s6"><span class="n">6</span>Configure the nodes</a></li>
+    <li class="sub"><a href="#s7"><span class="n">7</span>Start the network</a></li>
+    <li class="sub"><a href="#s8"><span class="n">8</span>Confirm consensus</a></li>
+    <li class="sub"><a href="#s9"><span class="n">9</span>Set up the mirror node</a></li>
+    <li class="sub"><a href="#s10"><span class="n">10</span>Verify the network</a></li>
+    <li><a href="#ops"><span class="n">4</span>Day-2 operations</a></li>
+    <li><a href="#trouble"><span class="n">5</span>Troubleshooting</a></li>
+    <li><a href="#limits"><span class="n">6</span>Scope and limitations</a></li>
+    <li><a href="#appA"><span class="n">A</span>hiero-node.sh</a></li>
+    <li><a href="#appB"><span class="n">B</span>hiero-mirror.sh</a></li>
+    <li><a href="#appC"><span class="n">C</span>Verification scripts</a></li>
+    <li><a href="#appD"><span class="n">D</span>Node Management Tools</a></li>
+  </ol>
+</nav>
+
+<main>
+<section id="overview">
+<h2>1. Overview</h2>
+<p>The result is a four-node consensus network with its own genesis, its own treasury key and its own ledger ID. A mirror node and network explorer sit beside it. Each node generates its own private keys locally; only public data leaves a node host. Four nodes tolerate one faulty or stopped node: consensus needs more than two thirds of the weight, so three of four nodes keep the network running.</p>
+
+<figure>
+<svg viewBox="0 0 800 330" role="img" aria-labelledby="archT archD">
+  <title id="archT">Network architecture</title>
+  <desc id="archD">Four consensus nodes gossip with each other on port 50111. SDK clients send transactions to port 50211. The mirror node pulls record streams from every node over read-only SSH and serves the REST API and explorer on port 8080.</desc>
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+  <!-- gossip mesh -->
+  <line class="gossip" x1="300" y1="80" x2="470" y2="80"/>
+  <line class="gossip" x1="300" y1="230" x2="470" y2="230"/>
+  <line class="gossip" x1="230" y1="105" x2="230" y2="205"/>
+  <line class="gossip" x1="540" y1="105" x2="540" y2="205"/>
+  <line class="gossip" x1="300" y1="100" x2="470" y2="210"/>
+  <line class="gossip" x1="470" y1="100" x2="300" y2="210"/>
+  <rect class="box acc" x="160" y="55" width="140" height="50" rx="5"/><text class="t" x="230" y="77" text-anchor="middle">node 1 · id 0</text><text class="s" x="230" y="94" text-anchor="middle">account 0.0.3</text>
+  <rect class="box acc" x="470" y="55" width="140" height="50" rx="5"/><text class="t" x="540" y="77" text-anchor="middle">node 2 · id 1</text><text class="s" x="540" y="94" text-anchor="middle">account 0.0.4</text>
+  <rect class="box acc" x="160" y="205" width="140" height="50" rx="5"/><text class="t" x="230" y="227" text-anchor="middle">node 3 · id 2</text><text class="s" x="230" y="244" text-anchor="middle">account 0.0.5</text>
+  <rect class="box acc" x="470" y="205" width="140" height="50" rx="5"/><text class="t" x="540" y="227" text-anchor="middle">node 4 · id 3</text><text class="s" x="540" y="244" text-anchor="middle">account 0.0.6</text>
+  <text class="s" x="385" y="160" text-anchor="middle">gossip 50111/tcp</text>
+  <!-- clients -->
+  <rect class="box" x="10" y="130" width="110" height="50" rx="5"/><text class="t" x="65" y="152" text-anchor="middle">SDK clients</text><text class="s" x="65" y="169" text-anchor="middle">gRPC 50211</text>
+  <path class="flow" d="M120,145 L160,95" marker-end="url(#ah)"/>
+  <path class="flow" d="M120,165 L160,215" marker-end="url(#ah)"/>
+  <!-- mirror -->
+  <rect class="box" x="660" y="120" width="130" height="70" rx="5"/><text class="t" x="725" y="146" text-anchor="middle">mirror node</text><text class="s" x="725" y="163" text-anchor="middle">REST · web3 · gRPC</text><text class="s" x="725" y="178" text-anchor="middle">explorer :8080</text>
+  <path class="flow" d="M610,85 L660,135" marker-end="url(#ah)"/>
+  <path class="flow" d="M610,225 L660,175" marker-end="url(#ah)"/>
+  <text class="s" x="725" y="210" text-anchor="middle">pulls record streams</text>
+  <text class="s" x="725" y="224" text-anchor="middle">rsync over SSH, read-only</text>
+  <text class="s" x="400" y="300" text-anchor="middle">Each node host also exposes metrics on 9999/tcp (keep internal).</text>
+</svg>
+<figcaption>Figure 1. Components and network flows. Node ids start at 0; the key files of node id 0 are named <code>node1</code>.</figcaption>
+</figure>
+
+<h3>Validated software versions</h3>
+<div class="tbl"><table>
+<tr><th>Component</th><th>Version</th><th>Source</th></tr>
+<tr><td>Consensus node</td><td class="num">v0.76.4</td><td><code>builds.hedera.com/node/software/v0.76/build-v0.76.4.zip</code> (SHA-384 checked)</td></tr>
+<tr><td>Java runtime</td><td class="num">OpenJDK 25</td><td>Ubuntu package <code>openjdk-25-jre-headless</code></td></tr>
+<tr><td>Node configuration templates</td><td class="num">Solo v0.91.0</td><td><code>github.com/hiero-ledger/solo</code>, <code>resources/templates</code></td></tr>
+<tr><td>Mirror node</td><td class="num">v0.163.0</td><td><code>gcr.io/mirrornode/*</code> container images</td></tr>
+<tr><td>Network explorer</td><td class="num">26.2.0</td><td><code>ghcr.io/hiero-ledger/hiero-mirror-node-explorer</code></td></tr>
+<tr><td>Operating system</td><td class="num">Ubuntu 24.04 LTS</td><td>x86-64</td></tr>
+</table></div>
+<p>Newer consensus node releases exist (v0.78.2 at the time of writing). Use the versions above unless you also validate a newer combination: each mirror node release supports a specific range of consensus node versions.</p>
+
+<h3>The steps at a glance</h3>
+<div class="tbl"><table>
+<tr><th class="num">Step</th><th>What happens</th><th>Where</th></tr>
+<tr><td class="num">1</td><td>Copy the two scripts to the hosts</td><td>Workstation</td></tr>
+<tr><td class="num">2</td><td>Install Java and create the node user and folders</td><td>Each node</td></tr>
+<tr><td class="num">3</td><td>Generate private keys; export a public bundle</td><td>Each node</td></tr>
+<tr><td class="num">4</td><td>Create the treasury key and the genesis file</td><td>Coordinator</td></tr>
+<tr><td class="num">5</td><td>Download and verify the node software</td><td>Each node</td></tr>
+<tr><td class="num">6</td><td>Write the network configuration</td><td>Each node</td></tr>
+<tr><td class="num">7</td><td>Start the nodes and wait for ACTIVE</td><td>Each node</td></tr>
+<tr><td class="num">8</td><td>Confirm identical state hashes</td><td>Each node</td></tr>
+<tr><td class="num">9</td><td>Set up the mirror node and explorer</td><td>Mirror and nodes</td></tr>
+<tr><td class="num">10</td><td>Run the verification suite</td><td>Workstation</td></tr>
+</table></div>
+</section>
+
+<section id="prereq">
+<h2>2. Before you start</h2>
+<h3>Roles</h3>
+<p>The runbook is written for independent operators, so every step says where it runs. One person can play every role.</p>
+<div class="grid2">
+  <div class="card"><h4>Node operator (×4)</h4><p>Runs one consensus node host. Keeps that node's private keys; shares only its public bundle.</p></div>
+  <div class="card"><h4>Genesis coordinator</h4><p>Creates the treasury key, assembles the genesis file from the four public bundles and distributes it. Handles public data only, plus the treasury key.</p></div>
+  <div class="card"><h4>Mirror operator</h4><p>Runs the mirror node and explorer. Gets read-only access to each node's record streams.</p></div>
+</div>
+
+<h3>Hosts</h3>
+<div class="tbl"><table>
+<tr><th>Host</th><th>Count</th><th>CPU / memory</th><th>Disk</th><th>Validated on</th></tr>
+<tr><td>Consensus node</td><td class="num">4</td><td class="num">4 vCPU / 16 GB</td><td class="num">100 GB SSD minimum</td><td>AWS EC2 t2.xlarge</td></tr>
+<tr><td>Mirror node + explorer</td><td class="num">1</td><td class="num">2 vCPU / 8 GB</td><td class="num">100 GB SSD minimum</td><td>AWS EC2 t2.large</td></tr>
+</table></div>
+<div class="note warn"><b class="t">Sizing lessons from the validation runs</b>
+<p>Hosts with 8 GB of memory are too small for a consensus node; 16 GB with a 4–10 GB Java heap ran reliably. With 30 GB disks, a test network halted after 3.8 days: event-stream files (on by default, about 5 GB per node per day, never deleted) filled the disks. The <code>configure</code> step now turns event streams off. Monitor disk use regardless, and alert at 80%.</p></div>
+
+<h3>Network and firewall</h3>
+<div class="tbl"><table>
+<tr><th>Port</th><th>On</th><th>Allow from</th><th>Purpose</th></tr>
+<tr><td class="num">50111/tcp</td><td>Nodes</td><td>The other three nodes</td><td>Gossip (consensus traffic)</td></tr>
+<tr><td class="num">50211/tcp</td><td>Nodes</td><td>Clients, verification workstation</td><td>gRPC API, plaintext</td></tr>
+<tr><td class="num">50212/tcp</td><td>Nodes</td><td>Clients (optional)</td><td>gRPC API over TLS, self-signed certificate</td></tr>
+<tr><td class="num">22/tcp</td><td>Nodes</td><td>Administrators; the mirror host</td><td>SSH administration; mirror pulls record streams over SSH</td></tr>
+<tr><td class="num">9999/tcp</td><td>Nodes</td><td>Localhost or your monitoring server only</td><td>Prometheus metrics, including platform status</td></tr>
+<tr><td class="num">8080/tcp</td><td>Mirror</td><td>Users and applications</td><td>REST API, web3 <code>eth_call</code>, mirror gRPC, explorer UI</td></tr>
+<tr><td class="num">22/tcp</td><td>Mirror</td><td>Administrators</td><td>SSH administration</td></tr>
+</table></div>
+
+<h3>Planning worksheet</h3>
+<p>Fill this in before you begin. The commands in this runbook use the example values in the third column; replace them with yours. If all hosts share a private network, use private addresses.</p>
+<div class="tbl"><table>
+<tr><th>Item</th><th>Notes</th><th>Example used below</th></tr>
+<tr><td>Node 1 address</td><td>Node id 0, account 0.0.3</td><td><code>10.0.1.11</code></td></tr>
+<tr><td>Node 2 address</td><td>Node id 1, account 0.0.4</td><td><code>10.0.1.12</code></td></tr>
+<tr><td>Node 3 address</td><td>Node id 2, account 0.0.5</td><td><code>10.0.1.13</code></td></tr>
+<tr><td>Node 4 address</td><td>Node id 3, account 0.0.6</td><td><code>10.0.1.14</code></td></tr>
+<tr><td>Mirror address</td><td></td><td><code>10.0.1.20</code></td></tr>
+<tr><td>Ledger ID</td><td>Hex. Must differ from public Hedera networks (0x00–0x03)</td><td><code>0x2a</code></td></tr>
+<tr><td>EVM chain ID</td><td>Must differ from public Hedera networks (295–298)</td><td><code>1234</code></td></tr>
+<tr><td>Consensus node release</td><td></td><td><code>v0.76.4</code></td></tr>
+<tr><td>Network name</td><td>Shown in the explorer; lowercase, digits, dashes</td><td><code>private-net</code></td></tr>
+</table></div>
+<p>Every host needs outbound HTTPS to <code>builds.hedera.com</code>, <code>raw.githubusercontent.com</code>, the Ubuntu package mirrors and, for the mirror host, <code>gcr.io</code>, <code>ghcr.io</code> and Docker Hub. Log in as a user with <code>sudo</code> rights (the examples use <code>ubuntu</code>).</p>
+</section>
+
+<section id="steps"><h2>3. Deployment steps</h2><p>Run the steps in order. Each one names the host it runs on and shows the expected output.</p></section>
+<section id="s1">
+<div class="step-h"><span class="step-n">1</span><h2 class="step-title">Copy the scripts to the hosts</h2></div>
+<div class="where"><span class="chip host">Workstation</span><span class="chip">all five hosts</span></div>
+<p>Save <a href="#appA">Appendix A</a> as <code>hiero-node.sh</code> and <a href="#appB">Appendix B</a> as <code>hiero-mirror.sh</code>. Use each appendix's Copy button so the text is copied exactly. Check both files against the SHA-256 values printed in the appendices.</p>
+<div class="code"><div class="code-h"><span>bash · workstation</span><button type="button" class="copy">Copy</button></div><pre><code>sha256sum hiero-node.sh hiero-mirror.sh</code></pre></div>
+<p class="label-out">Expected</p>
+<pre class="out">a49e9516f38dded09709e789d5613d25b67b3b83d66102a1ebb179bb4ba73e2f  hiero-node.sh
+ccd90433b13ea776ea0b7a830c05e32f1d479b7e6a4f9e9e2a1e4efd27893dc7  hiero-mirror.sh</pre>
+<p>If a sum differs, an editor changed the file (often line endings or a missing final newline): copy it again. Then copy the scripts to the hosts.</p>
+<div class="code"><div class="code-h"><span>bash · workstation</span><button type="button" class="copy">Copy</button></div><pre><code>chmod +x hiero-node.sh hiero-mirror.sh
+for ip in 10.0.1.11 10.0.1.12 10.0.1.13 10.0.1.14; do scp hiero-node.sh ubuntu@$ip:~/; done
+scp hiero-mirror.sh ubuntu@10.0.1.20:~/</code></pre></div>
+<p>The genesis coordinator (step 4) also needs <code>hiero-node.sh</code> in its home folder. Run <code>~/hiero-node.sh help</code> or <code>~/hiero-mirror.sh help</code> on any host for a summary of commands.</p>
+</section>
+
+<section id="s2">
+<div class="step-h"><span class="step-n">2</span><h2 class="step-title">Prepare each node host</h2></div>
+<div class="where"><span class="chip host">Each node</span><span class="chip">sudo</span></div>
+<p>Creates the <code>hedera</code> user (uid 2000) and the <code>/opt/hgcapp/services-hedera/HapiApp2.0</code> folder tree, then installs OpenJDK 25 and the tools the other steps need.</p>
+<div class="code"><div class="code-h"><span>bash · each node</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-node.sh prepare-host</code></pre></div>
+<p class="label-out">Expected (last lines)</p>
+<pre class="out">==&gt; java: openjdk version &quot;25.0.x&quot; ...
+==&gt; Host ready. Open firewall: gossip 50111/tcp from peer IPs; gRPC 50211-50212/tcp for clients; keep 9999 (metrics) internal.</pre>
+</section>
+
+<section id="s3">
+<div class="step-h"><span class="step-n">3</span><h2 class="step-title">Generate node keys</h2></div>
+<div class="where"><span class="chip host">Each node</span><span class="chip">sudo</span></div>
+<p>Each node generates its own keys on its own host:</p>
+<ul>
+<li><b>Gossip signing key</b> (RSA-3072): stays in <code>data/keys</code>.</li>
+<li><b>gRPC TLS key</b> (RSA-4096): stays in <code>hedera.key</code>.</li>
+<li><b>Node admin key</b> (ED25519): written to <code>~/hiero-share</code>. Move it offline after this step.</li>
+</ul>
+<p>The command also writes a public bundle, <code>node&lt;N&gt;.public.json</code>, and records the node id on the host. Run the line for the host you are on:</p>
+<div class="tbl"><table>
+<tr><th>Host</th><th>Command</th><th>Bundle produced</th></tr>
+<tr><td>Node 1</td><td><code>sudo ~/hiero-node.sh gen-keys --node-id 0 --nodes 4 --host 10.0.1.11 --out ~/hiero-share</code></td><td><code>node1.public.json</code></td></tr>
+<tr><td>Node 2</td><td><code>sudo ~/hiero-node.sh gen-keys --node-id 1 --nodes 4 --host 10.0.1.12 --out ~/hiero-share</code></td><td><code>node2.public.json</code></td></tr>
+<tr><td>Node 3</td><td><code>sudo ~/hiero-node.sh gen-keys --node-id 2 --nodes 4 --host 10.0.1.13 --out ~/hiero-share</code></td><td><code>node3.public.json</code></td></tr>
+<tr><td>Node 4</td><td><code>sudo ~/hiero-node.sh gen-keys --node-id 3 --nodes 4 --host 10.0.1.14 --out ~/hiero-share</code></td><td><code>node4.public.json</code></td></tr>
+</table></div>
+<p class="label-out">Expected (node 1)</p>
+<pre class="out">==&gt; Node id 0 of 4  -&gt;  key files named node1, account 0.0.3
+==&gt; Generating gossip signing key for node1 (node id 0)
+==&gt; Generating gRPC TLS key (hedera.key / hedera.crt)
+==&gt; Generating node admin ED25519 key -&gt; /home/ubuntu/hiero-share/node1-admin.key.pem (keep offline!)
+==&gt; Public bundle written: /home/ubuntu/hiero-share/node1.public.json
+==&gt; Send ONLY /home/ubuntu/hiero-share/node1.public.json to the genesis coordinator. Private keys stay on this host.</pre>
+<p>Send only the <code>.public.json</code> file to the coordinator. The command refuses to run twice on the same host, so a node identity is never overwritten by accident.</p>
+<div class="note"><b class="t">Why per-node key generation</b><p>The consensus node repository includes a key generator that produces the same keys for the same node id every time. That is convenient for tests and unsafe for a real network. The script uses fresh random keys from OpenSSL instead.</p></div>
+</section>
+
+<section id="s4">
+<div class="step-h"><span class="step-n">4</span><h2 class="step-title">Create the genesis</h2></div>
+<div class="where"><span class="chip host">Coordinator</span><span class="chip">no sudo</span></div>
+<p>The coordinator can be any Linux machine with <code>openssl</code> and <code>python3</code>, preferably not a node host. First create the treasury key, which controls account 0.0.2 and all initial HBAR.</p>
+<div class="code"><div class="code-h"><span>bash · coordinator</span><button type="button" class="copy">Copy</button></div><pre><code>mkdir -p ~/hiero-genesis &amp;&amp; cd ~/hiero-genesis
+~/hiero-node.sh gen-genesis-key --out .</code></pre></div>
+<p class="label-out">Expected</p>
+<pre class="out">==&gt; Genesis treasury key written to ./genesis.key.pem (store offline)
+bootstrap.genesisPublicKey (share with all operators): 6f0c…(64 hex characters)
+SDK operator private key (DER hex, keep secret):        302e0201…</pre>
+<div class="note crit"><b class="t">Protect the treasury key</b><p>The DER hex line is the private key in the form SDKs accept. Store it and <code>genesis.key.pem</code> in a password manager or vault, and never paste them into chat, tickets or shared documents. Step 10 needs the DER hex. Share only the public key (<code>genesis.pub.hex</code>).</p></div>
+<p>Collect the four public bundles in <code>~/hiero-genesis</code>, then build the genesis file:</p>
+<div class="code"><div class="code-h"><span>bash · coordinator</span><button type="button" class="copy">Copy</button></div><pre><code>cd ~/hiero-genesis
+~/hiero-node.sh build-genesis --nodes 4 genesis-network.json \
+  node1.public.json node2.public.json node3.public.json node4.public.json</code></pre></div>
+<p class="label-out">Expected</p>
+<pre class="out">genesis-network.json: 4 nodes, ids [0, 1, 2, 3]; tolerates 1 faulty node(s)
+==&gt; sha256 (operators must verify): 5c1e…
+Distribute genesis-network.json to every operator. Any byte difference prevents genesis.</pre>
+<p>Send <code>genesis-network.json</code> and <code>genesis.pub.hex</code> to every node and to the mirror host, and publish the SHA-256 through a second channel.</p>
+<div class="code"><div class="code-h"><span>bash · coordinator</span><button type="button" class="copy">Copy</button></div><pre><code>for ip in 10.0.1.11 10.0.1.12 10.0.1.13 10.0.1.14 10.0.1.20; do
+  ssh ubuntu@$ip &#x27;mkdir -p ~/hiero-genesis&#x27;
+  scp genesis-network.json genesis.pub.hex ubuntu@$ip:hiero-genesis/
+done</code></pre></div>
+<p>Each operator checks the file before using it:</p>
+<div class="code"><div class="code-h"><span>bash · each node and the mirror</span><button type="button" class="copy">Copy</button></div><pre><code>sha256sum ~/hiero-genesis/genesis-network.json   # must equal the coordinator&#x27;s value</code></pre></div>
+</section>
+
+<section id="s5">
+<div class="step-h"><span class="step-n">5</span><h2 class="step-title">Install the node software</h2></div>
+<div class="where"><span class="chip host">Each node</span><span class="chip">sudo</span></div>
+<p>Downloads the release zip (about 150 MB) and its <code>.sha384</code> file from <code>builds.hedera.com</code>, verifies the checksum and installs the jars.</p>
+<div class="code"><div class="code-h"><span>bash · each node</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-node.sh install v0.76.4</code></pre></div>
+<p class="label-out">Expected (last lines)</p>
+<pre class="out">build-v0.76.4.zip: OK
+==&gt; Installed v0.76.4: &lt;n&gt; libs</pre>
+<div class="note warn"><b class="t">Checksum only</b><p>Consensus node releases are published with SHA-384 checksums but no cryptographic signatures. The checksum protects against corrupted downloads, not against a tampered server. Organisations with stricter supply-chain rules should build from the tagged source (<code>hiero-consensus-node</code>, <code>docs/gradle-quickstart.md</code>) and install with <code>LOCAL_BUILD=&lt;path to hedera-node/data&gt;</code>.</p></div>
+</section>
+
+<section id="s6">
+<div class="step-h"><span class="step-n">6</span><h2 class="step-title">Configure the nodes</h2></div>
+<div class="where"><span class="chip host">Each node</span><span class="chip">sudo</span></div>
+<p>This step:</p>
+<ul>
+<li>fetches the configuration templates (Solo v0.91.0);</li>
+<li>installs the genesis file;</li>
+<li>writes the treasury public key, ledger ID and chain ID;</li>
+<li>turns event streams off;</li>
+<li>prints fingerprints of the network-wide files.</li>
+</ul>
+<p>Use the same values on every node.</p>
+<div class="code"><div class="code-h"><span>bash · each node</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-node.sh configure \
+  --genesis ~/hiero-genesis/genesis-network.json \
+  --genesis-pubkey ~/hiero-genesis/genesis.pub.hex \
+  --ledger-id 0x2a --chain-id 1234</code></pre></div>
+<p class="label-out">Expected</p>
+<pre class="out">==&gt; Genesis key set in data/config/application.properties (the file the node reads at genesis)
+==&gt; Network-wide file fingerprints (must match on every node):
+…  settings.txt
+…  data/config/genesis-network.json
+…  data/config/application.properties
+…  data/config/bootstrap.properties
+…  data/config/api-permission.properties</pre>
+<p><b>Compare the five fingerprints across all four nodes. They must be identical.</b> A single differing byte in these files stops the nodes from reaching agreement at genesis, or creates diverging state.</p>
+<div class="note crit"><b class="t">The genesis key must be in application.properties</b><p>Public documentation places <code>bootstrap.genesisPublicKey</code> in <code>bootstrap.properties</code>, but the node reads it only from <code>data/config/application.properties</code>. If it is missing there, the network starts with the public development key and anyone can control the treasury. The script writes it to the right file and checks it. <a href="#s10">Step 10</a> confirms it again from outside.</p></div>
+</section>
+
+<section id="s7">
+<div class="step-h"><span class="step-n">7</span><h2 class="step-title">Start the network</h2></div>
+<div class="where"><span class="chip host">Each node</span><span class="chip">sudo</span></div>
+<p>Installs a systemd unit, <code>hiero-node.service</code>, which restarts the node 10 seconds after a crash, and starts it. Start all four nodes within a few minutes of each other: a node waits until more than two thirds of the network is online.</p>
+<div class="code"><div class="code-h"><span>bash · each node</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-node.sh service --heap-min 4g --heap-max 10g</code></pre></div>
+<p>Then watch the status until it reads <code>ACTIVE</code>:</p>
+<div class="code"><div class="code-h"><span>bash · each node</span><button type="button" class="copy">Copy</button></div><pre><code>watch -n 10 ~/hiero-node.sh status</code></pre></div>
+<p>A node moves through <code>STARTING_UP</code>, then <code>OBSERVING</code> or <code>CHECKING</code>, to <code>ACTIVE</code>. In the validation runs all four nodes reached <code>ACTIVE</code> within about one minute of the fourth node starting.</p>
+<p class="label-out">Expected</p>
+<pre class="out">node id 0 (node1) of 4 nodes
+ACTIVE
+State  Recv-Q Send-Q  Local Address:Port  Peer Address:Port
+LISTEN 0      ...           *:50111            *:*
+LISTEN 0      ...           *:50211            *:*
+LISTEN 0      ...           *:50212            *:*
+LISTEN 0      ...           *:9999             *:*</pre>
+</section>
+
+<section id="s8">
+<div class="step-h"><span class="step-n">8</span><h2 class="step-title">Confirm consensus</h2></div>
+<div class="where"><span class="chip host">Each node</span><span class="chip">sudo</span></div>
+<p>Every node saves a signed state about once a minute. Nodes in consensus show the same hash mnemonic for the same round. Wait two minutes after <code>ACTIVE</code>, then run on every node:</p>
+<div class="code"><div class="code-h"><span>bash · each node</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-node.sh state 3</code></pre></div>
+<p class="label-out">Expected (one node; round numbers and words will differ)</p>
+<pre class="out">round 3312921    wish-ahead-salmon-mansion   signed by nodes 1, 2, 3
+round 3313296    clerk-alpha-gentle-filter   signed by nodes 1, 2, 3
+round 3313671    type-extend-unable-envelope   signed by nodes 1, 2, 3
+disk /: 12% used, 85G free
+  /opt/hgcapp/recordStreams                        152K
+  /opt/hgcapp/services-hedera/HapiApp2.0/data/saved 1.5G
+  /opt/hgcapp/services-hedera/HapiApp2.0/output    1.1G</pre>
+<p>Pick a round that appears on all four nodes: the mnemonic must be the same everywhere. <code>/opt/hgcapp/eventsStreams</code> should not be listed, or should stay empty. If it grows, event streams are still on: see <a href="#trouble">Troubleshooting</a>.</p>
+</section>
+
+<section id="s9">
+<div class="step-h"><span class="step-n">9</span><h2 class="step-title">Set up the mirror node</h2></div>
+<div class="where"><span class="chip host">Mirror</span><span class="chip host">Each node</span><span class="chip">sudo</span></div>
+<p>The mirror node verifies each node's record-stream files against the network's address book, loads them into PostgreSQL and serves the APIs and explorer through nginx on port 8080. It pulls the files with rsync over SSH. On the nodes, the mirror's key may only run a read-only copy of the record-stream folder, and only from the mirror's address.</p>
+<h3>9.1 Prepare the mirror host</h3>
+<div class="code"><div class="code-h"><span>bash · mirror</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-mirror.sh prepare-host</code></pre></div>
+<p>This installs Docker, Compose and rsync, creates <code>/opt/hiero-mirror</code> and generates a pull key. It then prints the exact command to run on every node:</p>
+<pre class="out">==&gt; Host ready. On EVERY consensus node, run:
+
+  sudo ~/hiero-node.sh allow-mirror --from 10.0.1.20 --pubkey &quot;ssh-ed25519 AAAA… hiero-mirror@mirror&quot;</pre>
+<h3>9.2 Grant read-only stream access on every node</h3>
+<p>Run the printed command on each of the four nodes. The nodes must already be running (step 7), because the record-stream folder is created at start.</p>
+<div class="code"><div class="code-h"><span>bash · each node</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-node.sh allow-mirror --from 10.0.1.20 --pubkey &quot;ssh-ed25519 AAAA… hiero-mirror@mirror&quot;</code></pre></div>
+<pre class="out">==&gt; Mirror key allowed for hiero-streams: read-only rsync of /opt/hgcapp/recordStreams, only from 10.0.1.20</pre>
+<h3>9.3 Configure and start the mirror</h3>
+<p>Use the same ledger ID and chain ID as the nodes.</p>
+<div class="code"><div class="code-h"><span>bash · mirror</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-mirror.sh configure --genesis ~/hiero-genesis/genesis-network.json \
+  --ledger-id 0x2a --chain-id 1234 --name private-net
+sudo ~/hiero-mirror.sh start</code></pre></div>
+<p class="label-out">Expected (abridged)</p>
+<pre class="out">==&gt; Nodes to pull from: 0.0.3 10.0.1.11 0.0.4 10.0.1.12 0.0.5 10.0.1.13 0.0.6 10.0.1.14
+==&gt; Configured mirror v0.163.0 for ledger 0x2a / chain 1234 in /opt/hiero-mirror
+==&gt; Pulled from 4/4 nodes: … signature files on disk
+==&gt; Sync service: active
+==&gt; Started. Explorer: http://&lt;this host&gt;:8080/   Check progress with: sudo ~/hiero-mirror.sh status</pre>
+<p>The first start downloads the container images and takes a few minutes. Check progress with:</p>
+<div class="code"><div class="code-h"><span>bash · mirror</span><button type="button" class="copy">Copy</button></div><pre><code>sudo ~/hiero-mirror.sh status</code></pre></div>
+<p>All containers should be <code>running</code> and <code>/api/v1/network/nodes</code> should report 4 nodes. Nodes write a record file only when there are transactions, so the block list stays empty until step 10. Open the explorer at <code>http://10.0.1.20:8080/</code>.</p>
+</section>
+
+<section id="s10">
+<div class="step-h"><span class="step-n">10</span><h2 class="step-title">Verify the network</h2></div>
+<div class="where"><span class="chip host">Workstation</span><span class="chip">Node.js 20 or later</span></div>
+<p>Three scripts, listed in <a href="#appC">Appendix C</a>, run 33 checks from outside the network:</p>
+<ul>
+<li><b>key-check</b> (2 checks): the network accepts your treasury key and rejects the public development key.</li>
+<li><b>network-check</b> (24 checks): accounts, transfers, consensus messages, tokens and a smart contract. Each write goes to a specific node, and each read must give the same answer from all four nodes.</li>
+<li><b>mirror-check</b> (7 checks): the mirror node imported everything network-check wrote.</li>
+</ul>
+<p>The companion <i>Verification Report</i> describes each check and the recorded results.</p>
+<div class="code"><div class="code-h"><span>bash · workstation</span><button type="button" class="copy">Copy</button></div><pre><code>mkdir hiero-verify &amp;&amp; cd hiero-verify
+# save package.json, key-check.mjs, network-check.mjs and mirror-check.mjs from Appendix C here
+npm install
+export HIERO_NODES=&quot;10.0.1.11:50211=0.0.3,10.0.1.12:50211=0.0.4,10.0.1.13:50211=0.0.5,10.0.1.14:50211=0.0.6&quot;
+read -rsp &quot;Treasury key (DER hex): &quot; OPERATOR_KEY_DER &amp;&amp; export OPERATOR_KEY_DER &amp;&amp; echo
+node key-check.mjs
+node network-check.mjs
+MIRROR_URL=http://10.0.1.20:8080 node mirror-check.mjs</code></pre></div>
+<p class="label-out">Expected</p>
+<pre class="out">PASS  genesis key accepted (0.0.2 key on the network ends ...)
+PASS  public development key rejected (INVALID_SIGNATURE)
+PASS  Treasury 0.0.2 balance — same answer from all 4 nodes  — 50000000000 ℏ
+…
+24/24 checks passed in 10.5s (ids saved to verify-ids.json)
+…
+7/7 mirror checks passed</pre>
+<p>If the workstation cannot reach the nodes directly, tunnel through any host that can. Do not map to local ports 50212 or 443: the SDK assumes TLS on those.</p>
+<div class="code"><div class="code-h"><span>bash · workstation (alternative)</span><button type="button" class="copy">Copy</button></div><pre><code>ssh -N -L 51211:10.0.1.11:50211 -L 52211:10.0.1.12:50211 -L 53211:10.0.1.13:50211 \
+       -L 54211:10.0.1.14:50211 -L 8080:10.0.1.20:8080 ubuntu@&lt;jump host&gt; &amp;
+export HIERO_NODES=&quot;127.0.0.1:51211=0.0.3,127.0.0.1:52211=0.0.4,127.0.0.1:53211=0.0.5,127.0.0.1:54211=0.0.6&quot;
+MIRROR_URL=http://127.0.0.1:8080 node mirror-check.mjs</code></pre></div>
+<p>When all three scripts pass, the network is ready.</p>
+</section>
+
+<section id="ops">
+<h2>4. Day-2 operations</h2>
+<h3>Consensus nodes</h3>
+<div class="tbl"><table>
+<tr><th>Task</th><th>Command</th></tr>
+<tr><td>Status</td><td><code>~/hiero-node.sh status</code></td></tr>
+<tr><td>State hashes and disk use</td><td><code>sudo ~/hiero-node.sh state 3</code></td></tr>
+<tr><td>Stop, start or restart one node</td><td><code>sudo systemctl stop|start|restart hiero-node</code></td></tr>
+<tr><td>Service log</td><td><code>journalctl -u hiero-node -n 100</code></td></tr>
+<tr><td>Node logs</td><td><code>/opt/hgcapp/services-hedera/HapiApp2.0/output/</code>: <code>swirlds.log</code> (platform), <code>hgcaa.log</code> (services), <code>stdout.log</code></td></tr>
+<tr><td>Metrics</td><td><code>curl -s localhost:9999/metrics | grep ^platform_PlatformStatus</code></td></tr>
+</table></div>
+<p>Platform status codes reported on port 9999:</p>
+<div class="tbl"><table>
+<tr><th class="num">Code</th><th>Status</th><th>Meaning</th></tr>
+<tr><td class="num">1</td><td>STARTING_UP</td><td>Loading state</td></tr>
+<tr><td class="num">2</td><td>ACTIVE</td><td>Taking part in consensus. The only healthy steady state</td></tr>
+<tr><td class="num">4</td><td>BEHIND</td><td>Fell behind; will reconnect and copy state from a peer</td></tr>
+<tr><td class="num">5 / 6</td><td>FREEZING / FREEZE_COMPLETE</td><td>Network freeze for maintenance</td></tr>
+<tr><td class="num">7</td><td>REPLAYING_EVENTS</td><td>Replaying its event log after a restart</td></tr>
+<tr><td class="num">8</td><td>OBSERVING</td><td>Starting; watching the network before joining</td></tr>
+<tr><td class="num">9</td><td>CHECKING</td><td>Its own events are not reaching consensus. If every node shows it, the network has stalled</td></tr>
+<tr><td class="num">10</td><td>RECONNECT_COMPLETE</td><td>Finished copying state from a peer</td></tr>
+<tr><td class="num">11</td><td>CATASTROPHIC_FAILURE</td><td>Stopped on an unrecoverable error; see <code>swirlds.log</code></td></tr>
+</table></div>
+<h3>Fault tolerance</h3>
+<p>One node may be down at a time: the other three keep reaching consensus, and the stopped node catches up when it returns. In validation, a stopped node rejoined about 40 seconds after starting. With two nodes down the network halts until one returns. Restart nodes one at a time and wait for <code>ACTIVE</code> before touching the next.</p>
+<h3>Monitoring</h3>
+<p>Neither the node software nor this runbook ships alerting. At a minimum, alert on:</p>
+<ul>
+<li>platform status other than 2 for more than 5 minutes, on any node;</li>
+<li>the same round showing different hash mnemonics on different nodes;</li>
+<li>disk use above 80%;</li>
+<li>the systemd unit restarting repeatedly.</li>
+</ul>
+<p>Hiero publishes Grafana dashboards for the metrics endpoint in the <code>hiero-consensus-node</code> repository, under <code>hedera-node/infrastructure/grafana</code>.</p>
+<h3>Disk growth</h3>
+<div class="tbl"><table>
+<tr><th>Path</th><th>Growth</th><th>Handling</th></tr>
+<tr><td><code>/opt/hgcapp/eventsStreams</code></td><td>About 5 GB per day per node when enabled</td><td>Off by default with these scripts. If you keep it (<code>--keep-event-streams</code>), prune it yourself</td></tr>
+<tr><td><code>/opt/hgcapp/recordStreams</code></td><td>Grows with transaction volume</td><td>Read by the mirror; keep files until the mirror has imported them</td></tr>
+<tr><td><code>HapiApp2.0/data/saved</code></td><td>Bounded: the node keeps the last few states</td><td>None</td></tr>
+<tr><td><code>HapiApp2.0/output</code></td><td>Bounded: logs roll at 100 MB, 10 files each</td><td><code>stdout.log</code> is not rotated; add a logrotate rule</td></tr>
+</table></div>
+<h3>Mirror node</h3>
+<div class="tbl"><table>
+<tr><th>Task</th><th>Command</th></tr>
+<tr><td>Status: sync per node, containers, latest block</td><td><code>sudo ~/hiero-mirror.sh status</code></td></tr>
+<tr><td>Stop and start (data is kept)</td><td><code>sudo ~/hiero-mirror.sh stop</code> / <code>sudo ~/hiero-mirror.sh start</code></td></tr>
+<tr><td>Importer logs</td><td><code>cd /opt/hiero-mirror &amp;&amp; sudo docker compose logs --since 10m importer</code></td></tr>
+<tr><td>Database passwords</td><td><code>/opt/hiero-mirror/config/.env</code> (root only, generated randomly)</td></tr>
+</table></div>
+<h3>Do not</h3>
+<ul>
+<li>Edit <code>genesis-network.json</code>, the treasury key or the ledger ID after the first start. These are fixed at genesis; changing them requires a new network.</li>
+<li>Copy a node's <code>data/keys</code> or <code>hedera.key</code> to another host, or run two hosts with the same node id.</li>
+<li>Run the nodes with the public development key. Step 10's key check guards against this.</li>
+</ul>
+</section>
+
+<section id="trouble">
+<h2>5. Troubleshooting</h2>
+<div class="tbl"><table>
+<tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
+<tr><td>Nodes stay in <code>STARTING_UP</code>, <code>OBSERVING</code> or <code>CHECKING</code></td><td>Fewer than three nodes running; gossip port 50111 blocked between nodes; or genesis files differ</td><td>Start the missing nodes; open 50111 between all node addresses; compare the step 6 fingerprints</td></tr>
+<tr><td>key-check: the public development key is accepted</td><td>The treasury public key was not in <code>application.properties</code> at first start</td><td>Re-create the network. Stop all four nodes. On each, run <code>sudo rm -rf /opt/hgcapp/services-hedera/HapiApp2.0/data/saved/* /opt/hgcapp/recordStreams/*</code>, re-run step 6, then start all four</td></tr>
+<tr><td>Disk fills; nodes fail with <code>No space left on device</code> and the network stalls in <code>CHECKING</code></td><td>Event streams enabled (default outside these scripts), or the disk is too small</td><td>Confirm <code>event.enableEventStreaming, false</code> is in <code>HapiApp2.0/settings.txt</code> on every node; free space; use 100 GB or more</td></tr>
+<tr><td>Node killed, or restarts repeatedly</td><td>Not enough memory</td><td>Use 16 GB hosts with <code>--heap-max 10g</code> or less</td></tr>
+<tr><td><code>Permission denied</code> under <code>/opt/hgcapp</code></td><td>The folder belongs to the <code>hedera</code> user</td><td>Run the command with <code>sudo</code>, as shown</td></tr>
+<tr><td>SDK times out or fails TLS against a node</td><td>Client connected to 50212 or a local port 50212 / 443, where the SDK assumes TLS</td><td>Use port 50211 (plaintext), or configure TLS with the node's certificate</td></tr>
+<tr><td>Mirror shows no blocks</td><td>No transactions yet (record files are written only when there are some); allow-mirror missing on a node; SSH from the mirror blocked</td><td>Run step 10; check <code>sudo ~/hiero-mirror.sh status</code> for nodes with 0 files; check port 22 from the mirror</td></tr>
+<tr><td>Mirror importer reports signature or address-book errors</td><td>Mirror configured from a different genesis file</td><td>Re-run <code>configure</code> with the network's <code>genesis-network.json</code> and restart</td></tr>
+<tr><td><code>java</code> missing or too old</td><td>Release v0.76 and later need Java 25</td><td>Re-run <code>prepare-host</code></td></tr>
+</table></div>
+</section>
+
+<section id="limits">
+<h2>6. Scope and limitations</h2>
+<p><b>Validated:</b></p>
+<ul>
+<li>Every step on AWS EC2 Ubuntu 24.04 hosts in one account and network, with the operator roles simulated by one team.</li>
+<li>Genesis with an independent treasury key.</li>
+<li>Agreement between the nodes.</li>
+<li>Stopping and restarting a single node.</li>
+<li>Mirror import, the REST and web3 APIs, and the explorer.</li>
+</ul>
+<p>The <code>state</code> command and the event-stream setting were added after the long-running observation described in section 2. They were checked on the test hosts but not yet through a full rebuild.</p>
+<p><b>Not covered by this runbook:</b></p>
+<ul>
+<li>Software upgrades: the network freeze procedure.</li>
+<li>Adding or removing nodes after genesis.</li>
+<li>Backup and restore.</li>
+<li>Client TLS with trusted certificates.</li>
+<li>High availability for the mirror node.</li>
+<li>Block nodes and the JSON-RPC relay.</li>
+<li>Host hardening beyond the firewall rules above.</li>
+</ul>
+<p>Hiero's public documentation does not yet describe these procedures for independently operated networks.</p>
+</section>
+
+<section id="appA">
+<h2>Appendix A. hiero-node.sh</h2>
+<p>Consensus node provisioning. Commands: <code>prepare-host</code>, <code>gen-keys</code>, <code>gen-genesis-key</code>, <code>build-genesis</code>, <code>install</code>, <code>configure</code>, <code>service</code>, <code>status</code>, <code>state</code>, <code>allow-mirror</code>. Requires bash, OpenSSL, Python 3, curl and unzip.</p>
+<div class="code file"><div class="code-h"><span><b>hiero-node.sh</b> · 613 lines · SHA-256 <code class="sha">a49e9516f38dded09709e789d5613d25b67b3b83d66102a1ebb179bb4ba73e2f</code></span><button type="button" class="copy">Copy</button></div><pre><code>#!/usr/bin/env bash
+#
+# hiero-node.sh — provision an independent Hiero consensus node on a Linux host.
+#
+# Mirrors what Solo (github.com/hiero-ledger/solo) does inside k8s, but for plain VMs/bare metal
+# where every node is run by a different operator.
+#
+#   Operator, on each node host:            Coordinator (public data only):
+#     1. prepare-host                          4. build-genesis
+#     2. gen-keys        -&gt; share bundle  --&gt;
+#     3. install                         &lt;--   genesis-network.json + genesis pubkey
+#     5. configure
+#     6. service  /  7. status
+#
+# Run `hiero-node.sh help` for details. Requires: bash, openssl, python3, curl, unzip, sha384sum.
+
+set -euo pipefail
+
+HAPI_DIR=&quot;${HAPI_DIR:-/opt/hgcapp/services-hedera/HapiApp2.0}&quot;
+HEDERA_USER=&quot;${HEDERA_USER:-hedera}&quot;
+HEDERA_UID=&quot;${HEDERA_UID:-2000}&quot;
+BUILDS_URL=&quot;${BUILDS_URL:-https://builds.hedera.com/node/software}&quot;
+TEMPLATES_URL=&quot;${TEMPLATES_URL:-https://raw.githubusercontent.com/hiero-ledger/solo/v0.91.0/resources/templates}&quot;  # pinned; same files as main on 2026-10-30
+DEFAULT_GOSSIP_PORT=50111
+DEFAULT_GRPC_PORT=50211
+
+log()  { printf &#x27;\033[1;34m==&gt;\033[0m %s\n&#x27; &quot;$*&quot; &gt;&amp;2; }
+warn() { printf &#x27;\033[1;33mwarn:\033[0m %s\n&#x27; &quot;$*&quot; &gt;&amp;2; }
+die()  { printf &#x27;\033[1;31merror:\033[0m %s\n&#x27; &quot;$*&quot; &gt;&amp;2; exit 1; }
+need() { for c in &quot;$@&quot;; do command -v &quot;$c&quot; &gt;/dev/null 2&gt;&amp;1 || die &quot;missing required command: $c&quot;; done; }
+need_root() { [[ $EUID -eq 0 ]] || die &quot;&#x27;$1&#x27; must run as root: sudo $0 $1 ...&quot;; }
+
+# Commands that write into $HAPI_DIR: it belongs to $HEDERA_USER and data/ is mode 750,
+# so a normal account gets &quot;Permission denied&quot;. Allow root (sudo) or the node user itself.
+need_node_writer() {
+  [[ $EUID -eq 0 || $(id -un) == &quot;$HEDERA_USER&quot; ]] &amp;&amp; return 0
+  die &quot;&#x27;$1&#x27; writes to $HAPI_DIR (owned by $HEDERA_USER). Run it with sudo: sudo $0 $1 ...&quot;
+}
+# After writing as root: node files go to the node user (it must read its own keys),
+# files meant for the operator go back to whoever called sudo.
+own_by_hedera() {
+  if [[ $EUID -eq 0 ]] &amp;&amp; id &quot;$HEDERA_USER&quot; &gt;/dev/null 2&gt;&amp;1; then chown -RH &quot;$HEDERA_USER:$HEDERA_USER&quot; &quot;$@&quot;; fi  # -H: HapiApp2.0 may be a symlink (node-mgmt-tools)
+}
+own_by_caller() {
+  if [[ $EUID -eq 0 &amp;&amp; -n ${SUDO_USER:-} ]]; then chown -R &quot;$SUDO_USER:&quot; &quot;$@&quot;; fi
+}
+
+# Remembers this host&#x27;s node id and the network size, so later commands don&#x27;t need them again.
+NODE_ENV_FILE() { echo &quot;$HAPI_DIR/node.env&quot;; }
+load_node_env() {
+  NODE_ID=&quot;&quot; NETWORK_SIZE=&quot;&quot;
+  if [[ -r &quot;$(NODE_ENV_FILE)&quot; ]]; then
+    # shellcheck disable=SC1090
+    source &quot;$(NODE_ENV_FILE)&quot;
+  fi
+}
+
+# Node id 0 -&gt; &quot;node1&quot;: the platform&#x27;s key loader names files node&lt;id+1&gt;.
+node_name() { echo &quot;node$(( $1 + 1 ))&quot;; }
+
+# Set key=value in a .properties file, replacing an existing entry or appending.
+set_prop() {
+  local file=$1 key=$2 value=$3
+  touch &quot;$file&quot;
+  if grep -qE &quot;^[[:space:]]*${key//./\\.}[[:space:]]*=&quot; &quot;$file&quot;; then
+    python3 - &quot;$file&quot; &quot;$key&quot; &quot;$value&quot; &lt;&lt;&#x27;PY&#x27;
+import re, sys
+path, key, value = sys.argv[1:4]
+pattern = re.compile(r&#x27;^\s*&#x27; + re.escape(key) + r&#x27;\s*=.*$&#x27;, re.M)
+with open(path) as f: text = f.read()
+with open(path, &#x27;w&#x27;) as f: f.write(pattern.sub(f&#x27;{key}={value}&#x27;, text))
+PY
+  else
+    printf &#x27;%s=%s\n&#x27; &quot;$key&quot; &quot;$value&quot; &gt;&gt; &quot;$file&quot;
+  fi
+}
+
+###############################################################################
+cmd_prepare_host() {
+  need_root prepare-host
+  if ! id &quot;$HEDERA_USER&quot; &gt;/dev/null 2&gt;&amp;1; then
+    log &quot;Creating user $HEDERA_USER (uid $HEDERA_UID)&quot;
+    useradd -m -d &quot;/home/$HEDERA_USER&quot; -u &quot;$HEDERA_UID&quot; -s /bin/bash &quot;$HEDERA_USER&quot;
+  fi
+  log &quot;Creating $HAPI_DIR layout&quot;
+  mkdir -p &quot;$HAPI_DIR&quot;/{data/{lib,apps,keys,config,saved,upgrade/current},output}
+  chown -R &quot;$HEDERA_USER:$HEDERA_USER&quot; &quot;$(dirname &quot;$(dirname &quot;$HAPI_DIR&quot;)&quot;)&quot;
+  chmod 750 &quot;$HAPI_DIR/data&quot;
+
+  # Install missing tools and the JDK. Releases from v0.76 build with JDK 25 (gradle/toolchain-versions.properties).
+  local pkgs=() c java_major=0
+  for c in openssl python3 curl unzip; do command -v &quot;$c&quot; &gt;/dev/null 2&gt;&amp;1 || pkgs+=(&quot;$c&quot;); done
+  if command -v java &gt;/dev/null 2&gt;&amp;1; then
+    java_major=$(java -version 2&gt;&amp;1 | awk -F&#x27;&quot;&#x27; &#x27;/version/{split($2, v, &quot;.&quot;); print v[1]; exit}&#x27;)
+  fi
+  (( java_major &gt;= ${JAVA_MAJOR:-25} )) || pkgs+=(&quot;openjdk-${JAVA_MAJOR:-25}-jre-headless&quot;)
+  if (( ${#pkgs[@]} )); then
+    command -v apt-get &gt;/dev/null 2&gt;&amp;1 || die &quot;missing: ${pkgs[*]}; install them with your package manager&quot;
+    log &quot;Installing: ${pkgs[*]}&quot;
+    apt-get update -qq
+    DEBIAN_FRONTEND=noninteractive NEEDRESTART_SUSPEND=1 apt-get install -y -qq &quot;${pkgs[@]}&quot; &gt;/dev/null
+  fi
+  need openssl python3 curl unzip sha384sum java
+  log &quot;java: $(java -version 2&gt;&amp;1 | head -1)&quot;
+  log &quot;Host ready. Open firewall: gossip ${DEFAULT_GOSSIP_PORT}/tcp from peer IPs; gRPC ${DEFAULT_GRPC_PORT}-$((DEFAULT_GRPC_PORT+1))/tcp for clients; keep 9999 (metrics) internal.&quot;
+}
+
+###############################################################################
+# gen-keys --node-id N --nodes TOTAL --host IP|DNS [--gossip-port N] [--grpc-port N] [--weight N]
+#          [--account-num N] [--admin-pubkey &lt;hex|file.pub.pem&gt;] [--out DIR]
+# (positional form still works: gen-keys &lt;nodeId&gt; &lt;host&gt; --nodes TOTAL)
+cmd_gen_keys() {
+  need openssl python3
+  need_node_writer gen-keys
+  local id=&quot;&quot; host=&quot;&quot; nodes=&quot;&quot; positional=()
+  local gossip_port=$DEFAULT_GOSSIP_PORT grpc_port=$DEFAULT_GRPC_PORT weight=1
+  local account_num=&quot;&quot; admin_pub=&quot;&quot; out=&quot;.&quot;
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --node-id) id=$2; shift 2 ;;
+      --nodes) nodes=$2; shift 2 ;;
+      --host) host=$2; shift 2 ;;
+      --gossip-port) gossip_port=$2; shift 2 ;;
+      --grpc-port) grpc_port=$2; shift 2 ;;
+      --weight) weight=$2; shift 2 ;;
+      --account-num) account_num=$2; shift 2 ;;
+      --admin-pubkey) admin_pub=$2; shift 2 ;;
+      --out) out=$2; shift 2 ;;
+      -*) die &quot;unknown option $1&quot; ;;
+      *) positional+=(&quot;$1&quot;); shift ;;
+    esac
+  done
+  [[ -z $id &amp;&amp; ${#positional[@]} -ge 1 ]] &amp;&amp; id=${positional[0]}
+  [[ -z $host &amp;&amp; ${#positional[@]} -ge 2 ]] &amp;&amp; host=${positional[1]}
+  [[ -n $id &amp;&amp; -n $host &amp;&amp; -n $nodes ]] || \
+    die &quot;usage: gen-keys --node-id &lt;0..N-1&gt; --nodes &lt;N&gt; --host &lt;public-ip-or-dns&gt; [options]&quot;
+  [[ $id =~ ^[0-9]+$ ]] || die &quot;--node-id must be a non-negative integer&quot;
+  [[ $nodes =~ ^[1-9][0-9]*$ ]] || die &quot;--nodes must be a positive integer (total nodes in the network)&quot;
+  (( id &lt; nodes )) || die &quot;--node-id $id is out of range: with --nodes $nodes, ids are 0..$((nodes - 1))&quot;
+  (( nodes &gt;= 4 )) || warn &quot;$nodes node(s) cannot tolerate a faulty node; use 4 or more for a real network&quot;
+  [[ -n $account_num ]] || account_num=$(( 3 + id ))
+
+  load_node_env
+  if [[ -n $NODE_ID &amp;&amp; $NODE_ID != &quot;$id&quot; ]]; then
+    die &quot;this host is already node id $NODE_ID ($(NODE_ENV_FILE)); one node per host&quot;
+  fi
+
+  local name; name=$(node_name &quot;$id&quot;)
+  local keys=&quot;$HAPI_DIR/data/keys&quot;
+  mkdir -p &quot;$keys&quot; &quot;$out&quot; || die &quot;cannot create $out&quot;
+  [[ -w $out ]] || die &quot;cannot write to --out $out as $(id -un); pass a folder you own, e.g. --out ~/hiero-share&quot;
+  log &quot;Node id $id of $nodes  -&gt;  key files named $name, account 0.0.$account_num&quot;
+
+  if [[ -e &quot;$keys/s-private-$name.pem&quot; ]]; then
+    die &quot;$keys/s-private-$name.pem already exists; refusing to overwrite a node identity&quot;
+  fi
+
+  # Gossip signing key: RSA-3072 / SHA-384, self-signed CA (same profile as Solo&#x27;s KeyManager).
+  log &quot;Generating gossip signing key for $name (node id $id)&quot;
+  local tmp; tmp=$(mktemp -d)
+  openssl req -x509 -newkey rsa:3072 -sha384 -nodes -days 36500 \
+    -keyout &quot;$tmp/key.pem&quot; -out &quot;$keys/s-public-$name.pem&quot; -subj &quot;/CN=s-$name&quot; \
+    -addext &quot;basicConstraints=critical,CA:TRUE,pathlen:1&quot; \
+    -addext &quot;keyUsage=critical,keyCertSign,cRLSign&quot; \
+    -addext &quot;extendedKeyUsage=critical,serverAuth,clientAuth&quot; 2&gt;/dev/null
+  openssl pkcs8 -topk8 -nocrypt -in &quot;$tmp/key.pem&quot; -out &quot;$keys/s-private-$name.pem&quot;
+  rm -rf &quot;$tmp&quot;
+
+  # gRPC TLS key: RSA-4096 / SHA-384, self-signed.
+  if [[ ! -e &quot;$HAPI_DIR/hedera.key&quot; ]]; then
+    log &quot;Generating gRPC TLS key (hedera.key / hedera.crt)&quot;
+    openssl req -x509 -newkey rsa:4096 -sha384 -nodes -days 36500 \
+      -keyout &quot;$HAPI_DIR/hedera.key&quot; -out &quot;$HAPI_DIR/hedera.crt&quot; -subj &quot;/CN=$name&quot; 2&gt;/dev/null
+  fi
+  chmod 600 &quot;$keys/s-private-$name.pem&quot; &quot;$HAPI_DIR/hedera.key&quot;
+
+  # Node admin key (ED25519) — signs future NodeUpdate/NodeDelete for this node.
+  if [[ -z &quot;$admin_pub&quot; ]]; then
+    log &quot;Generating node admin ED25519 key -&gt; $out/$name-admin.key.pem (keep offline!)&quot;
+    openssl genpkey -algorithm ed25519 -out &quot;$out/$name-admin.key.pem&quot;
+    chmod 600 &quot;$out/$name-admin.key.pem&quot;
+    openssl pkey -in &quot;$out/$name-admin.key.pem&quot; -pubout -out &quot;$out/$name-admin.pub.pem&quot;
+    admin_pub=&quot;$out/$name-admin.pub.pem&quot;
+  fi
+
+  local bundle=&quot;$out/$name.public.json&quot;
+  python3 - &quot;$id&quot; &quot;$name&quot; &quot;$host&quot; &quot;$gossip_port&quot; &quot;$grpc_port&quot; &quot;$weight&quot; &quot;$account_num&quot; \
+    &quot;$keys/s-public-$name.pem&quot; &quot;$HAPI_DIR/hedera.crt&quot; &quot;$admin_pub&quot; &gt; &quot;$bundle&quot; &lt;&lt;&#x27;PY&#x27;
+import base64, hashlib, json, subprocess, sys, unicodedata
+(node_id, name, host, gport, rport, weight, acct, sig_pem, tls_pem, admin) = sys.argv[1:11]
+der = subprocess.run([&#x27;openssl&#x27;, &#x27;x509&#x27;, &#x27;-in&#x27;, sig_pem, &#x27;-outform&#x27;, &#x27;DER&#x27;],
+                     capture_output=True, check=True).stdout
+# HAPI Node.grpc_certificate_hash: SHA-384 of the PEM cert text (UTF-8, NFKD).
+tls_text = unicodedata.normalize(&#x27;NFKD&#x27;, open(tls_pem).read())
+grpc_hash = hashlib.sha384(tls_text.encode(&#x27;utf-8&#x27;)).digest()
+if all(c in &#x27;0123456789abcdefABCDEF&#x27; for c in admin) and len(admin) == 64:
+    admin_raw = bytes.fromhex(admin)
+else:
+    spki = subprocess.run([&#x27;openssl&#x27;, &#x27;pkey&#x27;, &#x27;-pubin&#x27;, &#x27;-in&#x27;, admin, &#x27;-outform&#x27;, &#x27;DER&#x27;],
+                          capture_output=True, check=True).stdout
+    admin_raw = spki[-32:]
+json.dump({
+    &#x27;nodeId&#x27;: int(node_id), &#x27;name&#x27;: name, &#x27;host&#x27;: host,
+    &#x27;gossipPort&#x27;: int(gport), &#x27;grpcPort&#x27;: int(rport), &#x27;weight&#x27;: int(weight),
+    &#x27;accountNum&#x27;: int(acct),
+    &#x27;gossipCaCertificate&#x27;: base64.b64encode(der).decode(),
+    &#x27;grpcCertificateHash&#x27;: base64.b64encode(grpc_hash).decode(),
+    &#x27;adminKeyEd25519&#x27;: base64.b64encode(admin_raw).decode(),
+}, sys.stdout, indent=2)
+print()
+PY
+  printf &#x27;NODE_ID=%s\nNETWORK_SIZE=%s\n&#x27; &quot;$id&quot; &quot;$nodes&quot; &gt; &quot;$(NODE_ENV_FILE)&quot;
+  own_by_hedera &quot;$keys&quot; &quot;$HAPI_DIR/hedera.key&quot; &quot;$HAPI_DIR/hedera.crt&quot; &quot;$(NODE_ENV_FILE)&quot;
+  local created=(&quot;$bundle&quot;)
+  [[ -f &quot;$out/$name-admin.key.pem&quot; ]] &amp;&amp; created+=(&quot;$out/$name-admin.key.pem&quot; &quot;$out/$name-admin.pub.pem&quot;)
+  own_by_caller &quot;${created[@]}&quot;
+  log &quot;Saved node id $id / network size $nodes to $(NODE_ENV_FILE)&quot;
+  log &quot;Public bundle written: $bundle&quot;
+  log &quot;Send ONLY $bundle to the genesis coordinator. Private keys stay on this host.&quot;
+}
+
+###############################################################################
+# gen-genesis-key [--out DIR] : ED25519 key for the genesis treasury (0.0.2).
+cmd_gen_genesis_key() {
+  need openssl
+  local out=&quot;.&quot;
+  [[ ${1:-} == --out ]] &amp;&amp; out=$2
+  mkdir -p &quot;$out&quot;
+  [[ -e &quot;$out/genesis.key.pem&quot; ]] &amp;&amp; die &quot;$out/genesis.key.pem exists&quot;
+  openssl genpkey -algorithm ed25519 -out &quot;$out/genesis.key.pem&quot;
+  chmod 600 &quot;$out/genesis.key.pem&quot;
+  local pub_hex der_hex
+  pub_hex=$(openssl pkey -in &quot;$out/genesis.key.pem&quot; -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d &#x27; \n&#x27;)
+  der_hex=$(openssl pkey -in &quot;$out/genesis.key.pem&quot; -outform DER | od -An -tx1 | tr -d &#x27; \n&#x27;)
+  echo &quot;$pub_hex&quot; &gt; &quot;$out/genesis.pub.hex&quot;
+  own_by_caller &quot;$out/genesis.key.pem&quot; &quot;$out/genesis.pub.hex&quot;
+  log &quot;Genesis treasury key written to $out/genesis.key.pem (store offline)&quot;
+  echo &quot;bootstrap.genesisPublicKey (share with all operators): $pub_hex&quot;
+  echo &quot;SDK operator private key (DER hex, keep secret):        $der_hex&quot;
+}
+
+###############################################################################
+# build-genesis --nodes N &lt;out.json&gt; &lt;bundle.json&gt;...
+cmd_build_genesis() {
+  need python3
+  local nodes=&quot;&quot; args=()
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --nodes) nodes=$2; shift 2 ;;
+      -*) die &quot;unknown option $1&quot; ;;
+      *) args+=(&quot;$1&quot;); shift ;;
+    esac
+  done
+  [[ -n $nodes &amp;&amp; ${#args[@]} -ge 2 ]] || \
+    die &quot;usage: build-genesis --nodes &lt;N&gt; &lt;out.json&gt; &lt;node1.public.json&gt; ... (one bundle per node)&quot;
+  [[ $nodes =~ ^[1-9][0-9]*$ ]] || die &quot;--nodes must be a positive integer&quot;
+  local out=${args[0]}
+  python3 - &quot;$nodes&quot; &quot;${args[@]}&quot; &lt;&lt;&#x27;PY&#x27;
+import base64, ipaddress, json, sys
+expected, out, paths = int(sys.argv[1]), sys.argv[2], sys.argv[3:]
+bundles = sorted((json.load(open(p)) for p in paths), key=lambda b: b[&#x27;nodeId&#x27;])
+ids = [b[&#x27;nodeId&#x27;] for b in bundles]
+if len(set(ids)) != len(ids):
+    sys.exit(f&#x27;duplicate node ids: {ids}&#x27;)
+missing = sorted(set(range(expected)) - set(ids))
+extra = sorted(set(ids) - set(range(expected)))
+if missing or extra:
+    sys.exit(f&#x27;--nodes {expected} needs bundles for node ids 0..{expected - 1}; &#x27;
+             f&#x27;missing {missing or &quot;none&quot;}, unexpected {extra or &quot;none&quot;}&#x27;)
+for field in (&#x27;accountNum&#x27;, &#x27;gossipCaCertificate&#x27;):
+    vals = [b[field] for b in bundles]
+    if len(set(vals)) != len(vals):
+        sys.exit(f&#x27;duplicate {field} across bundles&#x27;)
+
+def endpoint(host, port):
+    try:
+        ip = ipaddress.IPv4Address(host)
+        return {&#x27;ipAddressV4&#x27;: base64.b64encode(ip.packed).decode(), &#x27;port&#x27;: port}
+    except ipaddress.AddressValueError:
+        return {&#x27;domainName&#x27;: host, &#x27;port&#x27;: port}
+
+meta = []
+for b in bundles:
+    gossip = [endpoint(b[&#x27;host&#x27;], b[&#x27;gossipPort&#x27;])]
+    meta.append({
+        &#x27;rosterEntry&#x27;: {
+            &#x27;nodeId&#x27;: str(b[&#x27;nodeId&#x27;]),
+            &#x27;weight&#x27;: str(b[&#x27;weight&#x27;]),
+            &#x27;gossipCaCertificate&#x27;: b[&#x27;gossipCaCertificate&#x27;],
+            &#x27;gossipEndpoint&#x27;: gossip,
+        },
+        &#x27;node&#x27;: {
+            &#x27;nodeId&#x27;: str(b[&#x27;nodeId&#x27;]),
+            &#x27;accountId&#x27;: {&#x27;shardNum&#x27;: &#x27;0&#x27;, &#x27;realmNum&#x27;: &#x27;0&#x27;, &#x27;accountNum&#x27;: str(b[&#x27;accountNum&#x27;])},
+            &#x27;description&#x27;: b[&#x27;name&#x27;],
+            &#x27;gossipEndpoint&#x27;: gossip,
+            &#x27;serviceEndpoint&#x27;: [endpoint(b[&#x27;host&#x27;], b[&#x27;grpcPort&#x27;]),
+                                endpoint(b[&#x27;host&#x27;], b[&#x27;grpcPort&#x27;] + 1)],
+            &#x27;gossipCaCertificate&#x27;: b[&#x27;gossipCaCertificate&#x27;],
+            &#x27;grpcCertificateHash&#x27;: b[&#x27;grpcCertificateHash&#x27;],
+            &#x27;weight&#x27;: str(b[&#x27;weight&#x27;]),
+            &#x27;adminKey&#x27;: {&#x27;ed25519&#x27;: b[&#x27;adminKeyEd25519&#x27;]},
+        },
+    })
+with open(out, &#x27;w&#x27;) as f:
+    json.dump({&#x27;nodeMetadata&#x27;: meta}, f, indent=2)
+    f.write(&#x27;\n&#x27;)
+n = len(bundles)
+print(f&#x27;{out}: {n} nodes, ids {ids}; tolerates {(n - 1) // 3} faulty node(s)&#x27;, file=sys.stderr)
+if n &lt; 4:
+    print(&#x27;warning: fewer than 4 nodes cannot tolerate any faulty node&#x27;, file=sys.stderr)
+PY
+  own_by_caller &quot;$out&quot;
+  log &quot;sha256 (operators must verify): $(sha256sum &quot;$out&quot; | cut -d&#x27; &#x27; -f1)&quot;
+  echo &quot;Distribute $out to every operator. Any byte difference prevents genesis.&quot;
+}
+
+###############################################################################
+# install &lt;tag&gt;   e.g. install v0.76.4      (or LOCAL_BUILD=/path/to/hedera-node/data)
+cmd_install() {
+  need curl unzip sha384sum
+  need_node_writer install
+  [[ $# -eq 1 ]] || die &quot;usage: install &lt;release-tag e.g. v0.76.4&gt;&quot;
+  local tag=$1
+  [[ $tag == v* ]] || tag=&quot;v$tag&quot;
+  local minor; minor=$(cut -d. -f1-2 &lt;&lt;&lt;&quot;$tag&quot;)
+  local dl=&quot;${DOWNLOAD_DIR:-$HOME/hiero-builds}&quot;
+  mkdir -p &quot;$dl&quot;
+  local zip=&quot;build-$tag.zip&quot; sum=&quot;build-$tag.sha384&quot;
+
+  if [[ -n &quot;${LOCAL_BUILD:-}&quot; ]]; then
+    log &quot;Installing jars from local build $LOCAL_BUILD&quot;
+    [[ -f &quot;$LOCAL_BUILD/apps/HederaNode.jar&quot; ]] || die &quot;$LOCAL_BUILD/apps/HederaNode.jar not found (run ./gradlew assemble)&quot;
+    rm -f &quot;$HAPI_DIR&quot;/data/lib/*.jar &quot;$HAPI_DIR&quot;/data/apps/*.jar
+    cp &quot;$LOCAL_BUILD&quot;/lib/*.jar &quot;$HAPI_DIR/data/lib/&quot;
+    cp &quot;$LOCAL_BUILD&quot;/apps/*.jar &quot;$HAPI_DIR/data/apps/&quot;
+  else
+    log &quot;Downloading $BUILDS_URL/$minor/$zip&quot;
+    (cd &quot;$dl&quot; &amp;&amp; curl -fL --retry 3 -O &quot;$BUILDS_URL/$minor/$zip&quot; &amp;&amp; curl -fL --retry 3 -O &quot;$BUILDS_URL/$minor/$sum&quot;)
+    log &quot;Verifying SHA-384&quot;
+    (cd &quot;$dl&quot; &amp;&amp; sha384sum -c &quot;$sum&quot;) || die &quot;checksum mismatch for $zip&quot;
+    local x; x=$(mktemp -d)
+    unzip -q -o &quot;$dl/$zip&quot; -d &quot;$x&quot;
+    rm -f &quot;$HAPI_DIR&quot;/data/lib/*.jar &quot;$HAPI_DIR&quot;/data/apps/*.jar
+    mkdir -p &quot;$HAPI_DIR&quot;/data/{lib,apps}
+    cp -r &quot;$x&quot;/data/lib/* &quot;$HAPI_DIR/data/lib/&quot;
+    cp -r &quot;$x&quot;/data/apps/* &quot;$HAPI_DIR/data/apps/&quot;
+    for f in VERSION immediate.sh; do [[ -f &quot;$x/$f&quot; ]] &amp;&amp; cp &quot;$x/$f&quot; &quot;$HAPI_DIR/&quot;; done
+    [[ -f &quot;$x/during-freeze.sh&quot; ]] &amp;&amp; cp &quot;$x/during-freeze.sh&quot; &quot;$HAPI_DIR/during_freeze.sh&quot;
+    rm -rf &quot;$x&quot;
+  fi
+  [[ -f &quot;$HAPI_DIR/data/apps/HederaNode.jar&quot; ]] || die &quot;HederaNode.jar missing after install&quot;
+  own_by_hedera &quot;$HAPI_DIR&quot;
+  log &quot;Installed $tag: $(ls &quot;$HAPI_DIR&quot;/data/lib/*.jar | wc -l) libs&quot;
+}
+
+###############################################################################
+# configure --genesis FILE --genesis-pubkey HEX [--ledger-id 0x..] [--chain-id N]
+#           [--grpc-port N] [--templates DIR|URL]
+cmd_configure() {
+  need python3 curl sha256sum
+  need_node_writer configure
+  local genesis=&quot;&quot; genesis_pub=&quot;&quot; ledger_id=&quot;&quot; chain_id=&quot;&quot; grpc_port=&quot;&quot; templates=&quot;$TEMPLATES_URL&quot; event_streams=0
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --keep-event-streams) event_streams=1; shift ;;
+      --genesis) genesis=$2; shift 2 ;;
+      --genesis-pubkey) genesis_pub=$2; shift 2 ;;
+      --ledger-id) ledger_id=$2; shift 2 ;;
+      --chain-id) chain_id=$2; shift 2 ;;
+      --grpc-port) grpc_port=$2; shift 2 ;;
+      --templates) templates=$2; shift 2 ;;
+      *) die &quot;unknown option $1&quot; ;;
+    esac
+  done
+  [[ -f &quot;$genesis&quot; ]] || die &quot;--genesis &lt;genesis-network.json&gt; is required&quot;
+  [[ -f &quot;$genesis_pub&quot; ]] &amp;&amp; genesis_pub=$(tr -d &#x27; \n&#x27; &lt; &quot;$genesis_pub&quot;)
+  [[ $genesis_pub =~ ^[0-9a-fA-F]{64}$ ]] || die &quot;--genesis-pubkey must be a 64-hex-char ED25519 public key (from gen-genesis-key)&quot;
+  [[ $genesis_pub == 0aa8e21064c61eab86e2a9c164565b4e7a9a4146106e0a6cd03a8c395a110e92 ]] &amp;&amp; \
+    die &quot;that is the public well-known dev genesis key; generate your own with gen-genesis-key&quot;
+
+  local cfg=&quot;$HAPI_DIR/data/config&quot;
+  mkdir -p &quot;$cfg&quot;
+  log &quot;Fetching config templates from $templates&quot;
+  local f
+  for f in settings.txt log4j2.xml application.properties bootstrap.properties api-permission.properties; do
+    local dest=&quot;$cfg/$f&quot;
+    [[ $f == settings.txt || $f == log4j2.xml ]] &amp;&amp; dest=&quot;$HAPI_DIR/$f&quot;
+    if [[ -d $templates ]]; then cp &quot;$templates/$f&quot; &quot;$dest&quot;; else curl -fsSL &quot;$templates/$f&quot; -o &quot;$dest&quot;; fi
+  done
+
+  # Event streams (event.enableEventStreaming, default true) write a file every 5 s to /opt/hgcapp/eventsStreams
+  # and nothing deletes them: ~5 GB/day per node on an idle network, which filled 30 GB disks in 3.8 days and
+  # halted a test network. Mirror nodes use record streams, not event streams. Off unless --keep-event-streams.
+  sed -i &#x27;/^[[:space:]]*event\.enableEventStreaming[[:space:]]*,/d&#x27; &quot;$HAPI_DIR/settings.txt&quot;
+  (( event_streams )) || printf &#x27;event.enableEventStreaming, false\n&#x27; &gt;&gt; &quot;$HAPI_DIR/settings.txt&quot;
+
+  cp &quot;$genesis&quot; &quot;$cfg/genesis-network.json&quot;
+  # The node&#x27;s bootstrap config (BootstrapConfigProviderImpl) reads ONLY data/config/application.properties,
+  # env vars and -D system properties. bootstrap.properties is never read, so the key must go here.
+  set_prop &quot;$cfg/application.properties&quot; bootstrap.genesisPublicKey &quot;$genesis_pub&quot;
+  sed -i &#x27;/^[[:space:]]*bootstrap\.genesisPublicKey[[:space:]]*=/d&#x27; &quot;$cfg/bootstrap.properties&quot;
+  if [[ -n $ledger_id ]]; then
+    set_prop &quot;$cfg/application.properties&quot; ledger.id &quot;$ledger_id&quot;
+    set_prop &quot;$cfg/bootstrap.properties&quot; ledger.id &quot;$ledger_id&quot;
+  fi
+  if [[ -n $chain_id ]]; then
+    set_prop &quot;$cfg/application.properties&quot; contracts.chainId &quot;$chain_id&quot;
+    set_prop &quot;$cfg/bootstrap.properties&quot; contracts.chainId &quot;$chain_id&quot;
+  fi
+  if [[ -n $grpc_port ]]; then
+    set_prop &quot;$cfg/node.properties&quot; grpc.port &quot;$grpc_port&quot;
+    set_prop &quot;$cfg/node.properties&quot; grpc.tlsPort &quot;$(( grpc_port + 1 ))&quot;
+  fi
+  own_by_hedera &quot;$HAPI_DIR&quot;
+
+  grep -q &quot;^bootstrap.genesisPublicKey=$genesis_pub\$&quot; &quot;$cfg/application.properties&quot; || \
+    die &quot;genesis key was not written to $cfg/application.properties&quot;
+  log &quot;Genesis key set in data/config/application.properties (the file the node reads at genesis)&quot;
+  log &quot;Network-wide file fingerprints (must match on every node):&quot;
+  (cd &quot;$HAPI_DIR&quot; &amp;&amp; sha256sum settings.txt data/config/{genesis-network.json,application.properties,bootstrap.properties,api-permission.properties})
+}
+
+###############################################################################
+# service &lt;nodeId&gt; [--heap-min 8g] [--heap-max 16g] [--no-start]
+cmd_service() {
+  need_root service
+  load_node_env
+  local id=&quot;&quot; xms=8g xmx=16g start=1
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --node-id) id=$2; shift 2 ;;
+      --heap-min) xms=$2; shift 2 ;;
+      --heap-max) xmx=$2; shift 2 ;;
+      --no-start) start=0; shift ;;
+      -*) die &quot;unknown option $1&quot; ;;
+      *) id=$1; shift ;;
+    esac
+  done
+  [[ -n $id ]] || id=$NODE_ID
+  [[ -n $id ]] || die &quot;no node id: run gen-keys first, or pass --node-id &lt;id&gt;&quot;
+  if [[ -n $NODE_ID &amp;&amp; $id != &quot;$NODE_ID&quot; ]]; then
+    die &quot;--node-id $id does not match this host&#x27;s keys (node id $NODE_ID in $(NODE_ENV_FILE))&quot;
+  fi
+  local name; name=$(node_name &quot;$id&quot;)
+  [[ -f &quot;$HAPI_DIR/data/keys/s-private-$name.pem&quot; ]] || die &quot;missing data/keys/s-private-$name.pem (node id $id -&gt; $name)&quot;
+  [[ -f &quot;$HAPI_DIR/data/config/genesis-network.json&quot; ]] || die &quot;run configure first&quot;
+  [[ -f &quot;$HAPI_DIR/data/apps/HederaNode.jar&quot; ]] || die &quot;run install first&quot;
+  local java_bin; java_bin=$(command -v java) || die &quot;java not found&quot;
+
+  cat &gt; /etc/systemd/system/hiero-node.service &lt;&lt;EOF
+[Unit]
+Description=Hiero consensus node (id $id / $name)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=$HEDERA_USER
+Group=$HEDERA_USER
+WorkingDirectory=$HAPI_DIR
+ExecStart=$java_bin --enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow \\
+  -Xms$xms -Xmx$xmx -XX:+UseZGC \\
+  -cp &quot;data/lib/*:data/apps/*&quot; com.hedera.node.app.ServicesMain -local $id
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=1048576
+StandardOutput=append:$HAPI_DIR/output/stdout.log
+StandardError=append:$HAPI_DIR/output/stdout.log
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  systemctl daemon-reload
+  systemctl enable hiero-node.service
+  if (( start )); then
+    systemctl restart hiero-node.service
+    log &quot;Started. Nodes wait in STARTING_UP/OBSERVING until &gt;2/3 of weight is online.&quot;
+  fi
+}
+
+###############################################################################
+# allow-mirror --pubkey &quot;&lt;ssh public key&gt;&quot; [--from &lt;mirror ip&gt;]
+# Lets a mirror node pull this node&#x27;s record streams: a dedicated user whose only possible action
+# is a read-only rsync of /opt/hgcapp/recordStreams (rrsync forced command, no shell, no forwarding).
+cmd_allow_mirror() {
+  need_root allow-mirror
+  local pubkey=&quot;&quot; from=&quot;&quot; user=&quot;${STREAMS_USER:-hiero-streams}&quot;
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --pubkey) pubkey=$2; shift 2 ;;
+      --from) from=$2; shift 2 ;;
+      *) die &quot;unknown option $1&quot; ;;
+    esac
+  done
+  [[ $pubkey =~ ^ssh-(ed25519|rsa)\ [A-Za-z0-9+/=]+ ]] || die &quot;usage: allow-mirror --pubkey \&quot;ssh-ed25519 AAAA...\&quot; [--from &lt;mirror-ip&gt;]&quot;
+  [[ -x /usr/bin/rrsync ]] || { apt-get install -y -qq rsync &gt;/dev/null; [[ -x /usr/bin/rrsync ]] || die &quot;rrsync not found (rsync package)&quot;; }
+  local streams=/opt/hgcapp/recordStreams
+  [[ -d $streams ]] || die &quot;$streams does not exist yet; start the node first&quot;
+
+  if ! id &quot;$user&quot; &gt;/dev/null 2&gt;&amp;1; then
+    log &quot;Creating read-only stream user $user&quot;
+    useradd -r -m -d &quot;/home/$user&quot; -s /bin/sh &quot;$user&quot;
+  fi
+  passwd -l &quot;$user&quot; &gt;/dev/null 2&gt;&amp;1 || true
+  local opts=&quot;command=\&quot;/usr/bin/rrsync -ro $streams\&quot;,restrict&quot;
+  [[ -n $from ]] &amp;&amp; opts=&quot;from=\&quot;$from\&quot;,$opts&quot;
+  install -d -m 700 -o &quot;$user&quot; -g &quot;$user&quot; &quot;/home/$user/.ssh&quot;
+  local ak=&quot;/home/$user/.ssh/authorized_keys&quot;
+  touch &quot;$ak&quot;
+  # replace any earlier entry for the same key
+  local keybody; keybody=$(awk &#x27;{print $2}&#x27; &lt;&lt;&lt;&quot;$pubkey&quot;)
+  grep -vF &quot;$keybody&quot; &quot;$ak&quot; &gt; &quot;$ak.tmp&quot; || true
+  echo &quot;$opts $pubkey&quot; &gt;&gt; &quot;$ak.tmp&quot;
+  mv &quot;$ak.tmp&quot; &quot;$ak&quot;; chown &quot;$user:$user&quot; &quot;$ak&quot;; chmod 600 &quot;$ak&quot;
+  log &quot;Mirror key allowed for $user: read-only rsync of $streams${from:+, only from $from}&quot;
+}
+
+###############################################################################
+cmd_status() {
+  load_node_env
+  [[ -n $NODE_ID ]] &amp;&amp; echo &quot;node id $NODE_ID ($(node_name &quot;$NODE_ID&quot;)) of ${NETWORK_SIZE:-?} nodes&quot;
+  local status
+  status=$(curl -fsS --max-time 3 http://localhost:9999/metrics 2&gt;/dev/null | grep -E &#x27;^platform_PlatformStatus&#x27; | awk &#x27;{print $NF}&#x27; | head -1 || true)
+  case ${status%%.*} in
+    1) echo &quot;STARTING_UP&quot; ;; 2) echo &quot;ACTIVE&quot; ;; 4) echo &quot;BEHIND&quot; ;; 5) echo &quot;FREEZING&quot; ;;
+    6) echo &quot;FREEZE_COMPLETE&quot; ;; 7) echo &quot;REPLAYING_EVENTS&quot; ;; 8) echo &quot;OBSERVING&quot; ;;
+    9) echo &quot;CHECKING&quot; ;; 10) echo &quot;RECONNECT_COMPLETE&quot; ;; 11) echo &quot;CATASTROPHIC_FAILURE&quot; ;;
+    &quot;&quot;) echo &quot;UNKNOWN (metrics on :9999 not reachable)&quot; ;; *) echo &quot;status code $status&quot; ;;
+  esac
+  command -v ss &gt;/dev/null &amp;&amp; ss -ltn | awk &#x27;NR==1 || /:(50111|50211|50212|9999) /&#x27;
+  if [[ -r &quot;$HAPI_DIR/output/swirlds.log&quot; ]]; then
+    echo &quot;--- swirlds.log (tail)&quot;; tail -n 5 &quot;$HAPI_DIR/output/swirlds.log&quot;
+  elif [[ -e &quot;$HAPI_DIR/output/swirlds.log&quot; ]]; then
+    echo &quot;(run with sudo to see the log tail)&quot;
+  fi
+  return 0
+}
+
+###############################################################################
+# state [N] : newest N saved states (round, hash mnemonic, signers) + disk use. Nodes are in sync when the
+# same round shows the same mnemonic on every node.
+cmd_state() {
+  need_root state
+  local n=${1:-3} f
+  local files; files=$(find &quot;$HAPI_DIR/data/saved&quot; -name stateMetadata.txt 2&gt;/dev/null | sort -V | tail -n &quot;$n&quot;)
+  [[ -n $files ]] || { echo &quot;no saved state yet (the first one is written about a minute after ACTIVE)&quot;; }
+  for f in $files; do
+    printf &#x27;round %-10s %s   signed by nodes %s\n&#x27; &quot;$(awk &#x27;/^ROUND:/{print $2}&#x27; &quot;$f&quot;)&quot; \
+      &quot;$(sed -n &#x27;s/^HASH_MNEMONIC: *//p&#x27; &quot;$f&quot;)&quot; &quot;$(sed -n &#x27;s/^SIGNING_NODES: *//p&#x27; &quot;$f&quot;)&quot;
+  done
+  df -h / /opt/hgcapp 2&gt;/dev/null | awk &#x27;NR==1 || !seen[$1]++&#x27; | sed 1d | awk &#x27;{print &quot;disk &quot; $6 &quot;: &quot; $5 &quot; used, &quot; $4 &quot; free&quot;}&#x27;
+  local d; for d in /opt/hgcapp/eventsStreams /opt/hgcapp/recordStreams &quot;$HAPI_DIR/data/saved&quot; &quot;$HAPI_DIR/output&quot;; do
+    [[ -d $d ]] &amp;&amp; printf &#x27;  %-48s %s\n&#x27; &quot;$d&quot; &quot;$(du -sh &quot;$d&quot; 2&gt;/dev/null | cut -f1)&quot;
+  done
+  return 0
+}
+
+###############################################################################
+cmd_help() {
+  cat &lt;&lt;EOF
+hiero-node.sh — provision an independent Hiero consensus node
+
+Environment: HAPI_DIR (default /opt/hgcapp/services-hedera/HapiApp2.0), HEDERA_USER (hedera),
+             TEMPLATES_URL, BUILDS_URL, LOCAL_BUILD (use local gradle build for &#x27;install&#x27;)
+
+Operator (each node host):
+  prepare-host                                  create user, directories, check tools     [sudo]
+  gen-keys --node-id &lt;0..N-1&gt; --nodes &lt;N&gt; --host &lt;public-ip|dns&gt; [opts]                  [sudo]
+                                                gossip + gRPC TLS + admin keys; writes nodeN.public.json;
+                                                saves node id + network size to $HAPI_DIR/node.env
+        --gossip-port 50111 --grpc-port 50211 --weight 1 --account-num &lt;3+id&gt;
+        --admin-pubkey &lt;hex|pub.pem&gt; --out &lt;dir you own, e.g. ~/hiero-share&gt;
+  install &lt;tag&gt;                                 download build-&lt;tag&gt;.zip, verify sha384, extract   [sudo]
+  configure --genesis &lt;genesis-network.json&gt; --genesis-pubkey &lt;hex|file&gt;
+        [--ledger-id 0x..] [--chain-id N] [--grpc-port N] [--templates dir|url]           [sudo]
+        [--keep-event-streams]                  keep event stream files (off by default: they fill the disk)
+  service [--node-id &lt;id&gt;] [--heap-min 8g --heap-max 16g] [--no-start]   systemd unit + start [sudo]
+                                                node id defaults to the one saved by gen-keys
+  status                                        PlatformStatus from :9999, ports, log tail
+  state [N]                                     newest N saved states (round + hash) and disk use     [sudo]
+  allow-mirror --pubkey &quot;&lt;ssh key&gt;&quot; [--from &lt;mirror ip&gt;]                                    [sudo]
+                                                let a mirror node pull record streams (read-only rsync)
+
+Coordinator (public data only):
+  gen-genesis-key [--out dir]                   ED25519 treasury key (0.0.2); prints pubkey hex
+  build-genesis --nodes &lt;N&gt; &lt;out.json&gt; &lt;nodeN.public.json&gt;...
+                                                assemble genesis roster; checks ids 0..N-1 all present
+
+[sudo] = writes to $HAPI_DIR (owned by the node user); run it as: sudo $0 &lt;command&gt; ...
+Coordinator commands need no sudo; run them in a folder you own.
+Node id 0 uses key files named node1 (id+1). Use &gt;= 4 nodes to tolerate one fault.
+EOF
+}
+
+main() {
+  local cmd=${1:-help}; shift || true
+  case $cmd in
+    prepare-host) cmd_prepare_host &quot;$@&quot; ;;
+    gen-keys) cmd_gen_keys &quot;$@&quot; ;;
+    gen-genesis-key) cmd_gen_genesis_key &quot;$@&quot; ;;
+    build-genesis) cmd_build_genesis &quot;$@&quot; ;;
+    install) cmd_install &quot;$@&quot; ;;
+    configure) cmd_configure &quot;$@&quot; ;;
+    service) cmd_service &quot;$@&quot; ;;
+    status) cmd_status &quot;$@&quot; ;;
+    state) cmd_state &quot;$@&quot; ;;
+    allow-mirror) cmd_allow_mirror &quot;$@&quot; ;;
+    help|-h|--help) cmd_help ;;
+    *) die &quot;unknown command &#x27;$cmd&#x27; (see: $0 help)&quot; ;;
+  esac
+}
+
+main &quot;$@&quot;
+</code></pre></div>
+</section>
+
+<section id="appB">
+<h2>Appendix B. hiero-mirror.sh</h2>
+<p>Mirror node and explorer on Docker Compose, fed by read-only rsync from each node. Commands: <code>prepare-host</code>, <code>address-book</code>, <code>configure</code>, <code>start</code>, <code>status</code>, <code>stop</code>, <code>sync-once</code>.</p>
+<div class="code file"><div class="code-h"><span><b>hiero-mirror.sh</b> · 555 lines · SHA-256 <code class="sha">ccd90433b13ea776ea0b7a830c05e32f1d479b7e6a4f9e9e2a1e4efd27893dc7</code></span><button type="button" class="copy">Copy</button></div><pre><code>#!/usr/bin/env bash
+#
+# hiero-mirror.sh — run a Hiero mirror node that follows an independent Hiero network
+# (the one built with hiero-node.sh).
+#
+# A mirror node does not take part in consensus. It pulls the record stream files and signature
+# files every consensus node writes to /opt/hgcapp/recordStreams/record0.0.N/, verifies them
+# against the network&#x27;s address book (file 0.0.102), loads them into PostgreSQL and serves the
+# REST / REST-Java / web3 / gRPC APIs behind one nginx port (8080).
+#
+# Stream transport here is &quot;direct pull&quot;: rsync over SSH from every node into the importer&#x27;s
+# local stream directory (importer cloudProvider LOCAL). Each node only allows a read-only,
+# folder-restricted rrsync login for the mirror&#x27;s key (see `hiero-node.sh allow-mirror`).
+#
+#   On the mirror host:                       On every consensus node:
+#     1. prepare-host  -&gt; prints SSH key  --&gt;   sudo ~/hiero-node.sh allow-mirror --pubkey &quot;&lt;key&gt;&quot; --from &lt;mirror-ip&gt;
+#     2. address-book --genesis &lt;file&gt;
+#     3. configure --genesis &lt;file&gt; --ledger-id 0x.. --chain-id N
+#     4. start          (sync service + docker compose)
+#     5. status
+#
+# Requires Ubuntu 24.04 (apt). Run `hiero-mirror.sh help` for details.
+
+set -euo pipefail
+
+MIRROR_DIR=&quot;${MIRROR_DIR:-/opt/hiero-mirror}&quot;
+MIRROR_VERSION=&quot;${MIRROR_VERSION:-0.163.0}&quot;   # pairs with consensus node v0.76.x (Solo 0.91 default)
+EXPLORER_VERSION=&quot;${EXPLORER_VERSION:-26.2.0}&quot; # hiero-mirror-node-explorer (Solo 0.91 default)
+STREAMS_USER=&quot;${STREAMS_USER:-hiero-streams}&quot; # read-only user on the consensus nodes
+SYNC_INTERVAL=&quot;${SYNC_INTERVAL:-2}&quot;           # seconds between rsync passes
+CONTAINER_UID=1000                            # mirror images run as uid/gid 1000
+
+log()  { printf &#x27;\033[1;34m==&gt;\033[0m %s\n&#x27; &quot;$*&quot; &gt;&amp;2; }
+warn() { printf &#x27;\033[1;33mwarn:\033[0m %s\n&#x27; &quot;$*&quot; &gt;&amp;2; }
+die()  { printf &#x27;\033[1;31merror:\033[0m %s\n&#x27; &quot;$*&quot; &gt;&amp;2; exit 1; }
+need() { for c in &quot;$@&quot;; do command -v &quot;$c&quot; &gt;/dev/null 2&gt;&amp;1 || die &quot;missing required command: $c&quot;; done; }
+need_root() { [[ $EUID -eq 0 ]] || die &quot;&#x27;$1&#x27; must run as root: sudo $0 $1 ...&quot;; }
+
+KEY_FILE() { echo &quot;$MIRROR_DIR/keys/pull_ed25519&quot;; }
+NODES_FILE() { echo &quot;$MIRROR_DIR/config/nodes.txt&quot;; }      # &quot;&lt;account&gt; &lt;ip&gt;&quot; per line
+STREAM_DIR() { echo &quot;$MIRROR_DIR/data/streams/recordstreams&quot;; }
+
+###############################################################################
+cmd_prepare_host() {
+  need_root prepare-host
+  local pkgs=() c
+  command -v docker &gt;/dev/null 2&gt;&amp;1 || pkgs+=(docker.io)
+  for c in rsync python3 openssl curl; do command -v &quot;$c&quot; &gt;/dev/null 2&gt;&amp;1 || pkgs+=(&quot;$c&quot;); done
+  docker compose version &gt;/dev/null 2&gt;&amp;1 || pkgs+=(docker-compose-v2)
+  if (( ${#pkgs[@]} )); then
+    log &quot;Installing: ${pkgs[*]}&quot;
+    apt-get update -qq
+    DEBIAN_FRONTEND=noninteractive NEEDRESTART_SUSPEND=1 apt-get install -y -qq &quot;${pkgs[@]}&quot; &gt;/dev/null
+  fi
+  systemctl enable --now docker &gt;/dev/null 2&gt;&amp;1
+  need docker rsync python3 openssl curl
+  docker compose version &gt;/dev/null 2&gt;&amp;1 || die &quot;docker compose plugin missing&quot;
+
+  log &quot;Creating $MIRROR_DIR layout&quot;
+  mkdir -p &quot;$MIRROR_DIR&quot;/{config,keys,db} &quot;$(STREAM_DIR)&quot;
+  chmod 700 &quot;$MIRROR_DIR/keys&quot;
+  chown -R &quot;$CONTAINER_UID:$CONTAINER_UID&quot; &quot;$MIRROR_DIR/data&quot;
+
+  if [[ ! -f &quot;$(KEY_FILE)&quot; ]]; then
+    log &quot;Generating the mirror&#x27;s pull key $(KEY_FILE)&quot;
+    ssh-keygen -q -t ed25519 -N &#x27;&#x27; -C &quot;hiero-mirror@$(hostname)&quot; -f &quot;$(KEY_FILE)&quot;
+  fi
+  local ip; ip=$(hostname -I | awk &#x27;{print $1}&#x27;)
+  log &quot;Host ready. On EVERY consensus node, run:&quot;
+  echo
+  echo &quot;  sudo ~/hiero-node.sh allow-mirror --from $ip --pubkey \&quot;$(cat &quot;$(KEY_FILE).pub&quot;)\&quot;&quot;
+  echo
+}
+
+###############################################################################
+# address-book --genesis genesis-network.json [--out FILE]
+# Builds the NodeAddressBook (file 0.0.102 format) the importer needs to verify stream signatures.
+# Verified byte-identical to a live network&#x27;s 0.0.102 built from the same genesis file.
+cmd_address_book() {
+  need python3 openssl
+  local genesis=&quot;&quot; out=&quot;$MIRROR_DIR/config/addressbook.bin&quot;
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --genesis) genesis=$2; shift 2 ;;
+      --out) out=$2; shift 2 ;;
+      *) die &quot;unknown option $1&quot; ;;
+    esac
+  done
+  [[ -f $genesis ]] || die &quot;usage: address-book --genesis &lt;genesis-network.json&gt; [--out file]&quot;
+  [[ -w $(dirname &quot;$out&quot;) ]] || die &quot;cannot write $(dirname &quot;$out&quot;); run with sudo&quot;
+  python3 - &quot;$genesis&quot; &quot;$out&quot; &lt;&lt;&#x27;PY&#x27;
+import base64, json, subprocess, sys
+# NodeAddressBook{1: NodeAddress} NodeAddress{4 RSA_PubKey, 5 nodeId, 6 AccountID, 7 nodeCertHash, 8 ServiceEndpoint, 9 description}
+def varint(n):
+    out = bytearray()
+    while True:
+        b = n &amp; 0x7F; n &gt;&gt;= 7
+        if n: out.append(b | 0x80)
+        else: out.append(b); return bytes(out)
+def f_int(num, v): return varint(num &lt;&lt; 3) + varint(v) if v else b&quot;&quot;
+def f_bytes(num, d): return varint((num &lt;&lt; 3) | 2) + varint(len(d)) + d if d else b&quot;&quot;
+def spki_hex(cert_der):
+    pem = subprocess.run([&quot;openssl&quot;, &quot;x509&quot;, &quot;-inform&quot;, &quot;DER&quot;, &quot;-noout&quot;, &quot;-pubkey&quot;], input=cert_der, capture_output=True, check=True).stdout
+    return subprocess.run([&quot;openssl&quot;, &quot;pkey&quot;, &quot;-pubin&quot;, &quot;-outform&quot;, &quot;DER&quot;], input=pem, capture_output=True, check=True).stdout.hex()
+def endpoint(ep):
+    m = f_bytes(1, base64.b64decode(ep[&quot;ipAddressV4&quot;])) if ep.get(&quot;ipAddressV4&quot;) else b&quot;&quot;
+    m += f_int(2, int(ep.get(&quot;port&quot;, 0)))
+    return m + (f_bytes(3, ep[&quot;domainName&quot;].encode()) if ep.get(&quot;domainName&quot;) else b&quot;&quot;)
+src, dst = sys.argv[1], sys.argv[2]
+book, rows = b&quot;&quot;, []
+for meta in sorted(json.load(open(src))[&quot;nodeMetadata&quot;], key=lambda m: int(m[&quot;node&quot;][&quot;nodeId&quot;])):
+    n, a = meta[&quot;node&quot;], meta[&quot;node&quot;][&quot;accountId&quot;]
+    acct = f_int(1, int(a.get(&quot;shardNum&quot;, 0))) + f_int(2, int(a.get(&quot;realmNum&quot;, 0))) + f_int(3, int(a[&quot;accountNum&quot;]))
+    addr = (f_bytes(4, spki_hex(base64.b64decode(n[&quot;gossipCaCertificate&quot;])).encode()) + f_int(5, int(n[&quot;nodeId&quot;]))
+            + f_bytes(6, acct) + f_bytes(7, base64.b64decode(n.get(&quot;grpcCertificateHash&quot;) or &quot;&quot;).hex().encode()))
+    for ep in n.get(&quot;serviceEndpoint&quot;, []): addr += f_bytes(8, endpoint(ep))
+    book += f_bytes(1, addr + f_bytes(9, n.get(&quot;description&quot;, &quot;&quot;).encode()))
+    rows.append(f&quot;node {n[&#x27;nodeId&#x27;]} -&gt; 0.0.{a[&#x27;accountNum&#x27;]} ({n.get(&#x27;description&#x27;, &#x27;&#x27;)})&quot;)
+open(dst, &quot;wb&quot;).write(book)
+print(f&quot;{dst}: {len(book)} bytes, {len(rows)} nodes: &quot; + &quot;; &quot;.join(rows), file=sys.stderr)
+PY
+  log &quot;sha256 $(sha256sum &quot;$out&quot; | cut -c1-16)…  (compare with file 0.0.102 if you can query the network)&quot;
+}
+
+###############################################################################
+# configure --genesis genesis-network.json --ledger-id 0x.. --chain-id N [--version X]
+cmd_configure() {
+  need_root configure
+  need python3 openssl curl
+  local genesis=&quot;&quot; ledger_id=&quot;&quot; chain_id=&quot;&quot; version=&quot;$MIRROR_VERSION&quot; name=&quot;localnet&quot;
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --genesis) genesis=$2; shift 2 ;;
+      --ledger-id) ledger_id=$2; shift 2 ;;
+      --chain-id) chain_id=$2; shift 2 ;;
+      --version) version=${2#v}; shift 2 ;;
+      --name) name=$2; shift 2 ;;
+      *) die &quot;unknown option $1&quot; ;;
+    esac
+  done
+  [[ -f $genesis &amp;&amp; -n $ledger_id &amp;&amp; -n $chain_id ]] || \
+    die &quot;usage: configure --genesis &lt;genesis-network.json&gt; --ledger-id &lt;0x.. same as nodes&gt; --chain-id &lt;N same as nodes&gt;&quot;
+  [[ $ledger_id =~ ^0x[0-9a-fA-F]+$ ]] || die &quot;--ledger-id must look like 0x2a&quot;
+  [[ $chain_id =~ ^[0-9]+$ ]] || die &quot;--chain-id must be a number&quot;
+  [[ $name =~ ^[a-z0-9-]+$ ]] || die &quot;--name must be lowercase letters, digits or dashes&quot;
+  local cfg=&quot;$MIRROR_DIR/config&quot;
+  mkdir -p &quot;$cfg&quot;
+
+  # 1. Address book (always rebuilt from the genesis file so they can&#x27;t drift apart)
+  cmd_address_book --genesis &quot;$genesis&quot; --out &quot;$cfg/addressbook.bin&quot;
+
+  # 2. Node list for the sync service: &quot;&lt;account&gt; &lt;ip&gt;&quot; from each node&#x27;s gRPC service endpoint
+  python3 - &quot;$genesis&quot; &gt; &quot;$(NODES_FILE)&quot; &lt;&lt;&#x27;PY&#x27;
+import base64, ipaddress, json, sys
+for m in sorted(json.load(open(sys.argv[1]))[&quot;nodeMetadata&quot;], key=lambda m: int(m[&quot;node&quot;][&quot;nodeId&quot;])):
+    n, ep = m[&quot;node&quot;], m[&quot;node&quot;][&quot;serviceEndpoint&quot;][0]
+    host = ep.get(&quot;domainName&quot;) or str(ipaddress.IPv4Address(base64.b64decode(ep[&quot;ipAddressV4&quot;])))
+    print(f&quot;0.0.{n[&#x27;accountId&#x27;][&#x27;accountNum&#x27;]} {host}&quot;)
+PY
+  log &quot;Nodes to pull from: $(tr &#x27;\n&#x27; &#x27; &#x27; &lt; &quot;$(NODES_FILE)&quot;)&quot;
+
+  # 3. Database passwords: random, generated once, kept in a root-only env file
+  local envf=&quot;$cfg/.env&quot;
+  if [[ ! -f $envf ]]; then
+    log &quot;Generating database passwords -&gt; $envf&quot;
+    {
+      for v in POSTGRES_PASSWORD OWNER_PASSWORD IMPORTER_PASSWORD REST_PASSWORD REST_JAVA_PASSWORD GRPC_PASSWORD WEB3_PASSWORD; do
+        echo &quot;$v=$(openssl rand -hex 16)&quot;
+      done
+    } &gt; &quot;$envf&quot;
+  fi
+  chmod 600 &quot;$envf&quot;
+  sed -i &#x27;/^MIRROR_VERSION=/d; /^EXPLORER_VERSION=/d&#x27; &quot;$envf&quot;
+  { echo &quot;MIRROR_VERSION=$version&quot;; echo &quot;EXPLORER_VERSION=$EXPLORER_VERSION&quot;; } &gt;&gt; &quot;$envf&quot;
+
+  # 4. DB init script from the same release as the images
+  log &quot;Fetching DB init script for v$version&quot;
+  curl -fsSL &quot;https://raw.githubusercontent.com/hiero-ledger/hiero-mirror-node/v$version/importer/src/main/resources/db/scripts/init.sh&quot; \
+    -o &quot;$cfg/init.sh&quot; || die &quot;cannot download init.sh for v$version (does the tag exist?)&quot;
+  chmod 755 &quot;$cfg/init.sh&quot;
+
+  # 5. docker-compose.yml (based on the upstream file at the same tag; only nginx publishes a port)
+  cat &gt; &quot;$MIRROR_DIR/docker-compose.yml&quot; &lt;&lt;&#x27;YAML&#x27;
+# Generated by hiero-mirror.sh — based on hiero-mirror-node docker-compose.yml at the same release tag.
+name: hiero-mirror
+x-app: &amp;app
+  restart: unless-stopped
+  configs:
+    - source: app-config
+      target: /usr/etc/hiero/application.yml
+      uid: &quot;1000&quot;
+      gid: &quot;1000&quot;
+  depends_on: [db, redis]
+
+services:
+  db:
+    image: gcr.io/mirrornode/postgres:16-alpine
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      OWNER_PASSWORD: ${OWNER_PASSWORD}
+      IMPORTER_PASSWORD: ${IMPORTER_PASSWORD}
+      REST_PASSWORD: ${REST_PASSWORD}
+      REST_JAVA_PASSWORD: ${REST_JAVA_PASSWORD}
+      GRPC_PASSWORD: ${GRPC_PASSWORD}
+      WEB3_PASSWORD: ${WEB3_PASSWORD}
+    restart: unless-stopped
+    stop_grace_period: 2m
+    shm_size: 256m
+    volumes:
+      - ./db:/var/lib/postgresql/data
+      - ./config/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+
+  redis:
+    image: redis:6-alpine
+    restart: unless-stopped
+
+  importer:
+    &lt;&lt;: *app
+    image: gcr.io/mirrornode/hedera-mirror-importer:${MIRROR_VERSION}
+    environment:
+      HIERO_MIRROR_IMPORTER_DB_HOST: db
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
+      SPRING_DATA_REDIS_HOST: redis
+    volumes:
+      - ./data:/var/lib/hiero/data
+      - ./config/addressbook.bin:/usr/etc/hiero/addressbook.bin:ro
+
+  rest:
+    &lt;&lt;: *app
+    image: gcr.io/mirrornode/hedera-mirror-rest:${MIRROR_VERSION}
+    environment:
+      CONFIG_PATH: /usr/etc/hiero/
+      HIERO_MIRROR_REST_DB_HOST: db
+      HIERO_MIRROR_REST_REDIS_URI: redis://redis:6379
+
+  rest-java:
+    &lt;&lt;: *app
+    image: gcr.io/mirrornode/hedera-mirror-rest-java:${MIRROR_VERSION}
+    environment:
+      HIERO_MIRROR_RESTJAVA_DB_HOST: db
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
+
+  web3:
+    &lt;&lt;: *app
+    image: gcr.io/mirrornode/hedera-mirror-web3:${MIRROR_VERSION}
+    environment:
+      HIERO_MIRROR_WEB3_DB_HOST: db
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
+
+  grpc:
+    &lt;&lt;: *app
+    image: gcr.io/mirrornode/hedera-mirror-grpc:${MIRROR_VERSION}
+    environment:
+      HIERO_MIRROR_GRPC_DB_HOST: db
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/usr/etc/hiero/
+      SPRING_DATA_REDIS_HOST: redis
+
+  explorer:
+    # Static web UI (hiero-mirror-node-explorer); calls /api/v1 on the same origin through api-proxy
+    image: ghcr.io/hiero-ledger/hiero-mirror-node-explorer/hiero-explorer:${EXPLORER_VERSION}
+    restart: unless-stopped
+    volumes:
+      - ./config/explorer/networks-config.json:/app/networks-config.json:ro
+      - ./config/explorer/core-config.json:/app/core-config.json:ro
+
+  api-proxy:
+    image: nginx:1-alpine
+    restart: unless-stopped
+    configs:
+      - source: proxy-config
+        target: /etc/nginx/conf.d/default.conf
+    ports:
+      - 8080:8080
+    depends_on: [rest, rest-java, web3, grpc, explorer]
+
+configs:
+  app-config:
+    file: ./config/application.yml
+  proxy-config:
+    file: ./config/nginx.conf
+YAML
+
+  # 6. Application config shared by all components
+  cat &gt; &quot;$cfg/application.yml&quot; &lt;&lt;YAML
+# Generated by hiero-mirror.sh
+hiero:
+  mirror:
+    importer:
+      network: other
+      startDate: 1970-01-01T00:00:00Z          # import from genesis
+      dataPath: /var/lib/hiero/data            # streams/recordstreams/record0.0.N/ is filled by the sync service
+      initialAddressBook: /usr/etc/hiero/addressbook.bin
+      downloader:
+        cloudProvider: LOCAL
+        bucketName: local                      # required for network &#x27;other&#x27;; unused by the LOCAL provider
+        local:
+          deleteAfterProcessing: false         # keep files so each rsync pass only copies new ones
+        balance:
+          enabled: false                       # consensus nodes write no balance files
+      block:
+        enabled: false                         # no block node; record streams only
+        cutover:
+          enabled: false
+      parser:
+        record:
+          entity:
+            persist:
+              pendingReward: false
+          sidecar:
+            enabled: true
+      db:
+        ownerPassword: \${OWNER_PASSWORD}
+        password: \${IMPORTER_PASSWORD}
+        restPassword: \${REST_PASSWORD}
+    rest:
+      db:
+        password: \${REST_PASSWORD}
+    restJava:
+      db:
+        password: \${REST_JAVA_PASSWORD}
+    grpc:
+      db:
+        password: \${GRPC_PASSWORD}
+    web3:
+      db:
+        password: \${WEB3_PASSWORD}
+      evm:
+        network: OTHER
+        properties:                            # must match the consensus nodes
+          contracts.chainId: &quot;$chain_id&quot;
+          ledger.id: &quot;$ledger_id&quot;
+YAML
+  # Resolve the password placeholders now (compose &#x27;file:&#x27; configs are not interpolated)
+  python3 - &quot;$cfg/application.yml&quot; &quot;$envf&quot; &lt;&lt;&#x27;PY&#x27;
+import sys
+path, envf = sys.argv[1], sys.argv[2]
+env = dict(l.strip().split(&quot;=&quot;, 1) for l in open(envf) if &quot;=&quot; in l)
+text = open(path).read()
+for k, v in env.items(): text = text.replace(&quot;${&quot; + k + &quot;}&quot;, v)
+open(path, &quot;w&quot;).write(text)
+PY
+  chmod 640 &quot;$cfg/application.yml&quot;; chown root:&quot;$CONTAINER_UID&quot; &quot;$cfg/application.yml&quot;
+
+  # 7. nginx routes (same as upstream api-proxy config)
+  cat &gt; &quot;$cfg/nginx.conf&quot; &lt;&lt;&#x27;NGINX&#x27;
+upstream grpc_host      { server grpc:5600;       keepalive 16; }
+upstream rest_host      { server rest:5551;       keepalive 16; }
+upstream rest_java_host { server rest-java:8084;  keepalive 16; }
+upstream web3_host      { server web3:8545;       keepalive 16; }
+upstream explorer_host  { server explorer:8080;   keepalive 16; }
+server {
+  listen 8080;
+  proxy_http_version 1.1;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header &quot;Connection&quot; &quot;&quot;;
+  resolver 127.0.0.11 valid=600s;
+  http2 on;
+  location /api/v1/contracts/call { proxy_pass http://web3_host$request_uri; }
+  location ~ &quot;^/api/v1/contracts/results/((0x)?[A-Fa-f0-9]{64}|\d+\.\d+\.\d+-\d+-\d+)/opcodes&quot; { proxy_pass http://web3_host$request_uri; }
+  location ~ &quot;^/api/v1/accounts/(\d+\.){0,2}(\d+|(0x)?[A-Fa-f0-9]{40}|(?:[A-Z2-7]{8})*(?:[A-Z2-7]{2}|[A-Z2-7]{4,5}|[A-Z2-7]{7,8}))/(allowances/nfts|airdrops|hooks)&quot; { proxy_pass http://rest_java_host$request_uri; }
+  location /api/v1/network/ { proxy_pass http://rest_java_host$request_uri; }
+  location ~ &quot;^/api/v1/topics/(\d+\.){0,2}\d+$&quot; { proxy_pass http://rest_java_host$request_uri; }
+  location /api/v1/ { proxy_pass http://rest_host$request_uri; }
+  location = /com.hedera.mirror.api.proto.ConsensusService/subscribeTopic { grpc_read_timeout 600s; grpc_pass grpc://grpc_host; }
+  location /com.hedera.mirror.api.proto. { grpc_pass grpc://grpc_host; }
+  location /grpc.reflection.v1alpha.ServerReflection { grpc_pass grpc://grpc_host; }
+  location /grpc.reflection.v1.ServerReflection { grpc_pass grpc://grpc_host; }
+  # everything else is the explorer web UI
+  location / { proxy_pass http://explorer_host; }
+}
+NGINX
+
+  # 8. Explorer config: one network, served from this origin (&quot;url&quot;: &quot;/&quot;), as Solo does
+  mkdir -p &quot;$cfg/explorer&quot;
+  python3 - &quot;$cfg/explorer&quot; &quot;$name&quot; &quot;${ledger_id#0x}&quot; &quot;$chain_id&quot; &lt;&lt;&#x27;PY&#x27;
+import json, os, sys
+d, name, ledger, chain = sys.argv[1], sys.argv[2], sys.argv[3].lower(), int(sys.argv[4])
+networks = [{
+    &quot;name&quot;: name, &quot;displayName&quot;: name.upper(), &quot;url&quot;: &quot;/&quot;,
+    &quot;ledgerID&quot;: ledger.zfill(2), &quot;baseRealm&quot;: 0, &quot;baseShard&quot;: 0,
+    &quot;enableWallet&quot;: False, &quot;enableStaking&quot;: False, &quot;enableExpiry&quot;: False, &quot;enableMarket&quot;: False,
+    &quot;popularTokenIndexURL&quot;: None, &quot;erc20IndexURL&quot;: None, &quot;erc721IndexURL&quot;: None, &quot;erc1155IndexURL&quot;: None,
+    &quot;publicLabelsURL&quot;: None, &quot;sourcifySetup&quot;: None,
+}]
+core = {&quot;productName&quot;: f&quot;{name.upper()} Explorer&quot;, &quot;documentTitlePrefix&quot;: name.upper(),
+        &quot;cryptoName&quot;: &quot;HBAR&quot;, &quot;cryptoSymbol&quot;: &quot;\u210f&quot;}
+json.dump(networks, open(os.path.join(d, &quot;networks-config.json&quot;), &quot;w&quot;), indent=2)
+json.dump(core, open(os.path.join(d, &quot;core-config.json&quot;), &quot;w&quot;), indent=2)
+PY
+  chmod 644 &quot;$cfg/explorer&quot;/*.json
+
+  ln -sf &quot;$envf&quot; &quot;$MIRROR_DIR/.env&quot;   # compose reads MIRROR_VERSION + passwords from here
+  log &quot;Configured mirror v$version for ledger $ledger_id / chain $chain_id in $MIRROR_DIR&quot;
+}
+
+###############################################################################
+# The sync loop: one rsync per node per pass, read-only rrsync on the node side.
+cmd_sync_once() {
+  local key; key=$(KEY_FILE)
+  [[ -f $key &amp;&amp; -f $(NODES_FILE) ]] || die &quot;run prepare-host and configure first&quot;
+  local acct ip ok=0 total=0
+  while read -r acct ip; do
+    [[ -n $acct ]] || continue
+    total=$((total + 1))
+    mkdir -p &quot;$(STREAM_DIR)/record$acct&quot;
+    # remote path is relative to /opt/hgcapp/recordStreams (enforced by rrsync on the node)
+    if rsync -a --chown=&quot;$CONTAINER_UID:$CONTAINER_UID&quot; --timeout=20 \
+         -e &quot;ssh -i $key -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=$MIRROR_DIR/keys/known_hosts -o ConnectTimeout=5&quot; \
+         &quot;$STREAMS_USER@$ip:record$acct/&quot; &quot;$(STREAM_DIR)/record$acct/&quot; &lt;/dev/null; then
+      ok=$((ok + 1))
+    else
+      warn &quot;sync from $acct ($ip) failed&quot;
+    fi
+  done &lt; &quot;$(NODES_FILE)&quot;
+  echo &quot;$ok/$total&quot;
+}
+
+cmd_sync_loop() {
+  need_root sync-loop
+  while :; do
+    cmd_sync_once &gt;/dev/null || true
+    sleep &quot;$SYNC_INTERVAL&quot;
+  done
+}
+
+###############################################################################
+cmd_start() {
+  need_root start
+  [[ -f &quot;$MIRROR_DIR/docker-compose.yml&quot; ]] || die &quot;run configure first&quot;
+  log &quot;Test pull from every node&quot;
+  local res; res=$(cmd_sync_once)
+  [[ ${res%%/*} -ge 1 ]] || die &quot;could not pull from any node ($res). Did you run &#x27;hiero-node.sh allow-mirror&#x27; on the nodes?&quot;
+  [[ ${res%%/*} == &quot;${res##*/}&quot; ]] || warn &quot;pulled from only $res nodes; the importer needs signatures from at least 1/3 of them&quot;
+  log &quot;Pulled from $res nodes: $(find &quot;$(STREAM_DIR)&quot; -name &#x27;*.rcd_sig&#x27; | wc -l) signature files on disk&quot;
+
+  local self; self=$(readlink -f &quot;$0&quot;)
+  cat &gt; /etc/systemd/system/hiero-mirror-sync.service &lt;&lt;EOF
+[Unit]
+Description=Pull Hiero record streams from consensus nodes for the mirror importer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Environment=MIRROR_DIR=$MIRROR_DIR SYNC_INTERVAL=$SYNC_INTERVAL STREAMS_USER=$STREAMS_USER
+ExecStart=$self sync-loop
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  systemctl daemon-reload
+  systemctl enable --now hiero-mirror-sync &gt;/dev/null 2&gt;&amp;1
+  log &quot;Sync service: $(systemctl is-active hiero-mirror-sync)&quot;
+
+  log &quot;Starting containers (first start pulls images; may take a few minutes)&quot;
+  (cd &quot;$MIRROR_DIR&quot; &amp;&amp; docker compose pull -q &amp;&amp; docker compose up -d)
+  log &quot;Started. Explorer: http://&lt;this host&gt;:8080/   Check progress with: sudo $0 status&quot;
+}
+
+cmd_stop() {
+  need_root stop
+  systemctl stop hiero-mirror-sync 2&gt;/dev/null || true
+  (cd &quot;$MIRROR_DIR&quot; &amp;&amp; docker compose stop)
+}
+
+###############################################################################
+cmd_status() {
+  need_root status
+  echo &quot;--- sync service: $(systemctl is-active hiero-mirror-sync 2&gt;/dev/null || echo none)&quot;
+  local acct ip
+  while read -r acct ip; do
+    [[ -n $acct ]] || continue
+    printf &#x27;  %-8s %-15s %4s record files, newest %s\n&#x27; &quot;$acct&quot; &quot;$ip&quot; \
+      &quot;$(find &quot;$(STREAM_DIR)/record$acct&quot; -maxdepth 1 -name &#x27;*.rcd.gz&#x27; 2&gt;/dev/null | wc -l)&quot; \
+      &quot;$(find &quot;$(STREAM_DIR)/record$acct&quot; -maxdepth 1 -name &#x27;*.rcd.gz&#x27; -printf &#x27;%f\n&#x27; 2&gt;/dev/null | sort | tail -1 | cut -c1-30)&quot;
+  done &lt; &quot;$(NODES_FILE)&quot;
+  echo &quot;--- containers&quot;
+  (cd &quot;$MIRROR_DIR&quot; &amp;&amp; docker compose ps --format &#x27;table {{.Service}}\t{{.State}}\t{{.Status}}&#x27;)
+  echo &quot;--- API (http://localhost:8080)&quot;
+  local blocks nodes
+  blocks=$(curl -fsS --max-time 5 &#x27;http://localhost:8080/api/v1/blocks?limit=1&amp;order=desc&#x27; 2&gt;/dev/null || true)
+  nodes=$(curl -fsS --max-time 5 &#x27;http://localhost:8080/api/v1/network/nodes&#x27; 2&gt;/dev/null || true)
+  python3 - &quot;$blocks&quot; &quot;$nodes&quot; &lt;&lt;&#x27;PY&#x27;
+import json, sys, time
+b, n = sys.argv[1], sys.argv[2]
+try:
+    blk = json.loads(b)[&quot;blocks&quot;][0]
+    end = float(blk[&quot;timestamp&quot;][&quot;to&quot;])
+    age = time.time() - end
+    print(f&quot;  latest block {blk[&#x27;number&#x27;]}  ({blk[&#x27;count&#x27;]} txs)  consensus time {time.strftime(&#x27;%Y-%m-%d %H:%M:%SZ&#x27;, time.gmtime(end))}&quot;
+          f&quot;  ({age:.0f}s ago; nodes only write a record file when there are transactions)&quot;)
+except Exception:
+    print(&quot;  /api/v1/blocks: no data yet&quot;)
+try:
+    print(f&quot;  /api/v1/network/nodes: {len(json.loads(n)[&#x27;nodes&#x27;])} nodes&quot;)
+except Exception:
+    print(&quot;  /api/v1/network/nodes: not ready&quot;)
+PY
+  echo &quot;--- importer (last errors)&quot;
+  (cd &quot;$MIRROR_DIR&quot; &amp;&amp; docker compose logs --no-color --since 10m importer 2&gt;/dev/null | grep -E &#x27; (ERROR|WARN) &#x27; | tail -3) || true
+}
+
+###############################################################################
+cmd_help() {
+  cat &lt;&lt;EOF
+hiero-mirror.sh — run a Hiero mirror node for an independent Hiero network
+
+Environment: MIRROR_DIR (default /opt/hiero-mirror), MIRROR_VERSION (default $MIRROR_VERSION),
+             STREAMS_USER (hiero-streams), SYNC_INTERVAL (2 seconds)
+
+On the mirror host (all [sudo]):
+  prepare-host                     install docker, compose, rsync; create $MIRROR_DIR; make the pull key
+                                   and print the allow-mirror command to run on every node
+  address-book --genesis &lt;file&gt;    build the importer&#x27;s address book (file 0.0.102 format) from
+                                   genesis-network.json (run automatically by configure)
+  configure --genesis &lt;file&gt; --ledger-id 0x.. --chain-id N [--version X] [--name localnet]
+                                   write compose file, application.yml, nginx routes, DB passwords,
+                                   explorer config (--name is the network name shown in the explorer)
+  start                            test-pull from every node, install the sync service, start containers
+  status                           sync progress per node, containers, latest block and lag, errors
+  stop                             stop sync and containers (data is kept)
+  sync-once                        one rsync pass from every node (debugging)
+
+On every consensus node (needs the updated hiero-node.sh):
+  sudo ~/hiero-node.sh allow-mirror --from &lt;mirror private IP&gt; --pubkey &quot;&lt;key printed by prepare-host&gt;&quot;
+
+Explorer UI: http://&lt;mirror&gt;:8080/        API docs: http://&lt;mirror&gt;:8080/api/v1/docs/
+API: http://&lt;mirror&gt;:8080/api/v1/...  (REST, REST-Java /api/v1/network/*, web3 /api/v1/contracts/call, gRPC)
+EOF
+}
+
+main() {
+  local cmd=${1:-help}; shift || true
+  case $cmd in
+    prepare-host) cmd_prepare_host &quot;$@&quot; ;;
+    address-book) cmd_address_book &quot;$@&quot; ;;
+    configure) cmd_configure &quot;$@&quot; ;;
+    start) cmd_start &quot;$@&quot; ;;
+    stop) cmd_stop &quot;$@&quot; ;;
+    status) cmd_status &quot;$@&quot; ;;
+    sync-once) need_root sync-once; cmd_sync_once &quot;$@&quot; ;;
+    sync-loop) cmd_sync_loop &quot;$@&quot; ;;
+    help|-h|--help) cmd_help ;;
+    *) die &quot;unknown command &#x27;$cmd&#x27; (see: $0 help)&quot; ;;
+  esac
+}
+
+main &quot;$@&quot;
+</code></pre></div>
+</section>
+
+<section id="appC">
+<h2>Appendix C. Verification scripts</h2>
+<p>Save the four files in one folder and run <code>npm install</code>. They use the Hiero JavaScript SDK, solc and ethers at pinned versions.</p>
+<div class="code file"><div class="code-h"><span><b>package.json</b> · 12 lines · SHA-256 <code class="sha">5bc5d8f0410d367e044cb97a4deae7480c28e18920228da3ba0e520dc9ddb5e1</code></span><button type="button" class="copy">Copy</button></div><pre><code>{
+  &quot;name&quot;: &quot;hiero-network-verify&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;private&quot;: true,
+  &quot;type&quot;: &quot;module&quot;,
+  &quot;description&quot;: &quot;Post-deployment verification for a private Hiero network&quot;,
+  &quot;dependencies&quot;: {
+    &quot;@hiero-ledger/sdk&quot;: &quot;2.89.1&quot;,
+    &quot;ethers&quot;: &quot;6.17.0&quot;,
+    &quot;solc&quot;: &quot;0.8.37&quot;
+  }
+}
+</code></pre></div>
+<div class="code file"><div class="code-h"><span><b>key-check.mjs</b> · 25 lines · SHA-256 <code class="sha">407be15a8fdd8d7d1ea36aeddb225b6943db5f629abba1f8eb326fbbab051292</code></span><button type="button" class="copy">Copy</button></div><pre><code>// key-check.mjs — proves the network was created with YOUR genesis key, not the public development key.
+// The functional checks alone cannot tell the two apart: they pass with either key.
+//
+//   HIERO_NODES=&quot;10.0.1.11:50211=0.0.3,...&quot; OPERATOR_KEY_DER=&lt;genesis key, DER hex&gt; node key-check.mjs
+import { AccountInfoQuery, Client, PrivateKey } from &quot;@hiero-ledger/sdk&quot;;
+
+// Well-known development key shipped with Hiero tooling (public; must NOT control a real network)
+const DEV_KEY = &quot;302e020100300506032b65700422042091132178e72057a1d7528025956fe39b0b847f200ab59b2fdd367017f3087137&quot;;
+const [first] = (process.env.HIERO_NODES ?? &quot;&quot;).split(&quot;,&quot;).filter(Boolean).map((e) =&gt; e.split(&quot;=&quot;));
+if (!first || !process.env.OPERATOR_KEY_DER) { console.error(&quot;set HIERO_NODES and OPERATOR_KEY_DER&quot;); process.exit(2); }
+
+const ours = PrivateKey.fromStringDer(process.env.OPERATOR_KEY_DER);
+let ok = true;
+for (const [name, key, mustWork] of [[&quot;genesis key&quot;, ours, true], [&quot;public development key&quot;, PrivateKey.fromStringDer(DEV_KEY), false]]) {
+  const client = Client.forNetwork({ [first[0]]: first[1] }).setOperator(&quot;0.0.2&quot;, key);
+  let accepted = false, detail;
+  try {
+    const info = await new AccountInfoQuery().setAccountId(&quot;0.0.2&quot;).execute(client);
+    accepted = true; detail = `0.0.2 key on the network ends ...${info.key.toString().slice(-16)}`;
+  } catch (e) { detail = String(e.status ?? e.message); }
+  const pass = accepted === mustWork; ok &amp;&amp;= pass;
+  console.log(`${pass ? &quot;PASS&quot; : &quot;FAIL&quot;}  ${name} ${accepted ? &quot;accepted&quot; : &quot;rejected&quot;} (${detail})`);
+  client.close();
+}
+process.exit(ok ? 0 : 1);
+</code></pre></div>
+<div class="code file"><div class="code-h"><span><b>network-check.mjs</b> · 97 lines · SHA-256 <code class="sha">4c7720cd8dd731004b37e89e3e0e41507f057c58b85c0c5e7638a62dbaf73edb</code></span><button type="button" class="copy">Copy</button></div><pre><code>// network-check.mjs — 24 functional checks against a 4-node Hiero network.
+// Each write is sent to one specific node; every result is then read back from all four nodes
+// and must be identical. Entity ids are saved to verify-ids.json for mirror-check.mjs.
+//
+//   HIERO_NODES=&quot;10.0.1.11:50211=0.0.3,10.0.1.12:50211=0.0.4,10.0.1.13:50211=0.0.5,10.0.1.14:50211=0.0.6&quot; \
+//   OPERATOR_KEY_DER=&lt;genesis key, DER hex&gt; node network-check.mjs
+//
+// Use the plaintext gRPC port (50211). The SDK assumes TLS on 50212 and 443.
+import { writeFileSync } from &quot;node:fs&quot;;
+import {
+  AccountInfoQuery, AccountCreateTransaction, AccountId, Client, ContractCallQuery, ContractCreateTransaction,
+  ContractExecuteTransaction, ContractFunctionParameters, Hbar, PrivateKey, TokenCreateTransaction,
+  TokenInfoQuery, TokenType, TopicCreateTransaction, TopicInfoQuery, TopicMessageSubmitTransaction,
+  TransferTransaction,
+} from &quot;@hiero-ledger/sdk&quot;;
+import solc from &quot;solc&quot;;
+
+const NOTE = &quot;network verification&quot;;
+const NODES = Object.fromEntries((process.env.HIERO_NODES ?? &quot;&quot;).split(&quot;,&quot;).filter(Boolean).map((e) =&gt; e.split(&quot;=&quot;)));
+if (Object.keys(NODES).length !== 4 || !process.env.OPERATOR_KEY_DER) {
+  console.error(&quot;set HIERO_NODES (4 entries host:port=0.0.N) and OPERATOR_KEY_DER&quot;); process.exit(2);
+}
+const nodeIds = Object.values(NODES).map((n) =&gt; AccountId.fromString(n));
+const label = (id) =&gt; `node-${Number(id.toString().split(&quot;.&quot;)[2]) - 2} (${id})`;
+const operatorKey = PrivateKey.fromStringDer(process.env.OPERATOR_KEY_DER);
+const client = Client.forNetwork(NODES).setOperator(&quot;0.0.2&quot;, operatorKey);
+client.setRequestTimeout(60_000);
+
+const results = [];
+const check = (name, ok, detail) =&gt; { results.push(ok); console.log(`${ok ? &quot;PASS&quot; : &quot;FAIL&quot;}  ${name}${detail ? &quot;  — &quot; + detail : &quot;&quot;}`); };
+const t0 = Date.now();
+const via = (tx, i) =&gt; tx.setNodeAccountIds([nodeIds[i]]);
+async function readFromAll(name, fn) {
+  const answers = [];
+  for (const id of nodeIds) answers.push([label(id), String(await fn(id))]);
+  const same = answers.every(([, a]) =&gt; a === answers[0][1]);
+  check(`${name} — same answer from all 4 nodes`, same, same ? answers[0][1] : JSON.stringify(answers));
+  return answers[0][1];
+}
+
+// 1. Treasury balance agrees on every node
+await readFromAll(&quot;Treasury 0.0.2 balance&quot;, async (id) =&gt;
+  (await new AccountInfoQuery().setAccountId(&quot;0.0.2&quot;).setNodeAccountIds([id]).execute(client)).balance.toString());
+
+// 2-5. Account create, transfer, balance
+const userKey = PrivateKey.generateED25519();
+let r = await (await via(new AccountCreateTransaction().setKeyWithoutAlias(userKey.publicKey).setInitialBalance(new Hbar(10)), 0).execute(client)).getReceipt(client);
+const userId = r.accountId; check(&quot;Create account via node-1&quot;, r.status.toString() === &quot;SUCCESS&quot;, `${userId}, 10 ℏ`);
+r = await (await via(new TransferTransaction().addHbarTransfer(&quot;0.0.2&quot;, new Hbar(-5)).addHbarTransfer(userId, new Hbar(5)), 1).execute(client)).getReceipt(client);
+check(&quot;Transfer 5 ℏ via node-2&quot;, r.status.toString() === &quot;SUCCESS&quot;);
+const bal = await readFromAll(`Balance of ${userId}`, async (id) =&gt; (await new AccountInfoQuery().setAccountId(userId).setNodeAccountIds([id]).execute(client)).balance.toString());
+check(&quot;Balance is 15 ℏ&quot;, bal === &quot;15 ℏ&quot;, bal);
+
+// 6-11. Consensus service: topic and three messages
+r = await (await via(new TopicCreateTransaction().setTopicMemo(NOTE), 2).execute(client)).getReceipt(client);
+const topicId = r.topicId; check(&quot;Create topic via node-3&quot;, r.status.toString() === &quot;SUCCESS&quot;, `${topicId}`);
+for (let i = 1; i &lt;= 3; i++) {
+  r = await (await via(new TopicMessageSubmitTransaction().setTopicId(topicId).setMessage(`hello #${i}`), 3).execute(client)).getReceipt(client);
+  check(`Submit message ${i} via node-4`, r.status.toString() === &quot;SUCCESS&quot;, `sequence ${r.topicSequenceNumber}`);
+}
+const seq = await readFromAll(`Topic ${topicId} sequence number`, async (id) =&gt; (await new TopicInfoQuery().setTopicId(topicId).setNodeAccountIds([id]).execute(client)).sequenceNumber.toString());
+check(&quot;Topic has 3 messages&quot;, seq === &quot;3&quot;, seq);
+
+// 12-14. Token service: fungible token
+r = await (await via(new TokenCreateTransaction().setTokenName(&quot;Verification Test Token&quot;).setTokenSymbol(&quot;HTT&quot;).setTokenType(TokenType.FungibleCommon).setDecimals(2).setInitialSupply(100_000).setTreasuryAccountId(&quot;0.0.2&quot;).setAdminKey(operatorKey.publicKey), 0).execute(client)).getReceipt(client);
+const tokenId = r.tokenId; check(&quot;Create fungible token via node-1&quot;, r.status.toString() === &quot;SUCCESS&quot;, `${tokenId}`);
+const supply = await readFromAll(`Token ${tokenId} total supply`, async (id) =&gt; (await new TokenInfoQuery().setTokenId(tokenId).setNodeAccountIds([id]).execute(client)).totalSupply.toString());
+check(&quot;Supply is 100000&quot;, supply === &quot;100000&quot;, supply);
+
+// 15-24. Smart contract service: compile, deploy, call from every node
+const source = `// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+contract Counter { uint256 public count; string public note; event Incremented(address indexed by, uint256 count);
+  constructor(string memory n) { note = n; }
+  function increment() external { count += 1; emit Incremented(msg.sender, count); } }`;
+const out = JSON.parse(solc.compile(JSON.stringify({ language: &quot;Solidity&quot;, sources: { &quot;Counter.sol&quot;: { content: source } },
+  settings: { evmVersion: &quot;paris&quot;, optimizer: { enabled: true, runs: 200 }, outputSelection: { &quot;*&quot;: { &quot;*&quot;: [&quot;evm.bytecode.object&quot;] } } } })));
+const bytecode = out.contracts[&quot;Counter.sol&quot;].Counter.evm.bytecode.object;
+check(&quot;Compile Counter.sol (solc &quot; + solc.version().split(&quot;+&quot;)[0] + &quot;)&quot;, bytecode.length &gt; 0, `${bytecode.length / 2} bytes`);
+// Inline init code: the node does not append setConstructorParameters(), so append the ABI-encoded args here.
+const ctorArgs = new ContractFunctionParameters().addString(NOTE)._build();
+r = await (await via(new ContractCreateTransaction().setBytecode(Buffer.concat([Buffer.from(bytecode, &quot;hex&quot;), Buffer.from(ctorArgs)])).setGas(300_000), 1).execute(client)).getReceipt(client);
+const contractId = r.contractId; check(&quot;Deploy contract via node-2&quot;, r.status.toString() === &quot;SUCCESS&quot;, `${contractId} (EVM 0x${contractId.toEvmAddress()})`);
+for (let i = 0; i &lt; 4; i++) {
+  r = await (await via(new ContractExecuteTransaction().setContractId(contractId).setGas(100_000).setFunction(&quot;increment&quot;), i).execute(client)).getReceipt(client);
+  check(`increment() via ${label(nodeIds[i])}`, r.status.toString() === &quot;SUCCESS&quot;);
+}
+const count = await readFromAll(&quot;Contract count()&quot;, async (id) =&gt; (await new ContractCallQuery().setContractId(contractId).setGas(50_000).setFunction(&quot;count&quot;).setNodeAccountIds([id]).execute(client)).getUint256(0).toString());
+check(&quot;count() is 4 (one increment per node)&quot;, count === &quot;4&quot;, count);
+const note = await readFromAll(&quot;Contract note()&quot;, async (id) =&gt; (await new ContractCallQuery().setContractId(contractId).setGas(50_000).setFunction(&quot;note&quot;).setNodeAccountIds([id]).execute(client)).getString(0));
+check(&quot;note() matches constructor argument&quot;, note === NOTE, note);
+
+writeFileSync(&quot;verify-ids.json&quot;, JSON.stringify({ account: String(userId), topic: String(topicId), token: String(tokenId),
+  contract: String(contractId), note: NOTE }, null, 2));
+const failed = results.filter((x) =&gt; !x).length;
+console.log(`\n${results.length - failed}/${results.length} checks passed in ${((Date.now() - t0) / 1000).toFixed(1)}s (ids saved to verify-ids.json)`);
+client.close(); process.exit(failed ? 1 : 0);
+</code></pre></div>
+<div class="code file"><div class="code-h"><span><b>mirror-check.mjs</b> · 43 lines · SHA-256 <code class="sha">cdc354ac0e125cebc22bcb782c77625270fcf591f53ee3cf68e57c73e643c05b</code></span><button type="button" class="copy">Copy</button></div><pre><code>// mirror-check.mjs — 7 checks that the mirror node imported what network-check.mjs wrote.
+// Run it after network-check.mjs, in the same folder (it reads verify-ids.json).
+//
+//   MIRROR_URL=http://10.0.1.20:8080 node mirror-check.mjs
+import { readFileSync } from &quot;node:fs&quot;;
+import { ethers } from &quot;ethers&quot;;
+
+const M = process.env.MIRROR_URL ?? &quot;http://localhost:8080&quot;;
+const ids = JSON.parse(readFileSync(&quot;verify-ids.json&quot;, &quot;utf8&quot;));
+const get = async (p) =&gt; { const r = await fetch(M + p); if (!r.ok) throw new Error(`${p} -&gt; HTTP ${r.status}`); return r.json(); };
+const call = async (to, sig) =&gt; {
+  const r = await fetch(M + &quot;/api/v1/contracts/call&quot;, { method: &quot;POST&quot;, headers: { &quot;content-type&quot;: &quot;application/json&quot; },
+    body: JSON.stringify({ to, data: ethers.id(sig).slice(0, 10), block: &quot;latest&quot; }) });
+  const j = await r.json(); if (!r.ok) throw new Error(`call ${sig} -&gt; HTTP ${r.status} ${JSON.stringify(j)}`); return j.result;
+};
+
+// The importer trails consensus by a few seconds; wait until the last contract call is visible.
+for (let i = 0; ; i++) {
+  const n = (await get(`/api/v1/contracts/${ids.contract}/results?limit=10`).catch(() =&gt; ({ results: [] }))).results.length;
+  if (n &gt;= 5) break;
+  if (i === 30) { console.log(&quot;FAIL  mirror did not import the test transactions within 60 s&quot;); process.exit(1); }
+  await new Promise((s) =&gt; setTimeout(s, 2000));
+}
+
+const res = [];
+const check = (name, ok, detail) =&gt; { res.push(ok); console.log(`${ok ? &quot;PASS&quot; : &quot;FAIL&quot;}  ${name}  — ${detail}`); };
+const acct = await get(`/api/v1/accounts/${ids.account}`);
+check(`Account ${ids.account} balance via mirror`, acct.balance.balance === 1_500_000_000, `${acct.balance.balance} tinybar (15 ℏ)`);
+const msgs = (await get(`/api/v1/topics/${ids.topic}/messages`)).messages;
+check(`Topic ${ids.topic} messages via mirror`, msgs.length === 3, msgs.map((m) =&gt; `#${m.sequence_number} &quot;${Buffer.from(m.message, &quot;base64&quot;)}&quot;`).join(&quot;, &quot;));
+const tok = await get(`/api/v1/tokens/${ids.token}`);
+check(`Token ${ids.token} via mirror`, tok.symbol === &quot;HTT&quot; &amp;&amp; tok.total_supply === &quot;100000&quot;, `${tok.name} (${tok.symbol}) supply ${tok.total_supply}`);
+const c = await get(`/api/v1/contracts/${ids.contract}`);
+const results = (await get(`/api/v1/contracts/${ids.contract}/results?limit=10`)).results;
+check(`Contract ${ids.contract} results via mirror`, results.length === 5, `${results.length} results (1 create + 4 increment), evm ${c.evm_address}`);
+const count = BigInt(await call(c.evm_address, &quot;count()&quot;));
+check(&quot;web3 eth_call count() via mirror&quot;, count === 4n, `${count}`);
+const note = ethers.AbiCoder.defaultAbiCoder().decode([&quot;string&quot;], await call(c.evm_address, &quot;note()&quot;))[0];
+check(&quot;web3 eth_call note() via mirror&quot;, note === ids.note, note);
+const nodes = (await get(&quot;/api/v1/network/nodes&quot;)).nodes;
+check(&quot;Network nodes via mirror&quot;, nodes.length === 4, nodes.map((n) =&gt; `${n.node_id}:${n.node_account_id}`).join(&quot; &quot;));
+console.log(`\n${res.filter(Boolean).length}/${res.length} mirror checks passed`);
+process.exit(res.every(Boolean) ? 0 : 1);
+</code></pre></div>
+</section>
+
+<section id="appD">
+<h2>Appendix D. Alternative: Hedera Node Management Tools</h2>
+<p>Hedera publishes Node Management Tools (NMT), the installer used on mainnet hosts, at <code>builds.hedera.com/?prefix=node/mgmt-tools/</code>. NMT runs the node in Docker Compose and generates its own keys. We tested v1.3.8 on the same four hosts, with consensus node v0.76.4. The network reached <code>ACTIVE</code> and passed all 24 functional checks. NMT does not create the genesis file, the treasury key or <code>application.properties</code>, so steps 3 and 4 of this runbook are still needed. The commands below worked on Ubuntu 24.04.</p>
+<div class="code"><div class="code-h"><span>bash · each node (NMT path)</span><button type="button" class="copy">Copy</button></div><pre><code>sudo apt-get install -y unzip docker.io docker-compose-v2 docker-buildx hashdeep incron
+sudo ./node-mgmt-tools-installer-v1.3.8-9d3ce8b4.run --accept      # without --accept it loops when there is no terminal
+cd /opt/hgcapp/node-mgmt-tools
+sudo mkdir -p logs                                                  # the upgrade watcher fails without it
+sudo bin/node-mgmt-tool -C preflight -m 10g -k 4g -d                # defaults expect a 118 GB heap
+sudo bin/node-mgmt-tool -C keys -t all -n node1                     # node1..node4; gossip store password is &quot;password&quot;
+sudo bin/node-mgmt-tool -C install -p ~/build-v0.76.4.zip -n node1 -g 0 -x 0.76.4 -i main -m 10g -k 4g
+# export the public bundle from the generated keys, build the genesis (step 4), then
+# run hiero-node.sh configure (step 6) on every node before starting
+sudo bin/node-mgmt-tool -C start</code></pre></div>
+<div class="note warn"><b class="t">Gaps found in NMT v1.3.8</b>
+<ul>
+<li>No public installation guide.</li>
+<li>Prerequisites are not installed. Docker buildx is not checked, and its absence causes a misleading "Image Not Found After Build" error.</li>
+<li>The JVM is sized for mainnet hardware.</li>
+<li>No health check: the container shows "Up" whether or not the node is in consensus.</li>
+<li>The node container's restart policy is "no".</li>
+<li><code>stop</code> kills the node instead of shutting it down cleanly.</li>
+<li>Event streams stay on, which caused the disk exhaustion described in section 2.</li>
+</ul>
+<p>For a network you operate yourself, the script path in this runbook is simpler and restarts failed nodes automatically.</p></div>
+</section>
+
+<footer>
+<p>Hiero Private Network Runbook · version 1.0 · MAKE Group. Consensus node, mirror node and explorer software are published by the Hiero project under their own licences.</p>
+</footer>
+</main>
+</div>
+
+<script>
+document.addEventListener("click", async (e) => {
+  const b = e.target.closest("button.copy");
+  if (!b) return;
+  const code = b.closest(".code").querySelector("pre code").textContent;
+  try { await navigator.clipboard.writeText(code); b.textContent = "Copied"; }
+  catch { b.textContent = "Select and copy"; const r = document.createRange(); r.selectNodeContents(b.closest(".code").querySelector("pre")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+  setTimeout(() => { b.textContent = "Copy"; }, 2000);
+});
+</script>
+</body>
+</html>
