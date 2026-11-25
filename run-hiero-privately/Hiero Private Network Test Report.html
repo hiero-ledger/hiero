@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hiero Private Network Test Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Operations manual: ink on paper, one steel-teal accent for actions, semantic stripes for callouts.
+     Layout: sticky contents rail on wide screens, single 72ch column of numbered steps. */
+  --paper: #f7f8f8;
+  --sheet: #ffffff;
+  --ink: #17212b;
+  --muted: #56636f;
+  --rule: #d9dee2;
+  --accent: #0e6e74;
+  --accent-soft: #e3f0f0;
+  --code-bg: #f1f3f4;
+  --warn: #9a5b00; --warn-bg: #fff6e6;
+  --crit: #a3262a; --crit-bg: #fdeeee;
+  --ok: #1f7a3f; --ok-bg: #eaf6ee;
+  --font-display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1519; --sheet: #151c21; --ink: #e3e8eb; --muted: #9aa7b0; --rule: #2a343b;
+    --accent: #52b9bd; --accent-soft: #15302f; --code-bg: #1b2328;
+    --warn: #f0b45a; --warn-bg: #2b2213; --crit: #f08a8a; --crit-bg: #2e1818; --ok: #6fcf8f; --ok-bg: #142a1c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1519; --sheet: #151c21; --ink: #e3e8eb; --muted: #9aa7b0; --rule: #2a343b;
+  --accent: #52b9bd; --accent-soft: #15302f; --code-bg: #1b2328;
+  --warn: #f0b45a; --warn-bg: #2b2213; --crit: #f08a8a; --crit-bg: #2e1818; --ok: #6fcf8f; --ok-bg: #142a1c;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 var(--font-body); }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 40px; }
+@media (max-width: 900px) { .wrap { grid-template-columns: minmax(0, 1fr); gap: 0; } nav.toc { position: static; max-height: none; border: 1px solid var(--rule); border-radius: 6px; margin: 16px 0; } }
+header.doc { max-width: 1180px; margin: 0 auto; padding: 40px 16px 24px; border-bottom: 1px solid var(--rule); }
+header.doc .kicker { font: 500 13px/1.4 var(--font-mono); color: var(--accent); letter-spacing: .04em; text-transform: uppercase; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 38px; margin: 6px 0 8px; }
+h2 { font-size: 26px; margin: 56px 0 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
+h3 { font-size: 19px; margin: 28px 0 8px; font-family: var(--font-body); }
+.lede { font-size: 18px; color: var(--muted); max-width: 72ch; margin: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 18px; font-size: 14px; color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 600; }
+nav.toc { position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; padding: 28px 12px 28px 0; font-size: 14px; }
+nav.toc p { font: 600 12px/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+nav.toc a { display: block; padding: 4px 8px; border-radius: 4px; color: var(--ink); text-decoration: none; }
+nav.toc a:hover { background: var(--accent-soft); }
+nav.toc li.sub a { padding-left: 22px; font-size: 13.5px; }
+nav.toc .n { display: inline-block; width: 26px; color: var(--muted); font-variant-numeric: tabular-nums; }
+main { min-width: 0; padding-bottom: 80px; }
+main > section > p, main > section > ul, main > section > ol { max-width: 72ch; }
+.step-title { border: 0 !important; margin: 40px 0 8px !important; font-size: 22px !important; padding-top: 0 !important; }
+.step-h { display: flex; gap: 14px; align-items: baseline; }
+.step-n { font: 600 14px/1 var(--font-mono); color: var(--sheet); background: var(--accent); padding: 6px 8px; border-radius: 4px; flex: none; font-variant-numeric: tabular-nums; }
+.where { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 14px; }
+.chip { font: 500 12px/1 var(--font-mono); padding: 6px 8px; border-radius: 999px; border: 1px solid var(--rule); background: var(--sheet); color: var(--muted); }
+.chip.host { border-color: var(--accent); color: var(--accent); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; background: var(--sheet); }
+.tbl { overflow-x: auto; margin: 12px 0 18px; border: 1px solid var(--rule); border-radius: 6px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 600; background: var(--code-bg); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font-family: var(--font-mono); font-size: .88em; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+.code { margin: 10px 0 16px; border: 1px solid var(--rule); border-radius: 6px; background: var(--code-bg); overflow: hidden; }
+.code-h { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 8px 6px 12px; border-bottom: 1px solid var(--rule); font: 12px/1.4 var(--font-mono); color: var(--muted); }
+.code-h code.sha { background: none; padding: 0; font-size: 11px; }
+.code pre { margin: 0; padding: 12px 14px; overflow-x: auto; font: 13px/1.55 var(--font-mono); }
+.code pre code { background: none; padding: 0; font-size: inherit; overflow-wrap: normal; }
+.code.file pre { max-height: none; }
+button.copy { font: 500 12px/1 var(--font-body); padding: 6px 10px; border: 1px solid var(--rule); border-radius: 4px; background: var(--sheet); color: var(--ink); cursor: pointer; flex: none; }
+button.copy:hover { border-color: var(--accent); color: var(--accent); }
+pre.out { margin: 6px 0 16px; padding: 10px 14px; border-left: 3px solid var(--ok); background: var(--ok-bg); font: 12.5px/1.55 var(--font-mono); overflow-x: auto; }
+.label-out { font: 600 12px/1 var(--font-mono); color: var(--ok); text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
+.note { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 0 6px 6px 0; margin: 14px 0; max-width: 80ch; }
+.note.warn { border-color: var(--warn); background: var(--warn-bg); }
+.note.crit { border-color: var(--crit); background: var(--crit-bg); }
+.note b.t { display: block; margin-bottom: 2px; }
+.note p { margin: 4px 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 14px 0; }
+.card { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; }
+.card h4 { margin: 0 0 4px; font-size: 15px; }
+.card p { margin: 0; font-size: 14px; color: var(--muted); }
+figure { margin: 18px 0; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 12px; overflow-x: auto; }
+figure svg { display: block; width: 100%; min-width: 640px; height: auto; }
+figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+svg .box { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.4; }
+svg .box.acc { stroke: var(--accent); stroke-width: 2; }
+svg .t { fill: var(--ink); font: 600 13px var(--font-body); }
+svg .s { fill: var(--muted); font: 11.5px var(--font-mono); }
+svg .gossip { stroke: var(--accent); stroke-width: 1.6; fill: none; }
+svg .flow { stroke: var(--muted); stroke-width: 1.4; fill: none; stroke-dasharray: 5 4; }
+svg .arrow { fill: var(--muted); }
+ol.steps-mini { padding-left: 20px; }
+footer { border-top: 1px solid var(--rule); margin-top: 60px; padding-top: 16px; font-size: 13px; color: var(--muted); }
+</style>
+<style>
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 18px 0; }
+.tile { background: var(--sheet); border: 1px solid var(--rule); border-top: 3px solid var(--ok); border-radius: 6px; padding: 12px 14px; }
+.tile.bad { border-top-color: var(--crit); }
+.tile .v { font: 600 26px/1.1 var(--font-display); font-variant-numeric: tabular-nums; }
+.tile .k { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.pill { display: inline-block; font: 600 11px/1 var(--font-mono); padding: 4px 7px; border-radius: 999px; letter-spacing: .03em; white-space: nowrap; }
+.pill.pass { color: var(--ok); background: var(--ok-bg); }
+.pill.fail { color: var(--crit); background: var(--crit-bg); }
+.pill.warn { color: var(--warn); background: var(--warn-bg); }
+.sev { border-left: 3px solid var(--rule); }
+.sev.c { border-left-color: var(--crit); } .sev.h { border-left-color: var(--warn); } .sev.m { border-left-color: var(--accent); }
+ol.timeline { list-style: none; padding: 0; margin: 12px 0; border-left: 2px solid var(--rule); max-width: 80ch; }
+ol.timeline li { position: relative; padding: 4px 0 10px 18px; }
+ol.timeline li::before { content: ""; position: absolute; left: -6px; top: 11px; width: 10px; height: 10px; border-radius: 50%; background: var(--sheet); border: 2px solid var(--muted); }
+ol.timeline li.bad::before { border-color: var(--crit); background: var(--crit); }
+ol.timeline time { font: 500 13px var(--font-mono); color: var(--muted); display: block; }
+</style>
+</head>
+<body>
+<header class="doc">
+  <div class="kicker">Test report · Hiero consensus network</div>
+  <h1>Hiero Private Network Test Report</h1>
+  <p class="lede">Status and health checks run against the private Hiero networks built with the <i>Hiero Private Network Runbook</i>: four consensus nodes and one mirror node.</p>
+  <div class="meta">
+    <span><b>Version</b> 1.0</span>
+    <span><b>Prepared by</b> MAKE Group</span>
+    <span><b>Versions</b> consensus node v0.76.4 · mirror node v0.163.0</span>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+  <p>Contents</p>
+  <ol>
+    <li><a href="#summary"><span class="n">1</span>Summary</a></li>
+    <li><a href="#env"><span class="n">2</span>Test environment</a></li>
+    <li><a href="#method"><span class="n">3</span>Method</a></li>
+    <li><a href="#checks"><span class="n">4</span>The 24 functional checks</a></li>
+    <li><a href="#runs"><span class="n">5</span>Test runs</a></li>
+    <li><a href="#health"><span class="n">6</span>Health checks</a></li>
+    <li><a href="#incident"><span class="n">7</span>Long-running stability</a></li>
+    <li><a href="#findings"><span class="n">8</span>Findings</a></li>
+    <li><a href="#scope"><span class="n">9</span>Not covered</a></li>
+    <li><a href="#appA"><span class="n">A</span>Test scripts</a></li>
+  </ol>
+</nav>
+
+<main>
+<section id="summary">
+<h2>1. Summary</h2>
+<p>We built the network twice: once with the runbook's scripts and once with Hedera's Node Management Tools. We ran a fixed suite of 24 functional checks against it four times. Every run passed all 24. The mirror node imported every result correctly (7 of 7 checks). The treasury key check, consensus state hashes and a single-node outage test all behaved as expected.</p>
+<p>The long-running test found one serious operational defect. After 3.8 days, the network built with Node Management Tools halted because event-stream files filled the 30 GB disks. No component raised an alert. The runbook now turns event streams off, sizes disks at 100 GB and lists the alerts to configure (section 7).</p>
+<div class="tiles">
+  <div class="tile"><div class="v">24 / 24</div><div class="k">functional checks passed, in each of 4 runs</div></div>
+  <div class="tile"><div class="v">7 / 7</div><div class="k">mirror node checks passed</div></div>
+  <div class="tile"><div class="v">2 / 2</div><div class="k">treasury key checks passed</div></div>
+  <div class="tile"><div class="v">4 nodes</div><div class="k">identical state hashes at every compared round</div></div>
+  <div class="tile"><div class="v">~40 s</div><div class="k">rejoin time after a node outage, with no network downtime</div></div>
+  <div class="tile bad"><div class="v">3.8 days</div><div class="k">until the disks filled and the network halted; mitigated in the runbook</div></div>
+</div>
+</section>
+
+<section id="env">
+<h2>2. Test environment</h2>
+<div class="tbl"><table>
+<tr><th></th><th>Scripts build</th><th>Node Management Tools build</th></tr>
+<tr><td>Install method</td><td>Runbook scripts (<code>hiero-node.sh</code>, systemd)</td><td>Node Management Tools v1.3.8 (Docker Compose), with the runbook scripts for genesis and configuration</td></tr>
+<tr><td>Consensus nodes</td><td>4 × AWS EC2 t2.xlarge (4 vCPU, 16 GB)</td><td>4 × AWS EC2 t2.xlarge (4 vCPU, 16 GB), 30 GB disk</td></tr>
+<tr><td>Mirror node</td><td>1 × t2.large (2 vCPU, 8 GB), mirror v0.163.0, explorer 26.2.0</td><td>Not deployed</td></tr>
+<tr><td>Software</td><td colspan="2">Consensus node v0.76.4 · OpenJDK 25 · Ubuntu 24.04 LTS</td></tr>
+<tr><td>Network</td><td colspan="2">4 nodes with equal weight · ledger ID 0x2a · EVM chain ID 1234 · own treasury key (ED25519)</td></tr>
+<tr><td>Client</td><td colspan="2">Hiero JavaScript SDK 2.89.1 · solc 0.8.37 · ethers 6.17.0 · Node.js, connected over SSH tunnels to each node's gRPC port 50211</td></tr>
+</table></div>
+</section>
+
+<section id="method">
+<h2>3. Method</h2>
+<p>The suite tests that the four nodes behave as one ledger, not only that each one answers requests:</p>
+<ul>
+<li><b>Writes go to specific nodes.</b> The transactions are spread across all four nodes, so each node must accept and gossip transactions.</li>
+<li><b>Reads go to every node.</b> Each read is sent to all four nodes separately, and the check passes only if all four give the same answer.</li>
+<li><b>Values are checked exactly.</b> Balances, sequence numbers, token supply and contract state must equal the expected values, not just exist.</li>
+</ul>
+<p>The suite covers the four main Hiero services:</p>
+<ul>
+<li>cryptocurrency: accounts and transfers;</li>
+<li>consensus service: topics and messages;</li>
+<li>token service: a fungible token;</li>
+<li>smart contracts: Solidity on the EVM.</li>
+</ul>
+<p>All transactions are signed by the treasury account 0.0.2 with the network's own treasury key. Separate scripts check the treasury key itself and the mirror node. Shell commands on each node check status and state hashes.</p>
+</section>
+
+<section id="checks">
+<h2>4. The 24 functional checks</h2>
+<p>Results column: the four recorded runs A-1, A-2, A-3 and B-1 (section 5). Observed values are from run B-1.</p>
+<div class="tbl"><table>
+<tr><th class="num">#</th><th>Service</th><th>Check</th><th>Sent to / read from</th><th>Pass criterion</th><th>Observed (B-1)</th><th>Result</th></tr>
+<tr><td class="num">1</td><td>Crypto</td><td>Treasury 0.0.2 balance</td><td>All 4 nodes</td><td>Same value from all 4</td><td class="num">50,000,000,000 ℏ</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">2</td><td>Crypto</td><td>Create account with 10 ℏ</td><td>Node 1</td><td>Receipt SUCCESS</td><td class="num">0.0.1001</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">3</td><td>Crypto</td><td>Transfer 5 ℏ from the treasury</td><td>Node 2</td><td>Receipt SUCCESS</td><td>SUCCESS</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">4</td><td>Crypto</td><td>New account balance</td><td>All 4 nodes</td><td>Same value from all 4</td><td class="num">15 ℏ</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">5</td><td>Crypto</td><td>Balance is correct</td><td>—</td><td>Equals 15 ℏ</td><td class="num">15 ℏ</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">6</td><td>Consensus</td><td>Create topic</td><td>Node 3</td><td>Receipt SUCCESS</td><td class="num">0.0.1002</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">7</td><td>Consensus</td><td>Submit message 1</td><td>Node 4</td><td>SUCCESS, sequence 1</td><td class="num">sequence 1</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">8</td><td>Consensus</td><td>Submit message 2</td><td>Node 4</td><td>SUCCESS, sequence 2</td><td class="num">sequence 2</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">9</td><td>Consensus</td><td>Submit message 3</td><td>Node 4</td><td>SUCCESS, sequence 3</td><td class="num">sequence 3</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">10</td><td>Consensus</td><td>Topic sequence number</td><td>All 4 nodes</td><td>Same value from all 4</td><td class="num">3</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">11</td><td>Consensus</td><td>Topic holds 3 messages</td><td>—</td><td>Equals 3</td><td class="num">3</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">12</td><td>Token</td><td>Create fungible token, 100,000 units, 2 decimals</td><td>Node 1</td><td>Receipt SUCCESS</td><td class="num">0.0.1003</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">13</td><td>Token</td><td>Total supply</td><td>All 4 nodes</td><td>Same value from all 4</td><td class="num">100000</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">14</td><td>Token</td><td>Supply is correct</td><td>—</td><td>Equals 100000</td><td class="num">100000</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">15</td><td>Contract</td><td>Compile <code>Counter.sol</code></td><td>Client</td><td>Bytecode produced</td><td class="num">1,232 bytes</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">16</td><td>Contract</td><td>Deploy with a constructor argument</td><td>Node 2</td><td>Receipt SUCCESS</td><td class="num">0.0.1004</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">17</td><td>Contract</td><td><code>increment()</code></td><td>Node 1</td><td>Receipt SUCCESS</td><td>SUCCESS</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">18</td><td>Contract</td><td><code>increment()</code></td><td>Node 2</td><td>Receipt SUCCESS</td><td>SUCCESS</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">19</td><td>Contract</td><td><code>increment()</code></td><td>Node 3</td><td>Receipt SUCCESS</td><td>SUCCESS</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">20</td><td>Contract</td><td><code>increment()</code></td><td>Node 4</td><td>Receipt SUCCESS</td><td>SUCCESS</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">21</td><td>Contract</td><td><code>count()</code> query</td><td>All 4 nodes</td><td>Same value from all 4</td><td class="num">4</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">22</td><td>Contract</td><td>Count is correct</td><td>—</td><td>Equals 4: one increment per node</td><td class="num">4</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">23</td><td>Contract</td><td><code>note()</code> query</td><td>All 4 nodes</td><td>Same value from all 4</td><td>constructor string</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+<tr><td class="num">24</td><td>Contract</td><td>Constructor argument stored</td><td>—</td><td>Equals the string passed at deploy</td><td>match</td><td><span class="pill pass">4 / 4 PASS</span></td></tr>
+</table></div>
+<p>Checks 17–22 together show that state changes made through every node land in one shared contract state.</p>
+</section>
+
+<section id="runs">
+<h2>5. Test runs</h2>
+<div class="tbl"><table>
+<tr><th>Run</th><th>Network state</th><th>Result</th><th class="num">Duration</th><th>Entities created</th></tr>
+<tr><td>A-1</td><td>Scripts build, first genesis</td><td><span class="pill pass">24 / 24</span></td><td class="num">11.8 s</td><td class="num">0.0.1012–0.0.1015</td></tr>
+<tr><td>A-2</td><td>Scripts build after re-genesis with the correct treasury key</td><td><span class="pill pass">24 / 24</span></td><td class="num">9.4 s</td><td class="num">0.0.1001–0.0.1004</td></tr>
+<tr><td>A-3</td><td>Scripts build with the mirror node running</td><td><span class="pill pass">24 / 24</span></td><td class="num">5.8 s</td><td class="num">0.0.1005–0.0.1008</td></tr>
+<tr><td>B-1</td><td>Node Management Tools build, 5 minutes after start</td><td><span class="pill pass">24 / 24</span></td><td class="num">10.5 s</td><td class="num">0.0.1001–0.0.1004</td></tr>
+</table></div>
+<div class="note warn"><b class="t">Why the functional suite is not enough on its own</b>
+<p>Run A-1 passed all 24 checks while the network was misconfigured. The treasury public key had been written to <code>bootstrap.properties</code>, where the public documentation places it, but the node reads it only from <code>application.properties</code>. The network had therefore started with the publicly known development key.</p>
+<p>The suite cannot see this, because it signs with whichever key controls the treasury. We re-created the network (run A-2) and added a dedicated key check (section 6). The runbook writes the key to the correct file and runs the key check as part of verification.</p></div>
+</section>
+
+<section id="health">
+<h2>6. Health checks</h2>
+<div class="tbl"><table>
+<tr><th>Check</th><th>How</th><th>Result</th><th>Evidence</th></tr>
+<tr class="sev"><td><b>H1</b> Platform status</td><td><code>platform_PlatformStatus</code> on port 9999 of each node</td><td><span class="pill pass">PASS</span></td><td>All 4 nodes ACTIVE (code 2). The Node Management Tools build reached ACTIVE about 50 seconds after start</td></tr>
+<tr><td><b>H2</b> Treasury key</td><td><code>key-check.mjs</code>: query 0.0.2 signed with the network's treasury key, then with the public development key</td><td><span class="pill pass">2 / 2 PASS</span></td><td>Treasury key accepted; development key rejected with <code>INVALID_SIGNATURE</code> (Node Management Tools build)</td></tr>
+<tr><td><b>H3</b> State agreement</td><td>Hash mnemonic of each saved signed state, compared across nodes</td><td><span class="pill pass">PASS</span></td><td>Identical on all 4 nodes at rounds 254 and 757, shortly after start (Node Management Tools build). Identical on the 3 running nodes at rounds 3,312,921, 3,313,296 and 3,313,671, 3.8 days later, each signed by 3 nodes</td></tr>
+<tr><td><b>H4</b> Single-node outage</td><td>Stop node 3 while the network runs; restart it</td><td><span class="pill pass">PASS</span></td><td>The other 3 nodes kept reaching consensus at about 10 rounds per second. Node 3 returned to ACTIVE about 40 s after restart (Node Management Tools build)</td></tr>
+<tr><td><b>H5</b> Mirror import</td><td><code>mirror-check.mjs</code> after run A-3, through the mirror's REST and web3 APIs</td><td><span class="pill pass">7 / 7 PASS</span></td><td>Two consecutive runs after run A-3 (details below)</td></tr>
+<tr><td><b>H6</b> Long-running stability</td><td>Leave the Node Management Tools build idle and observe</td><td><span class="pill fail">FAIL</span></td><td>Halted after 3.8 days: disks full (section 7)</td></tr>
+</table></div>
+
+<h3>H5 mirror checks in detail</h3>
+<div class="tbl"><table>
+<tr><th class="num">#</th><th>Check</th><th>Endpoint</th><th>Observed</th><th>Result</th></tr>
+<tr><td class="num">1</td><td>Account balance</td><td><code>/api/v1/accounts/0.0.1005</code></td><td class="num">1,500,000,000 tinybar (15 ℏ)</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td class="num">2</td><td>Topic messages</td><td><code>/api/v1/topics/0.0.1006/messages</code></td><td>3 messages, sequence 1–3, content intact</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td class="num">3</td><td>Token</td><td><code>/api/v1/tokens/0.0.1007</code></td><td>Symbol HTT, supply 100000</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td class="num">4</td><td>Contract results</td><td><code>/api/v1/contracts/0.0.1008/results</code></td><td>5 results: 1 create and 4 increments</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td class="num">5</td><td>EVM call <code>count()</code></td><td><code>/api/v1/contracts/call</code></td><td class="num">4</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td class="num">6</td><td>EVM call <code>note()</code></td><td><code>/api/v1/contracts/call</code></td><td>Constructor string</td><td><span class="pill pass">PASS</span></td></tr>
+<tr><td class="num">7</td><td>Network nodes</td><td><code>/api/v1/network/nodes</code></td><td>4 nodes: 0→0.0.3, 1→0.0.4, 2→0.0.5, 3→0.0.6</td><td><span class="pill pass">PASS</span></td></tr>
+</table></div>
+<p>The mirror's latest transaction was the last one submitted by run A-3, imported within seconds. The network explorer showed the same accounts, topic, token and contract.</p>
+</section>
+
+<section id="incident">
+<h2>7. Long-running stability</h2>
+<p>The Node Management Tools build was left running with no load after testing. It was ACTIVE for 3.8 days, then stopped reaching consensus.</p>
+<ol class="timeline">
+<li><time>Day 0, start</time>All 4 nodes started; ACTIVE about 50 seconds later.</li>
+<li class="bad"><time>About 3 days 15 hours</time>Node 1's disk is full. It falls behind, and its attempt to copy state from a peer fails with <code>No space left on device</code>.</li>
+<li class="bad"><time>3 days 16 hours 29 minutes</time>Node 1's container exits with code 203. Nothing restarts it: the Node Management Tools container policy is "no". The other 3 nodes carry on, as designed.</li>
+<li class="bad"><time>3 days 19 hours 54 minutes</time>Node 3's disk is full. Its pre-consensus event writer fails, so it stops contributing.</li>
+<li class="bad"><time>9 seconds later</time>With only 2 of 4 nodes healthy, below the two-thirds needed, the network stops reaching consensus. All running nodes report <code>CHECKING</code> ("Platform spent 3.8 d in ACTIVE").</li>
+</ol>
+<h3>Root cause</h3>
+<p>Event streaming (<code>event.enableEventStreaming</code>) is on by default in the consensus node. It writes one event file and one signature file every 5 seconds to <code>/opt/hgcapp/eventsStreams</code>, and nothing deletes them. On an idle network, this reached 18–19 GB and about 132,000 files per node in 3.8 days, roughly 5 GB per day. That filled the 29 GB root filesystem.</p>
+<p>The other directories stayed small: saved states 1.5–1.7 GB, logs 1.1–1.2 GB (log files roll at a fixed size), record streams under 1 MB. The Hiero repository's own development configuration disables event streaming. The Node Management Tools default and Solo's configuration template both leave it enabled.</p>
+<h3>Detection</h3>
+<p>No component raised an alert:</p>
+<ul>
+<li>the stopped container was not restarted;</li>
+<li>the containers on the stalled nodes kept reporting "running";</li>
+<li>neither Node Management Tools nor the node software ships a health check.</li>
+</ul>
+<p>The failure showed only through the platform status metric and the node logs.</p>
+<h3>Mitigation in runbook v1.0</h3>
+<ul>
+<li><code>hiero-node.sh configure</code> sets <code>event.enableEventStreaming, false</code>. The mirror node uses record streams, not event streams. Operators who need event streams can keep them with <code>--keep-event-streams</code> and must prune them.</li>
+<li>Minimum disk raised to 100 GB per host.</li>
+<li>A new <code>state</code> command shows state hashes and disk use per directory, and the runbook adds a check that the event-stream directory stays empty.</li>
+<li>The runbook lists the minimum alerts: platform status, state-hash agreement, disk use and service restarts.</li>
+<li>The runbook's systemd unit restarts a crashed node after 10 seconds.</li>
+</ul>
+<p>The mitigation was checked on the test hosts but not yet through a full rebuild and a multi-day run. We recommend repeating the long-running test with runbook v1.0 before production use.</p>
+</section>
+
+<section id="findings">
+<h2>8. Findings</h2>
+<div class="tbl"><table>
+<tr><th>ID</th><th>Severity</th><th>Finding</th><th>Status</th></tr>
+<tr class="sev c"><td>F1</td><td><span class="pill fail">Critical</span></td><td>Event streams are on by default and never pruned. They filled 30 GB disks in 3.8 days and halted the network.</td><td>Mitigated in runbook v1.0; long run to be repeated</td></tr>
+<tr class="sev c"><td>F2</td><td><span class="pill fail">Critical</span></td><td>The public documentation puts the treasury key in a file the node does not read. The network then silently starts with the public development key, and functional tests still pass.</td><td>Mitigated: the script writes the key to the correct file; key check added</td></tr>
+<tr class="sev h"><td>F3</td><td><span class="pill warn">High</span></td><td>There are no built-in health checks or alerts. Container and process state do not reflect consensus health.</td><td>Open: monitoring rules listed in the runbook; operator to implement</td></tr>
+<tr class="sev h"><td>F4</td><td><span class="pill warn">High</span></td><td>With Node Management Tools, a node that exits is not restarted (container restart policy "no").</td><td>Avoided on the runbook's script path (systemd restart)</td></tr>
+<tr class="sev m"><td>F5</td><td><span class="pill warn">Medium</span></td><td>Hosts with 8 GB of memory are too small for a consensus node.</td><td>Runbook specifies 16 GB with a heap of at most 10 GB</td></tr>
+<tr class="sev m"><td>F6</td><td><span class="pill warn">Medium</span></td><td>Consensus node release files are protected by checksums only, with no signatures.</td><td>Open: build from source where required</td></tr>
+</table></div>
+</section>
+
+<section id="scope">
+<h2>9. Not covered</h2>
+<p>These areas were outside the tests in this report:</p>
+<ul>
+<li>software upgrades through a network freeze;</li>
+<li>adding or removing a node after genesis;</li>
+<li>backup and restore;</li>
+<li>throughput and load testing;</li>
+<li>client connections over TLS;</li>
+<li>a multi-day run with the mirror node attached;</li>
+<li>failure of two nodes at once (other than the incident in section 7).</li>
+</ul>
+<p>Both deployments ran in a single cloud account and network, with the independent operators simulated by one team.</p>
+</section>
+
+<section id="appA">
+<h2>Appendix A. Test scripts</h2>
+<p>These are the scripts used for the checks above. Node endpoints and the treasury key are now read from environment variables, and the descriptive labels on the test topic, token and contract were neutralised; the checks themselves are unchanged. The same files are in the runbook's Appendix C, which also describes how to run them. Requires Node.js 20 or later and <code>npm install</code> with the <code>package.json</code> below.</p>
+<div class="code file"><div class="code-h"><span><b>package.json</b> · 12 lines · SHA-256 <code class="sha">5bc5d8f0410d367e044cb97a4deae7480c28e18920228da3ba0e520dc9ddb5e1</code></span><button type="button" class="copy">Copy</button></div><pre><code>{
+  &quot;name&quot;: &quot;hiero-network-verify&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;private&quot;: true,
+  &quot;type&quot;: &quot;module&quot;,
+  &quot;description&quot;: &quot;Post-deployment verification for a private Hiero network&quot;,
+  &quot;dependencies&quot;: {
+    &quot;@hiero-ledger/sdk&quot;: &quot;2.89.1&quot;,
+    &quot;ethers&quot;: &quot;6.17.0&quot;,
+    &quot;solc&quot;: &quot;0.8.37&quot;
+  }
+}
+</code></pre></div>
+<div class="code file"><div class="code-h"><span><b>network-check.mjs</b> · 97 lines · SHA-256 <code class="sha">4c7720cd8dd731004b37e89e3e0e41507f057c58b85c0c5e7638a62dbaf73edb</code></span><button type="button" class="copy">Copy</button></div><pre><code>// network-check.mjs — 24 functional checks against a 4-node Hiero network.
+// Each write is sent to one specific node; every result is then read back from all four nodes
+// and must be identical. Entity ids are saved to verify-ids.json for mirror-check.mjs.
+//
+//   HIERO_NODES=&quot;10.0.1.11:50211=0.0.3,10.0.1.12:50211=0.0.4,10.0.1.13:50211=0.0.5,10.0.1.14:50211=0.0.6&quot; \
+//   OPERATOR_KEY_DER=&lt;genesis key, DER hex&gt; node network-check.mjs
+//
+// Use the plaintext gRPC port (50211). The SDK assumes TLS on 50212 and 443.
+import { writeFileSync } from &quot;node:fs&quot;;
+import {
+  AccountInfoQuery, AccountCreateTransaction, AccountId, Client, ContractCallQuery, ContractCreateTransaction,
+  ContractExecuteTransaction, ContractFunctionParameters, Hbar, PrivateKey, TokenCreateTransaction,
+  TokenInfoQuery, TokenType, TopicCreateTransaction, TopicInfoQuery, TopicMessageSubmitTransaction,
+  TransferTransaction,
+} from &quot;@hiero-ledger/sdk&quot;;
+import solc from &quot;solc&quot;;
+
+const NOTE = &quot;network verification&quot;;
+const NODES = Object.fromEntries((process.env.HIERO_NODES ?? &quot;&quot;).split(&quot;,&quot;).filter(Boolean).map((e) =&gt; e.split(&quot;=&quot;)));
+if (Object.keys(NODES).length !== 4 || !process.env.OPERATOR_KEY_DER) {
+  console.error(&quot;set HIERO_NODES (4 entries host:port=0.0.N) and OPERATOR_KEY_DER&quot;); process.exit(2);
+}
+const nodeIds = Object.values(NODES).map((n) =&gt; AccountId.fromString(n));
+const label = (id) =&gt; `node-${Number(id.toString().split(&quot;.&quot;)[2]) - 2} (${id})`;
+const operatorKey = PrivateKey.fromStringDer(process.env.OPERATOR_KEY_DER);
+const client = Client.forNetwork(NODES).setOperator(&quot;0.0.2&quot;, operatorKey);
+client.setRequestTimeout(60_000);
+
+const results = [];
+const check = (name, ok, detail) =&gt; { results.push(ok); console.log(`${ok ? &quot;PASS&quot; : &quot;FAIL&quot;}  ${name}${detail ? &quot;  — &quot; + detail : &quot;&quot;}`); };
+const t0 = Date.now();
+const via = (tx, i) =&gt; tx.setNodeAccountIds([nodeIds[i]]);
+async function readFromAll(name, fn) {
+  const answers = [];
+  for (const id of nodeIds) answers.push([label(id), String(await fn(id))]);
+  const same = answers.every(([, a]) =&gt; a === answers[0][1]);
+  check(`${name} — same answer from all 4 nodes`, same, same ? answers[0][1] : JSON.stringify(answers));
+  return answers[0][1];
+}
+
+// 1. Treasury balance agrees on every node
+await readFromAll(&quot;Treasury 0.0.2 balance&quot;, async (id) =&gt;
+  (await new AccountInfoQuery().setAccountId(&quot;0.0.2&quot;).setNodeAccountIds([id]).execute(client)).balance.toString());
+
+// 2-5. Account create, transfer, balance
+const userKey = PrivateKey.generateED25519();
+let r = await (await via(new AccountCreateTransaction().setKeyWithoutAlias(userKey.publicKey).setInitialBalance(new Hbar(10)), 0).execute(client)).getReceipt(client);
+const userId = r.accountId; check(&quot;Create account via node-1&quot;, r.status.toString() === &quot;SUCCESS&quot;, `${userId}, 10 ℏ`);
+r = await (await via(new TransferTransaction().addHbarTransfer(&quot;0.0.2&quot;, new Hbar(-5)).addHbarTransfer(userId, new Hbar(5)), 1).execute(client)).getReceipt(client);
+check(&quot;Transfer 5 ℏ via node-2&quot;, r.status.toString() === &quot;SUCCESS&quot;);
+const bal = await readFromAll(`Balance of ${userId}`, async (id) =&gt; (await new AccountInfoQuery().setAccountId(userId).setNodeAccountIds([id]).execute(client)).balance.toString());
+check(&quot;Balance is 15 ℏ&quot;, bal === &quot;15 ℏ&quot;, bal);
+
+// 6-11. Consensus service: topic and three messages
+r = await (await via(new TopicCreateTransaction().setTopicMemo(NOTE), 2).execute(client)).getReceipt(client);
+const topicId = r.topicId; check(&quot;Create topic via node-3&quot;, r.status.toString() === &quot;SUCCESS&quot;, `${topicId}`);
+for (let i = 1; i &lt;= 3; i++) {
+  r = await (await via(new TopicMessageSubmitTransaction().setTopicId(topicId).setMessage(`hello #${i}`), 3).execute(client)).getReceipt(client);
+  check(`Submit message ${i} via node-4`, r.status.toString() === &quot;SUCCESS&quot;, `sequence ${r.topicSequenceNumber}`);
+}
+const seq = await readFromAll(`Topic ${topicId} sequence number`, async (id) =&gt; (await new TopicInfoQuery().setTopicId(topicId).setNodeAccountIds([id]).execute(client)).sequenceNumber.toString());
+check(&quot;Topic has 3 messages&quot;, seq === &quot;3&quot;, seq);
+
+// 12-14. Token service: fungible token
+r = await (await via(new TokenCreateTransaction().setTokenName(&quot;Verification Test Token&quot;).setTokenSymbol(&quot;HTT&quot;).setTokenType(TokenType.FungibleCommon).setDecimals(2).setInitialSupply(100_000).setTreasuryAccountId(&quot;0.0.2&quot;).setAdminKey(operatorKey.publicKey), 0).execute(client)).getReceipt(client);
+const tokenId = r.tokenId; check(&quot;Create fungible token via node-1&quot;, r.status.toString() === &quot;SUCCESS&quot;, `${tokenId}`);
+const supply = await readFromAll(`Token ${tokenId} total supply`, async (id) =&gt; (await new TokenInfoQuery().setTokenId(tokenId).setNodeAccountIds([id]).execute(client)).totalSupply.toString());
+check(&quot;Supply is 100000&quot;, supply === &quot;100000&quot;, supply);
+
+// 15-24. Smart contract service: compile, deploy, call from every node
+const source = `// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+contract Counter { uint256 public count; string public note; event Incremented(address indexed by, uint256 count);
+  constructor(string memory n) { note = n; }
+  function increment() external { count += 1; emit Incremented(msg.sender, count); } }`;
+const out = JSON.parse(solc.compile(JSON.stringify({ language: &quot;Solidity&quot;, sources: { &quot;Counter.sol&quot;: { content: source } },
+  settings: { evmVersion: &quot;paris&quot;, optimizer: { enabled: true, runs: 200 }, outputSelection: { &quot;*&quot;: { &quot;*&quot;: [&quot;evm.bytecode.object&quot;] } } } })));
+const bytecode = out.contracts[&quot;Counter.sol&quot;].Counter.evm.bytecode.object;
+check(&quot;Compile Counter.sol (solc &quot; + solc.version().split(&quot;+&quot;)[0] + &quot;)&quot;, bytecode.length &gt; 0, `${bytecode.length / 2} bytes`);
+// Inline init code: the node does not append setConstructorParameters(), so append the ABI-encoded args here.
+const ctorArgs = new ContractFunctionParameters().addString(NOTE)._build();
+r = await (await via(new ContractCreateTransaction().setBytecode(Buffer.concat([Buffer.from(bytecode, &quot;hex&quot;), Buffer.from(ctorArgs)])).setGas(300_000), 1).execute(client)).getReceipt(client);
+const contractId = r.contractId; check(&quot;Deploy contract via node-2&quot;, r.status.toString() === &quot;SUCCESS&quot;, `${contractId} (EVM 0x${contractId.toEvmAddress()})`);
+for (let i = 0; i &lt; 4; i++) {
+  r = await (await via(new ContractExecuteTransaction().setContractId(contractId).setGas(100_000).setFunction(&quot;increment&quot;), i).execute(client)).getReceipt(client);
+  check(`increment() via ${label(nodeIds[i])}`, r.status.toString() === &quot;SUCCESS&quot;);
+}
+const count = await readFromAll(&quot;Contract count()&quot;, async (id) =&gt; (await new ContractCallQuery().setContractId(contractId).setGas(50_000).setFunction(&quot;count&quot;).setNodeAccountIds([id]).execute(client)).getUint256(0).toString());
+check(&quot;count() is 4 (one increment per node)&quot;, count === &quot;4&quot;, count);
+const note = await readFromAll(&quot;Contract note()&quot;, async (id) =&gt; (await new ContractCallQuery().setContractId(contractId).setGas(50_000).setFunction(&quot;note&quot;).setNodeAccountIds([id]).execute(client)).getString(0));
+check(&quot;note() matches constructor argument&quot;, note === NOTE, note);
+
+writeFileSync(&quot;verify-ids.json&quot;, JSON.stringify({ account: String(userId), topic: String(topicId), token: String(tokenId),
+  contract: String(contractId), note: NOTE }, null, 2));
+const failed = results.filter((x) =&gt; !x).length;
+console.log(`\n${results.length - failed}/${results.length} checks passed in ${((Date.now() - t0) / 1000).toFixed(1)}s (ids saved to verify-ids.json)`);
+client.close(); process.exit(failed ? 1 : 0);
+</code></pre></div>
+<div class="code file"><div class="code-h"><span><b>key-check.mjs</b> · 25 lines · SHA-256 <code class="sha">407be15a8fdd8d7d1ea36aeddb225b6943db5f629abba1f8eb326fbbab051292</code></span><button type="button" class="copy">Copy</button></div><pre><code>// key-check.mjs — proves the network was created with YOUR genesis key, not the public development key.
+// The functional checks alone cannot tell the two apart: they pass with either key.
+//
+//   HIERO_NODES=&quot;10.0.1.11:50211=0.0.3,...&quot; OPERATOR_KEY_DER=&lt;genesis key, DER hex&gt; node key-check.mjs
+import { AccountInfoQuery, Client, PrivateKey } from &quot;@hiero-ledger/sdk&quot;;
+
+// Well-known development key shipped with Hiero tooling (public; must NOT control a real network)
+const DEV_KEY = &quot;302e020100300506032b65700422042091132178e72057a1d7528025956fe39b0b847f200ab59b2fdd367017f3087137&quot;;
+const [first] = (process.env.HIERO_NODES ?? &quot;&quot;).split(&quot;,&quot;).filter(Boolean).map((e) =&gt; e.split(&quot;=&quot;));
+if (!first || !process.env.OPERATOR_KEY_DER) { console.error(&quot;set HIERO_NODES and OPERATOR_KEY_DER&quot;); process.exit(2); }
+
+const ours = PrivateKey.fromStringDer(process.env.OPERATOR_KEY_DER);
+let ok = true;
+for (const [name, key, mustWork] of [[&quot;genesis key&quot;, ours, true], [&quot;public development key&quot;, PrivateKey.fromStringDer(DEV_KEY), false]]) {
+  const client = Client.forNetwork({ [first[0]]: first[1] }).setOperator(&quot;0.0.2&quot;, key);
+  let accepted = false, detail;
+  try {
+    const info = await new AccountInfoQuery().setAccountId(&quot;0.0.2&quot;).execute(client);
+    accepted = true; detail = `0.0.2 key on the network ends ...${info.key.toString().slice(-16)}`;
+  } catch (e) { detail = String(e.status ?? e.message); }
+  const pass = accepted === mustWork; ok &amp;&amp;= pass;
+  console.log(`${pass ? &quot;PASS&quot; : &quot;FAIL&quot;}  ${name} ${accepted ? &quot;accepted&quot; : &quot;rejected&quot;} (${detail})`);
+  client.close();
+}
+process.exit(ok ? 0 : 1);
+</code></pre></div>
+<div class="code file"><div class="code-h"><span><b>mirror-check.mjs</b> · 43 lines · SHA-256 <code class="sha">cdc354ac0e125cebc22bcb782c77625270fcf591f53ee3cf68e57c73e643c05b</code></span><button type="button" class="copy">Copy</button></div><pre><code>// mirror-check.mjs — 7 checks that the mirror node imported what network-check.mjs wrote.
+// Run it after network-check.mjs, in the same folder (it reads verify-ids.json).
+//
+//   MIRROR_URL=http://10.0.1.20:8080 node mirror-check.mjs
+import { readFileSync } from &quot;node:fs&quot;;
+import { ethers } from &quot;ethers&quot;;
+
+const M = process.env.MIRROR_URL ?? &quot;http://localhost:8080&quot;;
+const ids = JSON.parse(readFileSync(&quot;verify-ids.json&quot;, &quot;utf8&quot;));
+const get = async (p) =&gt; { const r = await fetch(M + p); if (!r.ok) throw new Error(`${p} -&gt; HTTP ${r.status}`); return r.json(); };
+const call = async (to, sig) =&gt; {
+  const r = await fetch(M + &quot;/api/v1/contracts/call&quot;, { method: &quot;POST&quot;, headers: { &quot;content-type&quot;: &quot;application/json&quot; },
+    body: JSON.stringify({ to, data: ethers.id(sig).slice(0, 10), block: &quot;latest&quot; }) });
+  const j = await r.json(); if (!r.ok) throw new Error(`call ${sig} -&gt; HTTP ${r.status} ${JSON.stringify(j)}`); return j.result;
+};
+
+// The importer trails consensus by a few seconds; wait until the last contract call is visible.
+for (let i = 0; ; i++) {
+  const n = (await get(`/api/v1/contracts/${ids.contract}/results?limit=10`).catch(() =&gt; ({ results: [] }))).results.length;
+  if (n &gt;= 5) break;
+  if (i === 30) { console.log(&quot;FAIL  mirror did not import the test transactions within 60 s&quot;); process.exit(1); }
+  await new Promise((s) =&gt; setTimeout(s, 2000));
+}
+
+const res = [];
+const check = (name, ok, detail) =&gt; { res.push(ok); console.log(`${ok ? &quot;PASS&quot; : &quot;FAIL&quot;}  ${name}  — ${detail}`); };
+const acct = await get(`/api/v1/accounts/${ids.account}`);
+check(`Account ${ids.account} balance via mirror`, acct.balance.balance === 1_500_000_000, `${acct.balance.balance} tinybar (15 ℏ)`);
+const msgs = (await get(`/api/v1/topics/${ids.topic}/messages`)).messages;
+check(`Topic ${ids.topic} messages via mirror`, msgs.length === 3, msgs.map((m) =&gt; `#${m.sequence_number} &quot;${Buffer.from(m.message, &quot;base64&quot;)}&quot;`).join(&quot;, &quot;));
+const tok = await get(`/api/v1/tokens/${ids.token}`);
+check(`Token ${ids.token} via mirror`, tok.symbol === &quot;HTT&quot; &amp;&amp; tok.total_supply === &quot;100000&quot;, `${tok.name} (${tok.symbol}) supply ${tok.total_supply}`);
+const c = await get(`/api/v1/contracts/${ids.contract}`);
+const results = (await get(`/api/v1/contracts/${ids.contract}/results?limit=10`)).results;
+check(`Contract ${ids.contract} results via mirror`, results.length === 5, `${results.length} results (1 create + 4 increment), evm ${c.evm_address}`);
+const count = BigInt(await call(c.evm_address, &quot;count()&quot;));
+check(&quot;web3 eth_call count() via mirror&quot;, count === 4n, `${count}`);
+const note = ethers.AbiCoder.defaultAbiCoder().decode([&quot;string&quot;], await call(c.evm_address, &quot;note()&quot;))[0];
+check(&quot;web3 eth_call note() via mirror&quot;, note === ids.note, note);
+const nodes = (await get(&quot;/api/v1/network/nodes&quot;)).nodes;
+check(&quot;Network nodes via mirror&quot;, nodes.length === 4, nodes.map((n) =&gt; `${n.node_id}:${n.node_account_id}`).join(&quot; &quot;));
+console.log(`\n${res.filter(Boolean).length}/${res.length} mirror checks passed`);
+process.exit(res.every(Boolean) ? 0 : 1);
+</code></pre></div>
+<p>State hashes (H3) were compared with <code>sudo hiero-node.sh state 3</code> on each node; platform status (H1) with <code>hiero-node.sh status</code>, which reads <code>platform_PlatformStatus</code> from <code>http://localhost:9999/metrics</code>.</p>
+</section>
+
+<footer>
+<p>Hiero Private Network Test Report · version 1.0 · MAKE Group. Companion to the Hiero Private Network Runbook v1.0.</p>
+</footer>
+</main>
+</div>
+
+<script>
+document.addEventListener("click", async (e) => {
+  const b = e.target.closest("button.copy");
+  if (!b) return;
+  const code = b.closest(".code").querySelector("pre code").textContent;
+  try { await navigator.clipboard.writeText(code); b.textContent = "Copied"; }
+  catch { b.textContent = "Select and copy"; const r = document.createRange(); r.selectNodeContents(b.closest(".code").querySelector("pre")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+  setTimeout(() => { b.textContent = "Copy"; }, 2000);
+});
+</script>
+</body>
+</html>
